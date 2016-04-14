@@ -1,0 +1,71 @@
+# Copyright 2016 Google Inc. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+upstream wsgi_server {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+
+  server unix:{{ virtualenv_path }}/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen              443;
+    server_name         {{ nginx_server_name }};
+    ssl on;
+    ssl_certificate     {{ ssl_dest_dir }}/{{ cert_name }};
+    ssl_certificate_key {{ ssl_dest_dir }}/{{ key_name }};
+
+    client_max_body_size 4G;
+
+    access_log {{ nginx_access_log_file }};
+    error_log {{ nginx_error_log_file }};
+
+    location /static/ {
+        alias   {{ nginx_static_dir }};
+    }
+
+    location /media/ {
+        alias   {{ nginx_media_dir }};
+    }
+
+    location / {
+        if (-f {{ virtualenv_path }}/maintenance_on.html) {
+            return 503;
+        }
+
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        # Try to serve static files from nginx, no point in making an
+        # *application* server like Unicorn/Rainbows! serve static files.
+        if (!-f $request_filename) {
+            proxy_pass http://wsgi_server;
+            break;
+        }
+    }
+
+    # Error pages
+    error_page 500 502 504 /500.html;
+    location = /500.html {
+        root {{ application_path }}/templates/;
+    }
+
+    error_page 503 /maintenance_on.html;
+    location = /maintenance_on.html {
+        root {{ virtualenv_path }}/;
+    }
+}

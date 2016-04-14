@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+  <head>
+    <meta charset='utf-8' />
+    <title>Sub Alerts</title>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+  </head>
+  <body class="styled">
+    <style>
+
+      body{
+        margin: 0;
+        height: 100%;
+        font-family: 'Open Sans',  'Arial', sans;
+        color: #000;
+      }
+      .container:not([hidden]) {
+        display: flex;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        pointer-events: none;
+      }
+      #errorContainer {
+        justify-content: center;
+      }
+      #alertContainer {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .message {
+        padding: 20px;
+        max-width: 45%;
+      }
+      #alert {
+        display: block;
+        text-align: center;
+        font-size: 150%;
+      }
+
+    </style>
+    <audio id="sound" preload="auto" hidden></audio>
+    <div id="alertContainer" class="container" hidden>
+       <img src="" id="alertImage">
+       <div id="alert" class="message"></div>
+    </div>
+    <script type="text/javascript">
+      var DEFAULT_ALERT_TIME = 5000;
+      var seen = {};
+      var seenUser = {};
+      var alertStack = [];
+      var firstLoad = true;
+      var alertActive = false;
+      var initialClear = false;
+      var allSubs = [];
+
+      // Helper Functions
+      function getQueryParams(qs) {
+          qs = qs.split('+').join(' ');
+
+          var params = {},
+              tokens,
+              re = /[?&]?([^=]+)=([^&]*)/g;
+
+          while (tokens = re.exec(qs)) {
+              params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+          }
+
+          return params;
+      }
+
+      var params = getQueryParams(window.location.search);
+
+      function setVisible(element, visible) {
+        if (visible) {
+          element.removeAttribute('hidden');
+        } else {
+          element.setAttribute('hidden', '');
+        }
+      }
+
+      // Actual functionality
+      function start() {
+        clearAlert();
+        loadSubMessages();
+      }
+
+      function loadSubMessages() {
+        $.getJSON('/alert_api?key='+currentUser, null, handleEmails ).fail(
+          function(jqxhr, textStatus, error) {
+            setTimeout(loadSubMessages, 60000);
+          });
+      }
+
+      function genAlertString(user) {
+          return user.replace("[[br]]", "<br />");
+          return s;
+      }
+      function handleEmails(resp) {
+        var alerts = resp.alerts;
+        var subs = [];
+        for (var i = 0; i < alerts.length-1; i++) {
+            var data = alerts[i];
+            if (!seenUser[data['id']]) {
+                subs.push(data);
+                seenUser[data['id']] = true;
+                if (!firstLoad) {
+                    alertStack.push(data);
+                }
+                allSubs.push(data['id']);
+            }
+           }
+
+        firstLoad = false; 
+        if (!alertActive && alertStack.length) {
+            showAlert();
+        }
+        setTimeout(loadSubMessages, DEFAULT_ALERT_TIME);
+      }
+
+
+      // Alert handling
+      var clearAlertTimeout;
+
+      function showAlert() {
+        alertActive = true;
+        var alertObj = alertStack.shift();
+        var message = genAlertString(alertObj.text);
+        document.getElementById('alert').innerHTML = message;
+        if (alertObj.image) {
+            document.getElementById('alertImage').src = alertObj.image;
+            setVisible(document.getElementById('alertImage'), true);
+        } else {
+            setVisible(document.getElementById('alertImage'), false);
+        }
+        if (alertObj.sound) {
+            var sound = document.getElementById('sound');
+            sound.src = alertObj.sound;
+            sound.play();
+        }
+        var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color'};
+        for (var key in styleProps) {
+            var val = styleProps[key];
+            if (alertObj[key]) {
+                $("#alertContainer").css(val, alertObj[key]);
+            }
+        }
+        setVisible(document.getElementById('alertContainer'), true);
+        clearTimeout(clearAlertTimeout);
+        initialClear = true;
+        clearAlertTimeout = setTimeout(clearAlert, DEFAULT_ALERT_TIME);
+      }
+
+      function clearAlert() {
+        if (initialClear == true) {
+            // When we first set our timeout, we haven't loaded the sound,
+            // so we basically set an updated timer and bail early here. 
+            initialClear = false;
+            var soundLength = document.getElementById('sound').duration;
+            soundLength = soundLength * 1000;
+            if ((soundLength + 1000) > DEFAULT_ALERT_TIME) {
+                length = soundLength - DEFAULT_ALERT_TIME;
+                clearAlertTimeout = setTimeout(clearAlert, length);
+                return;
+            }
+        }
+        setVisible(document.getElementById('alertContainer'), false);
+        if (alertStack.length) {
+            showAlert();
+        } else {
+            alertActive = false;
+        }
+        
+      }
+
+      if (params.key != undefined) {
+        currentUser = params.key;
+      }
+      start();
+
+
+    </script>
+
+  </body>
+</html>

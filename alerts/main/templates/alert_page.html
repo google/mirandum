@@ -1,0 +1,27 @@
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+{% extends "base.html" %}
+{% block content %}
+  <p>Your key is {{key.key}}. (<a href="/reset_key">reset</a>)</p>
+  <p>Use this URL in your streaming software for alerts.</p>
+  <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" />
+  <p>You have {{configs|length}} configured alerts.</p>
+  <ul>
+  {% for alert in configs %}
+    <li><b>{{alert.type}}</b>: {{alert.alert_text}} -- {{alert.alert_set.count}} alerts sent. (<a href="/{{alert.type}}/test_alert/{{alert.id}}?ret=alerts">test</a>) (<a href="/{{alert.type}}/alert/{{alert.id}}">edit</a>)</li>
+  {% endfor %}  
+  </ul>  
+{% endblock %}

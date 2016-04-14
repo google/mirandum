@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Copyright 2016 Google Inc. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+NAME="{{ application_name }}"
+DJANGODIR={{ application_path }}
+SOCKFILE={{ virtualenv_path }}/run/gunicorn.sock
+USER={{ gunicorn_user }}
+GROUP={{ gunicorn_group }}
+NUM_WORKERS={{ gunicorn_num_workers }}
+
+# Set this to 0 for unlimited requests. During development, you might want to
+# set this to 1 to automatically restart the process on each request (i.e. your
+# code will be reloaded on every request).
+MAX_REQUESTS={{ gunicorn_max_requests }}
+
+echo "Starting $NAME as `whoami`"
+
+# Activate the virtual environment.
+cd $DJANGODIR
+. {{ virtualenv_path }}/bin/activate
+
+# Set additional environment variables.
+. {{ virtualenv_path }}/bin/postactivate
+
+# Create the run directory if it doesn't exist.
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Programs meant to be run under supervisor should not daemonize themselves
+# (do not use --daemon).
+exec gunicorn \
+    --name $NAME \
+    --workers $NUM_WORKERS \
+    --max-requests $MAX_REQUESTS \
+    --user $USER --group $GROUP \
+    --log-level debug \
+    --bind unix:$SOCKFILE \
+    {{ application_name }}.wsgi

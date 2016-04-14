@@ -1,0 +1,60 @@
+# Copyright 2016 Google Inc. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+
+# certificates for public sites (production, staging, test) are non-vagrant
+
+- name: Create letsencrypt http-01 challenge directory
+  file: state=directory path={{ nginx_static_dir }}.well-known/acme-challenge
+        owner=www-data
+  when: using_vagrant is not defined or not using_vagrant
+        
+- name: Create letsencrypt live certificates directory
+  file: state=directory path={{ ssl_dest_dir }}
+        owner=www-data
+  when: using_vagrant is not defined or not using_vagrant
+
+#- name: Create SSL certificates if first run
+#  shell: creates="{{ ssl_dest_dir }}/fullchain.pem" cd {{ ssl_dest_dir }} && sudo -u www-data simp_le --email {{ project_email }} -f account_key.json -f fullchain.pem -f key.pem -d {{ nginx_server_name }}:{{ nginx_static_dir }} && service nginx reload
+#  when: using_vagrant is not defined or not using_vagrant
+#
+#- name: Set up Cron for SSL certificate renewal
+#  cron: user=www-data weekday=0 state=present name="Renew ssl certificate"
+#        job="cd {{ ssl_dest_dir }} && simp_le --email {{ project_email }} -f account_key.json -f fullchain.pem -f key.pem -d {{ nginx_server_name }}:{{ nginx_static_dir }} && service nginx reload"
+#  when: using_vagrant is not defined or not using_vagrant
+
+# self-signed certificate for vagrant hosts
+
+#- name: Copy the self-signed SSL certificate to the vagrant VM server
+#  copy: content="{{ ssl_crt }}" dest={{ ssl_dest_dir }}/{{ cert_name }}
+#  notify: restart nginx
+#
+#- name: Copy the self-signed SSL key to the vagrant VM server
+#  copy: content="{{ ssl_key }}" dest={{ ssl_dest_dir }}/{{ key_name }}
+#  notify: restart nginx
+
+# now we can create the https configuration and kick nginx into action 
+
+- name: Create the Nginx configuration file for https
+  template: src=nginx_site_config.https.j2
+            dest=/etc/nginx/sites-available/{{ application_name }}.https
+            backup=yes
+  notify: reload nginx
+
+- name: Ensure that the https application site is enabled
+  command: ln -s /etc/nginx/sites-available/{{ application_name }}.https
+           /etc/nginx/sites-enabled/{{ application_name }}.https
+           creates=/etc/nginx/sites-enabled/{{ application_name }}.https
+  notify: reload nginx

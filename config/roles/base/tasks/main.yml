@@ -1,0 +1,73 @@
+# Copyright 2016 Google Inc. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+- name: Install PostgreSQL
+  apt: name={{ item }} update_cache={{ update_apt_cache }} state=installed
+  with_items:
+    - libpq-dev
+    - python-psycopg2
+  tags: packages
+
+- name: Download fresh Erlang repo configuration for RabbitMQ, etc.
+  get_url: dest=/opt url=https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+ 
+- name: Install fresh Erlang repo configuration.
+  apt: deb=/opt/erlang-solutions_1.0_all.deb
+
+- name: Ensure bash, OpenSSl, libssl and python are the latest versions
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - bash
+    - openssl
+    - libssl-dev
+    - libssl-doc
+    - python
+    - python-dev
+  tags: packages
+
+- name: Install base packages
+  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  with_items:
+    - build-essential
+    - ntp
+    - htop
+    - screen
+    - git
+    - python-pip
+    - python-pycurl
+    - supervisor
+    - postfix
+    - avahi-utils
+    - libffi-dev
+  tags: packages
+
+- name: Install base python packages, make sure they are updated
+  pip: name={{ item }} state=latest
+  with_items:
+    - pip
+    - setuptools
+    - newrelic
+    - virtualenv
+  tags: packages
+
+- name: install UTF8 locale
+  locale_gen: name=en_US.UTF-8 state=present
+
+- name: Install simp_le python packages from source
+  pip: name={{ item }} state=present
+  with_items:
+    - "git+https://github.com/kuba/simp_le.git#egg=simp_le"
+  tags: packages
+  when: using_vagrant is not defined or not using_vagrant

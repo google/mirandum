@@ -1,0 +1,48 @@
+# Copyright 2016 Google Inc. All Rights Reserved.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+
+# Application settings.
+virtualenv_path: "/webapps/{{ application_name }}"
+# note how we serve live from the mounted directory
+project_path: "/srv/project"
+application_path: "{{ project_path }}/{{ application_name }}"
+application_log_dir: "{{ virtualenv_path }}/logs"
+application_log_file: "{{ application_log_dir }}/gunicorn_supervisor.log"
+requirements_file: "{{ project_path }}/requirements.txt"
+
+
+# Gunicorn settings
+gunicorn_user: "{{ application_name }}"
+gunicorn_group: webapps
+
+
+# Nginx settings
+nginx_http_port: 80
+nginx_https_port: 443
+nginx_access_log_file: "{{ application_log_dir }}/nginx_access.log"
+nginx_error_log_file: "{{ application_log_dir }}/nginx_error.log"
+nginx_static_dir: "{{ virtualenv_path }}/static/"
+nginx_media_dir: "{{ virtualenv_path }}/media/"
+
+# Django Environment variables
+django_environment:
+  DJANGO_SETTINGS_MODULE: "{{ django_settings_file }}"
+  DJANGO_SECRET_KEY: "{{ django_secret_key }}"
+  EMAIL_HOST: "{{ smtp_host }}"
+  EMAIL_HOST_USER: "{{ smtp_user }}"
+  EMAIL_HOST_PASSWORD: "{{ smtp_password }}"
+  DATABASE_USER: "{{ db_user }}"
+  DATABASE_PASSWORD: "{{ db_password }}"
