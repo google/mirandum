@@ -1,4 +1,4 @@
-# TODO: PROJECTNAME
+# mirandum
 
 This is a project designed to allow for the running of a website which will
 deliver information about account changes while livestreaming; it combines
