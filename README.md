@@ -1,14 +1,13 @@
 # mirandum
 
 This is a project designed to allow for the running of a website which will
-deliver information about account changes while livestreaming; it combines
-tools like:
+deliver information about account changes while livestreaming; it uses
+Google's YouTube, Gmail, and Live Streaming  APIs (and eventually others)
+to access information about your account, and provide a web UI for presenting
+this information.
 
- - http://chrisplaysgames.com/sub/
- - http://www.iopred.com/fanfundingalerts/
- - http://chrisplaysgames.com/sponsor/
+This is an alternative to software like Stream Warrior/tnotify.
 
-into a single UI.
 
 The intent is to allow an extensible way to add additional alerting into this
 application for additional features, e.g. highlighting on hotwords in
