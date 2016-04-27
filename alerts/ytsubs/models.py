@@ -16,15 +16,10 @@ from django.db import models
 from googaccount.models import AppCreds
 import main.models
 
-class SubUpdate(models.Model):
+class SubUpdate(main.models.Updater):
     credentials = models.ForeignKey(AppCreds)
-    last_update = models.DateTimeField()
-    last_failure = models.DateTimeField(blank=True,null=True)
-    last_failure_message = models.TextField(blank=True, null=True)
-    failure_count = models.IntegerField(default=0)
 
-class SubEvent(models.Model):
-    sub_id = models.CharField(max_length=255)
+class SubEvent(main.models.UpdaterEvent):
     details = models.TextField()
     update = models.ForeignKey(SubUpdate)
 

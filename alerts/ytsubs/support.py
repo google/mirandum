@@ -12,21 +12,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License. 
 
-import django
-
-django.setup()
-
 import json
 import httplib2
-import time
-from datetime import datetime, timedelta
-from django.utils import timezone
+
+from django.contrib.auth.models import User
+from oauth2client.contrib.django_orm import Storage
+
+from apiclient import discovery, errors
 from ytsubs.models import *
 from googaccount.models import CredentialsModel
-from django.contrib.auth.models import User
-from apiclient import discovery
-from apiclient import errors
-from oauth2client.contrib.django_orm import Storage
 
 def ListRecentMessagesMatchingQuery(service, user_id, query=''):
   try:
@@ -47,18 +41,19 @@ def GetMessage(service, user_id, msg_id):
   except errors.HttpError, error:
     print 'An error occurred: %s' % error
 
-def run_fan_funding(ffu):
+def run_subs(ffu):
     storage = Storage(CredentialsModel, 'id', ffu.credentials, 'credential')
+    print ffu.credentials
     credential = storage.get()
     if credential is None or credential.invalid == True:
-        return
+        raise Exception("invalid credentials")
     http = httplib2.Http()
     http = credential.authorize(http)
     service = discovery.build('gmail', 'v1', http)
     output = ListRecentMessagesMatchingQuery(service, "me", '"has subscribed to you"')
     added = 0
     for item in output:
-        if SubEvent.objects.filter(sub_id=item['id']).count():
+        if SubEvent.objects.filter(external_id=item['id']).count():
             break
         message = GetMessage(service, "me", item['id'])
         headers = message['payload']['headers']
@@ -70,35 +65,8 @@ def run_fan_funding(ffu):
         if 'noreply@youtube.com' in f:
             s = s.strip().replace(" has subscribed to you on YouTube!", "")
             try:
-                e = SubEvent(sub_id=item['id'], details = s, update=ffu)
+                e = SubEvent(external_id=item['id'], details = s, update=ffu)
                 e.save()
                 added += 1
             except Exception, E:
                 print "Failed to create specific subevent for %s: \n    %s: %s" % (ffu.id, type(E), E) 
-
-
-def run():
-    while True:
-        time_threshold = datetime.now() - timedelta(seconds=15)
-        time_threshold = timezone.make_aware(time_threshold, timezone.get_default_timezone())
-        for i in SubUpdate.objects.filter(last_update__lt=time_threshold, failure_count__lt=5):
-            try:
-                run_fan_funding(i)
-                i.last_update = timezone.now()
-                i.last_failure = None
-                i.last_failure_message = None
-                i.failure_count = 0
-                i.save()
-            except Exception, E:
-                msg = "Attempting to update subs failed for %s: \n   %s: %s" % (i.id, type(E), E)
-                print msg
-                i.last_update = timezone.now()
-                i.last_failure = timezone.now()
-                i.last_failure_message = msg
-                i.failure_count = i.failure_count + 1
-                i.save()
-
-        time.sleep(1)
-
-if __name__ == "__main__":
-    run()
