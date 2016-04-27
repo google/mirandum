@@ -49,3 +49,13 @@ class Alert(models.Model):
 class AccessKey(models.Model):
     user = models.ForeignKey(User)
     key = models.CharField(max_length=200)
+
+class Updater(models.Model):
+    last_update = models.DateTimeField()
+    last_failure = models.DateTimeField(blank=True,null=True)
+    last_failure_message = models.TextField(blank=True, null=True)
+    failure_count = models.IntegerField(default=0)
+    type = models.CharField(max_length=255)
+
+class UpdaterEvent(models.Model):
+    external_id = models.CharField(max_length=255)
