@@ -13,14 +13,20 @@
 #  limitations under the License. 
 
 from datetime import  datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from fanfunding.models import FanFundingUpdate, AlertConfig 
-from googaccount.models import AppCreds
 from django.shortcuts import render
-from fanfunding.signals import config_to_alert
 import django.forms as forms
+
+from main.support import ac
+from fanfunding.models import FanFundingUpdate, AlertConfig 
+from fanfunding.signals import config_to_alert
+from googaccount.models import AppCreds
+from googaccount.forms import CredsChoices, creds_form
+
+MODULE_NAME = "fanfunding"
 
 @login_required
 def home(request):
@@ -29,21 +35,14 @@ def home(request):
     return render(request, "fanfunding/home.html", {'configs': ffconfigs,
         'alerts': alerts})
 
-class CredsChoices(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.label
-
 @login_required
 def setup(request):
-    
-    class CredsForm(forms.Form):
-        account = CredsChoices(queryset=AppCreds.objects.filter(user=request.user), empty_label="")
-    
+    CredsForm = creds_form(request.user)
     if request.POST:
         f = CredsForm(request.POST)
         if f.is_valid():
             creds = f.cleaned_data['account']
-            ffu = FanFundingUpdate(credentials=creds, last_update=datetime(1990,1,1,0,0,0))
+            ffu = FanFundingUpdate(credentials=creds, last_update=datetime(1990,1,1,0,0,0), type="fanfunding")
             ffu.save()
             return HttpResponseRedirect("/fanfunding/")
     else:
@@ -68,31 +67,8 @@ def test_alert(request, alert_id=None):
         return HttpResponseRedirect("/alert_page")
     return HttpResponseRedirect("/fanfunding/")
 
-
-@login_required
-def alert_config(request, alert_id=None):
-    ac = None
-    if alert_id:
-        try:
-            ac = AlertConfig.objects.get(pk=int(alert_id), user=request.user)
-        except ObjectDoesNotExist:
-            return HttpResponseRedirect('/fanfunding/')
-        if request.POST and 'delete' in request.POST:
-            ac.delete()
-            return HttpResponseRedirect('/fanfunding/')
-    if request.POST:
-        f = AlertForm(request.POST, instance=ac)
-    else:
-        initial = {"alert_string": "[[name]] has donated [[amount]]!"}
-        if ac:
-            f = AlertForm(instance=ac)
-        else:
-            f = AlertForm(initial=initial)
-    if f.is_valid():
-        ac = f.save(commit=False)
-        ac.type = "fanfunding"
-        ac.user = request.user
-        ac.save()
-        return HttpResponseRedirect("/fanfunding/")
-        
-    return render(request, "fanfunding/alert.html", {'form': f, 'new': alert_id is None})
+alert_config = ac(
+    MODULE_NAME,
+    AlertForm,
+    AlertConfig,
+    {"alert_text": "[[name]] has donated [[amount]]!"})

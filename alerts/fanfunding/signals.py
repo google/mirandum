@@ -21,7 +21,6 @@ from fanfunding.models import FanFundingEvent, AlertConfig
 import json
 
 def config_to_alert(alert, info, test=False):
-    add = True
     if alert.blacklist:
         blacklist_strings = map(lambda x: x.strip(), alert.blacklist.split(","))
     else:
@@ -40,7 +39,7 @@ def config_to_alert(alert, info, test=False):
 
 @receiver(post_save, sender=FanFundingEvent)
 def event(instance, **kwargs):
-    user = instance.ffu.credentials.user
+    user = instance.updater.credentials.user
     details = json.loads(instance.details)
     alerts = AlertConfig.objects.filter(user=user)
     info = {
