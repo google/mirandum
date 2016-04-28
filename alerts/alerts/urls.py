@@ -38,6 +38,12 @@ urlpatterns = patterns('',
     url(r'^fanfunding/alert$', 'fanfunding.views.alert_config'),
     url(r'^fanfunding/alert/(?P<alert_id>[0-9]*)$', 'fanfunding.views.alert_config'),
     
+    url(r'^sponsors/$', 'sponsors.views.home'),
+    url(r'^sponsors/setup$', 'sponsors.views.setup'),
+    url(r'^sponsors/test_alert/(?P<alert_id>[0-9]*)$', 'sponsors.views.test_alert'),
+    url(r'^sponsors/alert$', 'sponsors.views.alert_config'),
+    url(r'^sponsors/alert/(?P<alert_id>[0-9]*)$', 'sponsors.views.alert_config'),
+
     url(r'^ytsubs/$', 'ytsubs.views.home'),
     url(r'^ytsubs/setup$', 'ytsubs.views.setup'),
     url(r'^ytsubs/test_alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.test_alert'),
@@ -45,7 +51,5 @@ urlpatterns = patterns('',
     url(r'^ytsubs/alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.alert_config'),
     
     url(r'^accounts/', include('registration.backends.simple.urls')),
-    url(r'^sponsors/$', 'sponsor.views.home'),
-    url(r'^sponsors/setup$', 'sponsor.views.setup'),
 
 )

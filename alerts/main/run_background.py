@@ -26,6 +26,7 @@ from main.models import Updater
 
 from fanfunding.support import run_fan_funding
 from ytsubs.support import run_subs
+from sponsors.support import run_sponsors
 
 META = {
     'fanfunding': {
@@ -35,6 +36,10 @@ META = {
     'ytsubs': {
         'runner': run_subs,
         'prop': 'subupdate'
+    },
+    'sponsors': {
+        'runner': run_sponsors,
+        'prop': 'sponsorupdate'
     }
         
 }
@@ -66,7 +71,6 @@ def run():
                     i.last_failure_message = msg
                     i.failure_count = i.failure_count + 1
                     i.save()
-                print i.id
         except Exception, E:
             print "Something very basic went wrong with something: %s" % E
         time.sleep(1)

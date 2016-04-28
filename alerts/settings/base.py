@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'main',
     'fanfunding',
     'registration',
+    'sponsors',
     'googaccount',
     'ytsubs',
 )
