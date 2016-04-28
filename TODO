@@ -1,9 +1,10 @@
  - List blacklisted alerts
- - Tie alerts to a particular alertconfig so you can count how many have triggered
  - Make repeat subs not repeat alerts
+ - Add sponsorships
  - Add donation platforms:
     - StreamTip
     - Imraising
     - TwitchAlerts
  - TTS on Donation text
  - Variable alerts for different donation amounts
+ - Remove accounts - from configured, and overall
