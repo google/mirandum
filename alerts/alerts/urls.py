@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'alerts.views.home', name='home'),
     url(r'^$', 'main.views.home', name='home'),
-    url(r'^home/$', 'main.views.home_quiet', name='home_quiet'),
+    url(r'^home/$', 'main.views.home', name='home_quiet'),
     # url(r'^blog/', include('blog.urls')),
 #    url(r'^stream1/$', RedisQueueView.as_view(redis_channel="foo"), name="stream1"),
     url(r'^alert_page$', 'main.views.alert_page', name='alert_page'),

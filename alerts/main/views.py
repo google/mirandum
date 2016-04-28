@@ -21,8 +21,9 @@ from django.contrib.auth.decorators import login_required
 from main.models import AccessKey, AlertConfig, Alert
 
 # Create your views here.
+@login_required
 def home(request):
-    return render(request, "home.html")
+    return HttpResponseRedirect("/alert_page")
 
 @login_required
 def alert_page(request):
@@ -67,8 +68,3 @@ def alert_api(request):
     response['Access-Control-Allow-Origin'] = "*"
     response['Access-Control-Allow-Headers'] = 'accept, x-requested-with'
     return response
-
-@login_required
-def home_quiet(request):
-    return HttpResponseRedirect("/alert_page")
-    return render(request, 'home_quiet.html')
