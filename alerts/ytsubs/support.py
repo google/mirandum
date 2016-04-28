@@ -43,7 +43,6 @@ def GetMessage(service, user_id, msg_id):
 
 def run_subs(ffu):
     storage = Storage(CredentialsModel, 'id', ffu.credentials, 'credential')
-    print ffu.credentials
     credential = storage.get()
     if credential is None or credential.invalid == True:
         raise Exception("invalid credentials")
