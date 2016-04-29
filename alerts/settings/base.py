@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'main',
     'fanfunding',
+    'imraising',
     'registration',
     'sponsors',
     'googaccount',

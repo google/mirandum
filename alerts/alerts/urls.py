@@ -38,6 +38,12 @@ urlpatterns = patterns('',
     url(r'^fanfunding/alert$', 'fanfunding.views.alert_config'),
     url(r'^fanfunding/alert/(?P<alert_id>[0-9]*)$', 'fanfunding.views.alert_config'),
     
+    url(r'^imraising/$', 'imraising.views.home'),
+    url(r'^imraising/setup$', 'imraising.views.setup'),
+    url(r'^imraising/test_alert/(?P<alert_id>[0-9]*)$', 'imraising.views.test_alert'),
+    url(r'^imraising/alert$', 'imraising.views.alert_config'),
+    url(r'^imraising/alert/(?P<alert_id>[0-9]*)$', 'imraising.views.alert_config'),
+
     url(r'^sponsors/$', 'sponsors.views.home'),
     url(r'^sponsors/setup$', 'sponsors.views.setup'),
     url(r'^sponsors/test_alert/(?P<alert_id>[0-9]*)$', 'sponsors.views.test_alert'),
