@@ -41,7 +41,7 @@ def setup(request):
         f = CredsForm(request.POST)
         if f.is_valid():
             creds = f.cleaned_data['account']
-            ffu = SubUpdate(credentials=creds, last_update=datetime(1990,1,1,0,0,0), type="ytsubs")
+            ffu = SubUpdate(credentials=creds, last_update=datetime(1990,1,1,0,0,0), type="ytsubs", user=request.user)
             ffu.save()
             return HttpResponseRedirect("/ytsubs/")
     else:

@@ -55,6 +55,7 @@ class Updater(models.Model):
     last_failure = models.DateTimeField(blank=True,null=True)
     last_failure_message = models.TextField(blank=True, null=True)
     failure_count = models.IntegerField(default=0)
+    user = models.ForeignKey(User, blank=True, null=True)
     type = models.CharField(max_length=255)
 
 class UpdaterEvent(models.Model):
