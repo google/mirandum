@@ -42,10 +42,13 @@ def event(instance, **kwargs):
     user = instance.updater.credentials.user
     details = json.loads(instance.details)
     alerts = AlertConfig.objects.filter(user=user)
+    name = "Anonymous Donor"
+    if 'supporterDetails' in details['snippet']:
+        name = details['snippet']['supporterDetails']['displayName']
     info = {
-        'name': details['snippet']['supporterDetails']['displayName'],
+        'name': name,
         'amount': details['snippet']['displayString'],
-        'comment': details['snippet']['commentText'],
+        'comment': details['snippet'].get('commentText', ""),
     }
     for alert in alerts:
         config_to_alert(alert, info)
