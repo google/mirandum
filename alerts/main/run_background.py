@@ -64,7 +64,7 @@ def run():
                     i.failure_count = 0
                     i.save()
                 except Exception, E:
-                    msg = "Attempting to update subs failed for %s: \n   %s: %s" % (i.id, type(E), E)
+                    msg = "Attempting to update %s failed for %s: \n   %s: %s" % (i.type, i.id, type(E), E)
                     print msg
                     i.last_update = timezone.now()
                     i.last_failure = timezone.now()
