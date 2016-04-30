@@ -28,6 +28,7 @@ from fanfunding.support import run_fan_funding
 from ytsubs.support import run_subs
 from sponsors.support import run_sponsors
 from streamtip.support import run_streamtip
+from twitchalerts.support import run_twitchalerts
 from imraising.support import run_imraising
 
 META = {
@@ -46,6 +47,10 @@ META = {
     'streamtip': {
         'runner': run_streamtip,
         'prop': 'streamtipupdate'
+    },
+    'twitchalerts': {
+        'runner': run_twitchalerts,
+        'prop': 'twitchalertsupdate'
     },
     'imraising': {
         'runner': run_imraising,

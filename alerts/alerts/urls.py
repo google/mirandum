@@ -50,6 +50,13 @@ urlpatterns = patterns('',
     url(r'^imraising/alert$', 'imraising.views.alert_config'),
     url(r'^imraising/alert/(?P<alert_id>[0-9]*)$', 'imraising.views.alert_config'),
 
+    url(r'^twitchalerts/$', 'twitchalerts.views.home'),
+    url(r'^twitchalerts/setup$', 'twitchalerts.views.setup'),
+    url(r'^twitchalerts/authorize$', 'twitchalerts.views.setup'),
+    url(r'^twitchalerts/test_alert/(?P<alert_id>[0-9]*)$', 'twitchalerts.views.test_alert'),
+    url(r'^twitchalerts/alert$', 'twitchalerts.views.alert_config'),
+    url(r'^twitchalerts/alert/(?P<alert_id>[0-9]*)$', 'twitchalerts.views.alert_config'),
+
     url(r'^sponsors/$', 'sponsors.views.home'),
     url(r'^sponsors/setup$', 'sponsors.views.setup'),
     url(r'^sponsors/test_alert/(?P<alert_id>[0-9]*)$', 'sponsors.views.test_alert'),
