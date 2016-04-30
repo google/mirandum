@@ -27,6 +27,7 @@ from main.models import Updater
 from fanfunding.support import run_fan_funding
 from ytsubs.support import run_subs
 from sponsors.support import run_sponsors
+from streamtip.support import run_streamtip
 from imraising.support import run_imraising
 
 META = {
@@ -41,6 +42,10 @@ META = {
     'sponsors': {
         'runner': run_sponsors,
         'prop': 'sponsorupdate'
+    },
+    'streamtip': {
+        'runner': run_streamtip,
+        'prop': 'streamtipupdate'
     },
     'imraising': {
         'runner': run_imraising,

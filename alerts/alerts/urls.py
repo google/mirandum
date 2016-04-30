@@ -38,6 +38,12 @@ urlpatterns = patterns('',
     url(r'^fanfunding/alert$', 'fanfunding.views.alert_config'),
     url(r'^fanfunding/alert/(?P<alert_id>[0-9]*)$', 'fanfunding.views.alert_config'),
     
+    url(r'^streamtip/$', 'streamtip.views.home'),
+    url(r'^streamtip/setup$', 'streamtip.views.setup'),
+    url(r'^streamtip/test_alert/(?P<alert_id>[0-9]*)$', 'streamtip.views.test_alert'),
+    url(r'^streamtip/alert$', 'streamtip.views.alert_config'),
+    url(r'^streamtip/alert/(?P<alert_id>[0-9]*)$', 'streamtip.views.alert_config'),
+    
     url(r'^imraising/$', 'imraising.views.home'),
     url(r'^imraising/setup$', 'imraising.views.setup'),
     url(r'^imraising/test_alert/(?P<alert_id>[0-9]*)$', 'imraising.views.test_alert'),

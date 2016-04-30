@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'imraising',
     'registration',
     'sponsors',
+    'streamtip',
     'googaccount',
     'ytsubs',
 )
