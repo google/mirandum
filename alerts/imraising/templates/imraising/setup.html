@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
+Copy the "Advanced Key" from the bottom of the <a href="https://imraising.tv/dashboard/settings/" target="_blank">Dashboard Settings</a>.
 <form method="POST"> {% csrf_token %}
-<a href="/googleaccount/">Manage Google Accounts</a>
 <table>
   {{form.as_table}}
 </table>
