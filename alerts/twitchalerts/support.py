@@ -37,6 +37,7 @@ def refresh_twitch(ffu):
     if 'error' in data:
         raise Exception("Unable to refresh twitch auth tokens: %s\n%s" % (data['error'], data['message']))
     ffu.access_token = data['access_token']
+    ffu.refresh_token = data['refresh_token']
     ffu.refresh_before = timezone.now()+datetime.timedelta(seconds=3000)
     ffu.save()
 
