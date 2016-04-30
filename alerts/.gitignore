@@ -1,2 +1,4 @@
 *.pyc
 db.sqlite3
+twitchalerts/app_info.py
+client_secrets.json
