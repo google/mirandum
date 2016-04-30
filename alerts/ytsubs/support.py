@@ -52,7 +52,7 @@ def run_subs(ffu):
     output = ListRecentMessagesMatchingQuery(service, "me", '"has subscribed to you"')
     added = 0
     for item in output:
-        if SubEvent.objects.filter(external_id=item['id']).count():
+        if SubEvent.objects.filter(external_id=item['id'], update=ffu).count():
             break
         message = GetMessage(service, "me", item['id'])
         headers = message['payload']['headers']
