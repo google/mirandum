@@ -15,9 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
+  <script>
+    function updateURL() {
+        var baseURL = 'http://www.livestreamalerts.com/alert_popup?key={{key.key}}';
+        var enabled = document.getElementById("enablebg").checked;
+        var bgcolor = document.getElementById("bgcolor").value;
+        if (enabled) {
+            baseURL += "&bgColor="+encodeURIComponent(bgcolor);
+        }
+        document.getElementById("alerturl").value = baseURL;
+    }
+  </script>
+
   <p>Your key is {{key.key}}. (<a href="/reset_key">reset</a>)</p>
   <p>Use this URL in your streaming software for alerts.</p>
-  <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" />
+  <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" id="alerturl" />
+  <p><input id="enablebg" type="checkbox" onchange="updateURL()" /> Add background (for Chroma) Color: <input type="text" value="#00ff00" id="bgcolor" onchange="updateURL()" /></p>
   <p>You have {{configs|length}} configured alerts.</p>
   <ul>
   {% for alert in configs %}
