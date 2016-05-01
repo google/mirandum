@@ -9,3 +9,5 @@ oauth2client
 psycopg2
 urllib3
 google-api-python-client
+boto
+gcs-oauth2-boto-plugin==1.9
