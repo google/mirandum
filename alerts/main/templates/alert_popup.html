@@ -39,9 +39,6 @@ limitations under the License.
         right: 0;
         pointer-events: none;
       }
-      #errorContainer {
-        justify-content: center;
-      }
       #alertContainer {
         justify-content: center;
         align-items: center;
@@ -111,9 +108,16 @@ limitations under the License.
           });
       }
 
-      function genAlertString(user) {
-          return user.replace("[[br]]", "<br />");
-          return s;
+      function populateAlert(alertText) {
+          var alertElem = document.getElementById('alert');
+          alertElem.innerHTML = '';
+          var splitText = alertText.split("[[br]]");
+          for (var i = 0; i < splitText.length; i++) {
+            if (i != 0) {
+                alertElem.appendChild(document.createElement("br"));
+            }
+            alertElem.appendChild(document.createTextNode(splitText[i]));
+          }
       }
       function handleEmails(resp) {
         var alerts = resp.alerts;
@@ -144,8 +148,7 @@ limitations under the License.
       function showAlert() {
         alertActive = true;
         var alertObj = alertStack.shift();
-        var message = genAlertString(alertObj.text);
-        document.getElementById('alert').innerHTML = message;
+        var message = populateAlert(alertObj.text);
         if (alertObj.image) {
             document.getElementById('alertImage').src = alertObj.image;
             setVisible(document.getElementById('alertImage'), true);
@@ -194,6 +197,9 @@ limitations under the License.
 
       if (params.key != undefined) {
         currentUser = params.key;
+      }
+      if (params.bgColor != undefined) {
+          document.body.style.backgroundColor = params.bgColor;
       }
       start();
 
