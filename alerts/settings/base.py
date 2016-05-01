@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'twitchalerts',
     'streamtip',
     'googaccount',
+    'upload',
     'ytsubs',
 )
 
@@ -117,3 +118,4 @@ DEFAULT_FROM_EMAIL = 'crschmidt@crschmidt.net'
 DEFAULT_TO_EMAIL = 'crschmidt@crschmidt.net'
 LOGIN_URL = '/accounts/login/'
 SERVER_BASE = "http://localhost:8000/"
+GCS_BUCKET = "storage.livestreamalerts.com"
