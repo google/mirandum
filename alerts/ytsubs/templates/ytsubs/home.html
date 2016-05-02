@@ -21,7 +21,7 @@ limitations under the License.
 <a href="setup" class="button">Add new account</a>
 <ul>
   {% for config in configs %}
-    <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago)
+    <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago) (<a href="/delete_updater/{{config.id}}">delete</a>)
    {% if config.failure_count %} <br />
    <b>{{config.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
    {% endif %}

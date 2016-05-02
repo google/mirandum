@@ -18,7 +18,7 @@ import random
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from main.models import AccessKey, AlertConfig, Alert
+from main.models import AccessKey, AlertConfig, Alert, Updater
 
 # Create your views here.
 @login_required
@@ -44,6 +44,19 @@ def reset_key(request):
         key.save()
         return HttpResponseRedirect("/alert_page")
     return render(request, "reset_key.html")
+
+@login_required
+def delete_updater(request, id):
+    u = Updater.objects.get(pk=id, user=request.user)
+    if request.method == 'POST':
+        type = u.type
+        u.delete()
+        if 'redirect' in request.POST:
+            return HttpResponseRedirect("/%s/" % u.type)
+        else:
+            return HttpResponseRedirect("/")
+    else:
+        return render(request, "delete_update.html")
 
 def alert_popup(request):
     return render(request, "alert_popup.html")
