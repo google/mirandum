@@ -22,7 +22,16 @@ upstream wsgi_server {
 
 server {
     listen              443;
-    server_name         {{ nginx_server_name }};
+    server_name  {{ nginx_server_name }};
+    rewrite ^(.*) https://www.{{ nginx_server_name }}$1 permanent;
+    ssl on;
+    ssl_certificate     /etc/ssl/alerts.crt;
+    ssl_certificate_key /etc/ssl/alerts.key;
+}
+
+server {
+    listen              443;
+    server_name         www.{{ nginx_server_name }};
     ssl on;
     ssl_certificate     {{ ssl_dest_dir }}/{{ cert_name }};
     ssl_certificate_key {{ ssl_dest_dir }}/{{ key_name }};
