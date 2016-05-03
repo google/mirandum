@@ -40,6 +40,9 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=SubEvent)
 def event(instance, **kwargs):
     user = instance.update.credentials.user
+    if SubEvent.objects.filter(update=instance.update, details=instance.details).count() > 1:
+        # No unsub/resub
+        return
     alerts = SubAlertConfig.objects.filter(user=user)
     info = {
         'name': instance.details,
