@@ -32,6 +32,8 @@ def run_fan_funding(ffu):
     http = credential.authorize(http)
     resp, data = http.request("%sfanFundingEvents?part=snippet&maxResults=5" % BASE_URL)
     data = json.loads(data)
+    if 'error' in data:
+        raise Exception("Error fetching fanfunding: %s" % json.dumps(data['error']))
     events = []
     if 'items' in data:
         for i in data['items']:
