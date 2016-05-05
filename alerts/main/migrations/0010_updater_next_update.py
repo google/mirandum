@@ -12,6 +12,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License. 
+
 from __future__ import unicode_literals
 
 from django.db import models, migrations
@@ -22,14 +23,14 @@ from django.utils.timezone import utc
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0007_updater_user'),
+        ('main', '0009_updaterevent_base_updater'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='updaterevent',
-            name='timestamp',
-            field=models.DateTimeField(default=datetime.datetime(2016, 5, 2, 12, 34, 24, 588226, tzinfo=utc), auto_now_add=True),
+            model_name='updater',
+            name='next_update',
+            field=models.DateTimeField(default=datetime.datetime(2016, 5, 5, 1, 45, 24, 922090, tzinfo=utc)),
             preserve_default=False,
         ),
     ]

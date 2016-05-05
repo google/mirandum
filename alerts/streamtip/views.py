@@ -45,7 +45,6 @@ def setup(request):
             ffu = StreamtipUpdate(
                 client_id=f.cleaned_data['client_id'], 
                 access_token=f.cleaned_data['access_token'], 
-                last_update=datetime(1990,1,1,0,0,0), 
                 type="streamtip", 
                 user=request.user)
             ffu.save()

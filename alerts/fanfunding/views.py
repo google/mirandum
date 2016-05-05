@@ -42,7 +42,7 @@ def setup(request):
         f = CredsForm(request.POST)
         if f.is_valid():
             creds = f.cleaned_data['account']
-            ffu = FanFundingUpdate(credentials=creds, last_update=datetime(1990,1,1,0,0,0), type="fanfunding", user=request.user)
+            ffu = FanFundingUpdate(credentials=creds, type="fanfunding", user=request.user)
             ffu.save()
             return HttpResponseRedirect("/fanfunding/")
     else:

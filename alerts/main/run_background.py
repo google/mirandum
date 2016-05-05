@@ -19,6 +19,7 @@ import django
 
 django.setup()
 
+import math
 import time
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -59,32 +60,37 @@ META = {
         
 }
 
+DEFAULT_UPDATE_INTERVAL = 15
+
 def run():
     while True:
         try:
-            time_threshold = datetime.now() - timedelta(seconds=15)
-            time_threshold = timezone.make_aware(time_threshold, timezone.get_default_timezone())
-            for i in Updater.objects.filter(last_update__lt=time_threshold, failure_count__lt=5):
+            time_threshold = timezone.now()
+            for i in Updater.objects.filter(next_update__lt=time_threshold, failure_count__lt=5).order_by('next_update'):
                 updater_props = META.get(i.type, None)
                 if not updater_props: continue
                 
                 runner = updater_props['runner']
 
                 i = getattr(i, updater_props['prop'])
+
                 try:
                     runner(i)
                     i.last_update = timezone.now()
-                    i.last_failure = None
-                    i.last_failure_message = None
+                    i.next_update = timezone.now() + timedelta(seconds=DEFAULT_UPDATE_INTERVAL)
+                    # We leave messages + timestamps so we can see old failures even if the system recovered.
                     i.failure_count = 0
                     i.save()
                 except Exception, E:
                     msg = "Attempting to update %s failed for %s: \n   %s: %s" % (i.type, i.id, type(E), E)
                     print msg
-                    i.last_update = timezone.now()
+                    # we don't update last_update on failure.
                     i.last_failure = timezone.now()
                     i.last_failure_message = msg
                     i.failure_count = i.failure_count + 1
+                    # exponential backoff
+                    update_time = DEFAULT_UPDATE_INTERVAL * math.pow(2, i.failure_count)
+                    i.next_update = timezone.now() + timedelta(seconds=update_time)
                     i.save()
         except Exception, E:
             print "Something very basic went wrong with something: %s" % E
