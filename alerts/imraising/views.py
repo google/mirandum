@@ -42,7 +42,7 @@ def setup(request):
         f = ImraisingForm(request.POST)
         if f.is_valid():
             key = f.cleaned_data['key']
-            ffu = ImraisingUpdate(api_key=key, last_update=datetime(1990,1,1,0,0,0), type="imraising", user=request.user)
+            ffu = ImraisingUpdate(api_key=key, type="imraising", user=request.user)
             ffu.save()
             return HttpResponseRedirect("/imraising/")
     else:

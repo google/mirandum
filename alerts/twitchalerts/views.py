@@ -74,7 +74,6 @@ def setup(request):
         refresh_token = data['refresh_token'],
         user=request.user,
         type="twitchalerts",
-        last_update=datetime.datetime(1990,1,1,0,0,0),
         refresh_before=refresh_before,
     )
     tau.save()

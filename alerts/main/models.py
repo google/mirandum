@@ -14,7 +14,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-import md5, random
+import md5, random, datetime
+
 
 class AlertStyle(models.Model):
     image = models.TextField(blank=True,null=True)
@@ -51,7 +52,8 @@ class AccessKey(models.Model):
     key = models.CharField(max_length=200)
 
 class Updater(models.Model):
-    last_update = models.DateTimeField()
+    last_update = models.DateTimeField(default=datetime.datetime(1990,1,1,0,0,0))
+    next_update = models.DateTimeField(default=datetime.datetime(1990,1,1,0,0,0))
     last_failure = models.DateTimeField(blank=True,null=True)
     last_failure_message = models.TextField(blank=True, null=True)
     failure_count = models.IntegerField(default=0)
