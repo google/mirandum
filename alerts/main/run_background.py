@@ -85,7 +85,6 @@ def run():
                     msg = "Attempting to update %s failed for %s: \n   %s: %s" % (i.type, i.id, type(E), E)
                     print msg
                     # we don't update last_update on failure.
-                    i.last_update = timezone.now()
                     i.last_failure = timezone.now()
                     i.last_failure_message = msg
                     i.failure_count = i.failure_count + 1
