@@ -52,7 +52,7 @@ def setup(request):
 class AlertForm(forms.ModelForm):
     class Meta:
         model = AlertConfig
-        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color']
+        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'filter_type', 'filter_amount']
         widgets = {
             'image_url': forms.TextInput(attrs={'size': 50}),
             'sound_url': forms.TextInput(attrs={'size': 50}),

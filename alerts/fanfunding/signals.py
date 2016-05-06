@@ -41,7 +41,7 @@ def config_to_alert(alert, info, test=False):
 def event(instance, **kwargs):
     user = instance.updater.credentials.user
     details = json.loads(instance.details)
-    alerts = AlertConfig.objects.filter(user=user)
+    alerts = AlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     name = "Anonymous Donor"
     if 'supporterDetails' in details['snippet']:
         name = details['snippet']['supporterDetails']['displayName']
@@ -50,5 +50,21 @@ def event(instance, **kwargs):
         'amount': details['snippet']['displayString'],
         'comment': details['snippet'].get('commentText', ""),
     }
+    amount_micros = int(details['snippet']['amountMicros'])
     for alert in alerts:
-        config_to_alert(alert, info)
+        if alert.filter_type == "1equal":
+            if alert.filter_amount * 1000000 == amount_micros:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "2gt":
+            if alert.filter_amount * 1000000 < amount_micros:
+                config_to_alert(alert, info)
+                break
+        else:
+            config_to_alert(alert, info)
+
+if __name__ == "__main__":
+    # simple testing.
+    import django
+    django.setup()
+    event(FanFundingEvent.objects.all()[0])
