@@ -24,3 +24,9 @@ class ImraisingEvent(main.models.UpdaterEvent):
 
 class ImraisingAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)
+    filter_type = models.CharField(max_length=20, choices=(
+        ('1equal', 'Equals'),
+        ('2gt', 'Greater than'),
+        ('3default', 'Default'),
+    ), default='3default', help_text="When filtering for specific amounts, comparison to use.")
+    filter_amount = models.FloatField(blank=True, null=True)
