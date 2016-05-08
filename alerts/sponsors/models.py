@@ -15,6 +15,7 @@
 from django.db import models
 from googaccount.models import AppCreds
 import main.models
+import json
 
 class SponsorUpdate(main.models.Updater):
     credentials = models.ForeignKey(AppCreds)
@@ -22,6 +23,13 @@ class SponsorUpdate(main.models.Updater):
 class SponsorEvent(main.models.UpdaterEvent):
     details = models.TextField()
     updater = models.ForeignKey(SponsorUpdate)
+    
+    def as_dict(self):
+        details = json.loads(self.details)
+        info = {
+            'name': details['snippet']['sponsorDetails']['displayName'],
+        }
+        return info
 
 class SponsorAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)

@@ -14,6 +14,7 @@
 
 from django.db import models
 import main.models
+import json
 
 class TwitchalertsUpdate(main.models.Updater):
     access_token = models.CharField(max_length=255)
@@ -25,5 +26,30 @@ class TwitchalertsEvent(main.models.UpdaterEvent):
     details = models.TextField()
     updater = models.ForeignKey(TwitchalertsUpdate)
 
+    def as_dict(self):
+        details = json.loads(self.details)
+        name = "Anonymous"
+        if 'name' in details and details['name']:
+            name = details['name']
+        message = ""
+        if 'message' in details and details['message']:
+            message = details['message']
+        amount = "%.2f" % float(details['amount']) 
+        amount = " ".join([amount, details['currency']])
+
+        info = {
+            'name': name,
+            'amount': amount,
+            'comment': message,
+            'donation_amount': float(details['amount']),
+        }
+        return info
+
 class TwitchalertsAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)
+    filter_type = models.CharField(max_length=20, choices=(
+        ('1equal', 'Equals'),
+        ('2gt', 'Greater than'),
+        ('3default', 'Default'),
+    ), default='3default', help_text="When filtering for specific amounts, comparison to use.")
+    filter_amount = models.FloatField(blank=True, null=True)

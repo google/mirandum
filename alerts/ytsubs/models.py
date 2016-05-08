@@ -22,6 +22,11 @@ class SubUpdate(main.models.Updater):
 class SubEvent(main.models.UpdaterEvent):
     details = models.TextField()
     update = models.ForeignKey(SubUpdate)
+    def as_dict(self):
+        info = {
+            'name': self.details,
+        }
+        return info
 
 class SubAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)

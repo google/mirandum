@@ -14,6 +14,7 @@
 
 from django.db import models
 import main.models
+import json
 
 class StreamtipUpdate(main.models.Updater):
     client_id = models.CharField(max_length=255)
@@ -23,5 +24,27 @@ class StreamtipEvent(main.models.UpdaterEvent):
     details = models.TextField()
     updater = models.ForeignKey(StreamtipUpdate)
 
+    def as_dict(self):
+        details = json.loads(self.details)
+        name = "Anonymous"
+        amount = " ".join([str(details['amount']), details['currencyCode']])
+        if 'user' in details:
+            name = details['user']['displayName']
+        elif 'username' in details:
+            name = details['username']
+        info = {
+            'name': name,
+            'amount': amount,
+            'comment': details['note'],
+            'donation_amount': details['amount'],
+        }
+        return info
+
 class StreamtipAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)
+    filter_type = models.CharField(max_length=20, choices=(
+        ('1equal', 'Equals'),
+        ('2gt', 'Greater than'),
+        ('3default', 'Default'),
+    ), default='3default', help_text="When filtering for specific amounts, comparison to use.")
+    filter_amount = models.FloatField(blank=True, null=True)

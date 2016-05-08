@@ -14,6 +14,7 @@
 
 from django.db import models
 import main.models
+import json
 
 class ImraisingUpdate(main.models.Updater):
     api_key = models.CharField(max_length=255)
@@ -21,6 +22,16 @@ class ImraisingUpdate(main.models.Updater):
 class ImraisingEvent(main.models.UpdaterEvent):
     details = models.TextField()
     updater = models.ForeignKey(ImraisingUpdate)
+    
+    def as_dict(self):
+        details = json.loads(self.details)
+        info = {
+            'name': details['nickname'],
+            'amount': " ".join([str(details['amount']['display']['total']), details['amount']['display']['currency']]),
+            'comment': details['message'],
+            'donation_amount': float(details['amount']['display']['total']),
+        }
+        return info
 
 class ImraisingAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)
