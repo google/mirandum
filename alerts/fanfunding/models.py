@@ -15,6 +15,7 @@
 from django.db import models
 from googaccount.models import AppCreds
 import main.models
+import json
 
 class FanFundingUpdate(main.models.Updater):
     credentials = models.ForeignKey(AppCreds)
@@ -22,6 +23,19 @@ class FanFundingUpdate(main.models.Updater):
 class FanFundingEvent(main.models.UpdaterEvent):
     details = models.TextField()
     updater = models.ForeignKey(FanFundingUpdate)
+
+    def as_dict(self):
+        details = json.loads(self.details)
+        name = "Anonymous Donor"
+        if 'supporterDetails' in details['snippet']:
+            name = details['snippet']['supporterDetails']['displayName']
+        info = {
+            'name': name,
+            'amount': details['snippet']['displayString'],
+            'comment': details['snippet'].get('commentText', ""),
+            'amount_micros': int(details['snippet']['amountMicros'])
+        }
+        return info
 
 class AlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)

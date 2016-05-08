@@ -39,20 +39,16 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=TwitchalertsEvent)
 def event(instance, **kwargs):
     user = instance.updater.user
-    details = json.loads(instance.details)
-    alerts = TwitchalertsAlertConfig.objects.filter(user=user)
-    name = "Anonymous"
-    if 'name' in details and details['name']:
-        name = details['name']
-    message = ""
-    if 'message' in details and details['message']:
-        message = details['message']
-    amount = "%.2f" % float(details['amount']) 
-    amount = " ".join([amount, details['currency']])
-    info = {
-        'name': name,
-        'amount': amount,
-        'comment': message,
-    }
+    alerts = TwitchalertsAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
+    info = instance.as_dict()
     for alert in alerts:
-        config_to_alert(alert, info)
+        if alert.filter_type == "1equal":
+            if alert.filter_amount == info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "2gt":
+            if alert.filter_amount < info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        else:
+            config_to_alert(alert, info)

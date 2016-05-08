@@ -44,8 +44,6 @@ def event(instance, **kwargs):
         # No unsub/resub
         return
     alerts = SubAlertConfig.objects.filter(user=user)
-    info = {
-        'name': instance.details,
-    }
+    info = instance.as_dict()
     for alert in alerts:
         config_to_alert(alert, info)

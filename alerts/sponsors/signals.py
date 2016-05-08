@@ -38,10 +38,7 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=SponsorEvent)
 def event(instance, **kwargs):
     user = instance.updater.credentials.user
-    details = json.loads(instance.details)
     alerts = SponsorAlertConfig.objects.filter(user=user)
-    info = {
-        'name': details['snippet']['sponsorDetails']['displayName'],
-    }
+    info = instance.as_dict()
     for alert in alerts:
         config_to_alert(alert, info)

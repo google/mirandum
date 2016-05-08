@@ -39,21 +39,15 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=ImraisingEvent)
 def event(instance, **kwargs):
     user = instance.updater.user
-    details = json.loads(instance.details)
     alerts = ImraisingAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
-    info = {
-        'name': details['nickname'],
-        'amount': " ".join([str(details['amount']['display']['total']), details['amount']['display']['currency']]),
-        'comment': details['message'],
-    }
-    donation_amount = float(details['amount']['display']['total'])
+    info = instance.as_dict()
     for alert in alerts:
         if alert.filter_type == "1equal":
-            if alert.filter_amount == donation_amount:
+            if alert.filter_amount == info['donation_amount']:
                 config_to_alert(alert, info)
                 break
         elif alert.filter_type == "2gt":
-            if alert.filter_amount  < donation_amount:
+            if alert.filter_amount < info['donation_amount']:
                 config_to_alert(alert, info)
                 break
         else:

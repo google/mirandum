@@ -39,18 +39,20 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=StreamtipEvent)
 def event(instance, **kwargs):
     user = instance.updater.user
-    details = json.loads(instance.details)
-    alerts = StreamtipAlertConfig.objects.filter(user=user)
-    name = "Anonymous"
-    amount = " ".join([str(details['amount']), details['currencyCode']])
-    if 'user' in details:
-        name = details['user']['displayName']
-    elif 'username' in details:
-        name = details['username']
-    info = {
-        'name': name,
-        'amount': amount,
-        'comment': details['note'],
-    }
+    info = instance.as_dict()
     for alert in alerts:
         config_to_alert(alert, info)
+    user = instance.updater.user
+    alerts = StreamtipAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
+    info = instance.as_dict()
+    for alert in alerts:
+        if alert.filter_type == "1equal":
+            if alert.filter_amount == info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "2gt":
+            if alert.filter_amount < info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        else:
+            config_to_alert(alert, info)

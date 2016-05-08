@@ -41,16 +41,9 @@ def config_to_alert(alert, info, test=False):
 def event(instance, **kwargs):
     user = instance.updater.credentials.user
     details = json.loads(instance.details)
+    info = instance.as_dict()
     alerts = AlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
-    name = "Anonymous Donor"
-    if 'supporterDetails' in details['snippet']:
-        name = details['snippet']['supporterDetails']['displayName']
-    info = {
-        'name': name,
-        'amount': details['snippet']['displayString'],
-        'comment': details['snippet'].get('commentText', ""),
-    }
-    amount_micros = int(details['snippet']['amountMicros'])
+    amount_micros = info['amount_micros']
     for alert in alerts:
         if alert.filter_type == "1equal":
             if alert.filter_amount * 1000000 == amount_micros:
