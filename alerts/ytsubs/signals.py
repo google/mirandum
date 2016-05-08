@@ -27,7 +27,7 @@ def config_to_alert(alert, info, test=False):
     else:
         blacklist_strings = []
     for s in blacklist_strings:
-        if s.lower() in info['name'].lower():
+        if s and s.lower() in info['name'].lower():
             return
     text = alert.alert_text
     text = text.replace("[[name]]", info['name'])
