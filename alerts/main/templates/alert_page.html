@@ -37,11 +37,13 @@ limitations under the License.
     <li><b>{{alert.type}}</b>: {{alert.alert_text}} -- {{alert.alert_set.count}} alerts sent. (<a href="/{{alert.type}}/test_alert/{{alert.id}}?ret=alerts">test</a>) (<a href="/{{alert.type}}/alert/{{alert.id}}">edit</a>)</li>
   {% endfor %}  
   </ul>  
+ <h2>Lists</h2>
+ <p>Lists let you show recent subscribers, sponsors, or donors, for each configured service. (Coming soon: a single combined "recent donors" list across donation services.</p>
   <p>You have {{recents|length}} configured lists.</p>
   <ul>
   {% for recent in recents %}
     <li><b>{{recent.type}}</b>: List {{recent.count}} items, <i>{{recent.format}}</i> (<a href="/recent_config/{{recent.id}}">edit</a>) (<a href="/recent_popup?id={{recent.id}}&key={{key.key}}">open</a>)</li>
   {% endfor %}  
   </ul> 
-  <a href="/recent_config">Add New</a>
+  <a href="/recent_config">Add New List</a>
 {% endblock %}
