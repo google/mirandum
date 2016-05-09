@@ -52,7 +52,7 @@ def run_subs(ffu):
     output = ListRecentMessagesMatchingQuery(service, "me", '"has subscribed to you"')
     added = 0
     for item in output:
-        if SubEvent.objects.filter(external_id=item['id'], update=ffu).count():
+        if SubEvent.objects.filter(external_id=item['id'], updater=ffu).count():
             break
         message = GetMessage(service, "me", item['id'])
         headers = message['payload']['headers']
@@ -64,7 +64,7 @@ def run_subs(ffu):
         if 'noreply@youtube.com' in f:
             s = s.strip().replace(" has subscribed to you on YouTube!", "")
             try:
-                e = SubEvent(external_id=item['id'], details = s, update=ffu)
+                e = SubEvent(external_id=item['id'], details = s, updater=ffu)
                 e.save()
                 added += 1
             except Exception, E:

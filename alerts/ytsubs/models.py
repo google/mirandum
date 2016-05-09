@@ -21,7 +21,7 @@ class SubUpdate(main.models.Updater):
 
 class SubEvent(main.models.UpdaterEvent):
     details = models.TextField()
-    update = models.ForeignKey(SubUpdate)
+    updater = models.ForeignKey(SubUpdate)
     def as_dict(self):
         info = {
             'name': self.details,
