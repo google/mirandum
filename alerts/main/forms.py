@@ -31,5 +31,5 @@ class RecentForm(forms.ModelForm):
         model = RecentConfig
         fields = ['format', 'count', 'seperator', 'type', 'font', 'font_size', 'font_color']
         widgets = {
-            'type': forms.widgets.Select(choices=main.appconfig.type_choices())
+            'type': forms.widgets.Select(choices=([('', '')] + main.appconfig.type_choices()))
         }

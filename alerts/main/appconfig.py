@@ -53,4 +53,4 @@ def type_choices():
     output = []
     for key in type_data:
         output.append((key, key))
-    return output
+    return sorted(output)
