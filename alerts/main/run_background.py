@@ -24,41 +24,8 @@ import time
 from datetime import datetime, timedelta
 from django.utils import timezone
 from main.models import Updater
+from main.appconfig import type_data
 
-from fanfunding.support import run_fan_funding
-from ytsubs.support import run_subs
-from sponsors.support import run_sponsors
-from streamtip.support import run_streamtip
-from twitchalerts.support import run_twitchalerts
-from imraising.support import run_imraising
-
-META = {
-    'fanfunding': {
-        'runner': run_fan_funding,
-        'prop': 'fanfundingupdate'
-    },
-    'ytsubs': {
-        'runner': run_subs,
-        'prop': 'subupdate'
-    },
-    'sponsors': {
-        'runner': run_sponsors,
-        'prop': 'sponsorupdate'
-    },
-    'streamtip': {
-        'runner': run_streamtip,
-        'prop': 'streamtipupdate'
-    },
-    'twitchalerts': {
-        'runner': run_twitchalerts,
-        'prop': 'twitchalertsupdate'
-    },
-    'imraising': {
-        'runner': run_imraising,
-        'prop': 'imraisingupdate'
-    }
-        
-}
 
 DEFAULT_UPDATE_INTERVAL = 15
 
@@ -67,7 +34,7 @@ def run():
         try:
             time_threshold = timezone.now()
             for i in Updater.objects.filter(next_update__lt=time_threshold, failure_count__lt=5).order_by('next_update'):
-                updater_props = META.get(i.type, None)
+                updater_props = type_data.get(i.type, None)
                 if not updater_props: continue
                 
                 runner = updater_props['runner']

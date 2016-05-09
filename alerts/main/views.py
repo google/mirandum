@@ -15,10 +15,13 @@
 import md5
 import json
 import random
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from main.models import AccessKey, AlertConfig, Alert, Updater
+from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig
+from main.support import formatter
+from main.forms import RecentForm
+from main.appconfig import type_data
 
 # Create your views here.
 @login_required
@@ -33,7 +36,8 @@ def alert_page(request):
         key.key = k
         key.save()
     configs = AlertConfig.objects.filter(user=request.user)
-    return render(request, "alert_page.html", {'key': key, 'configs': configs})    
+    recents = RecentConfig.objects.filter(user=request.user)
+    return render(request, "alert_page.html", {'key': key, 'configs': configs, 'recents': recents})    
 
 @login_required
 def reset_key(request):
@@ -61,6 +65,9 @@ def delete_updater(request, id):
 def alert_popup(request):
     return render(request, "alert_popup.html")
 
+def recent_popup(request):
+    return render(request, "recent_popup.html")
+
 def alert_api(request):
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
@@ -81,3 +88,58 @@ def alert_api(request):
     response['Access-Control-Allow-Origin'] = "*"
     response['Access-Control-Allow-Headers'] = 'accept, x-requested-with'
     return response
+
+
+
+def recent_api(request):
+    if not 'key' in request.GET or not 'id' in request.GET: 
+        return HttpResponseBadRequest()
+    key = request.GET['key']
+    k = AccessKey.objects.get(key=key)
+    config = RecentConfig.objects.get(pk=request.GET['id'])
+    if config.user != k.user or not config.type in type_data:
+        return HttpResponseBadRequest()
+    event = type_data[config.type]['event']
+    events = event.objects.filter(updater__user=k.user).order_by("-id")[0:config.count]
+    output = []
+    for i in events:
+        output.append(formatter(config.format, i.as_dict()))
+    output = {
+      'latest': config.seperator.join(output),
+      'font': config.font or None,
+      'font_size': config.font_size or None,
+      'font_color': config.font_color or None,
+      }
+     
+    output_s = json.dumps(output)
+    return HttpResponse(output_s, content_type='text/plain')
+    
+@login_required
+def recent_config(request, recent_id=None):
+    config = RecentConfig
+    form = RecentForm
+    ac = None
+    if recent_id:
+        try:
+            ac = config.objects.get(pk=int(recent_id), user=request.user)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect('/')
+        if request.POST and 'delete' in request.POST:
+            ac.delete()
+            return HttpResponseRedirect('/')
+    if request.POST:
+        f = form(request.POST, instance=ac)
+    else:
+        #initial = form_sample
+        if ac:
+            f = form(instance=ac)
+        else:
+#            f = form(initial=initial)
+            f = form()
+    if f.is_valid():
+        ac = f.save(commit=False)
+        ac.user = request.user
+        ac.save()
+        return HttpResponseRedirect("/")
+        
+    return render(request, "recent_config.html", {'form': f, 'new': recent_id is None})

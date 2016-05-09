@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+  <head>
+    <meta charset='utf-8' />
+    <title>Sub Alerts</title>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+  </head>
+  <body class="styled">
+    <style>
+
+      body{
+        margin: 0;
+        height: 100%;
+        font-family: 'Open Sans',  'Arial', sans;
+        color: #000;
+      }
+
+    </style>
+    <div id="latestContainer" class="container">
+      <div id="latest" class="message"></div>
+    </div>
+    <script type="text/javascript">
+      var DEFAULT_ALERT_TIME = 5000;
+      var seen = {};
+      var seenUser = {};
+      var alertStack = [];
+      var firstLoad = true;
+      var alertActive = false;
+      var initialClear = false;
+      var allSubs = [];
+
+      // Helper Functions
+      function getQueryParams(qs) {
+          qs = qs.split('+').join(' ');
+
+          var params = {},
+              tokens,
+              re = /[?&]?([^=]+)=([^&]*)/g;
+
+          while (tokens = re.exec(qs)) {
+              params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+          }
+
+          return params;
+      }
+
+      var params = getQueryParams(window.location.search);
+
+      // Actual functionality
+      function start() {
+        loadSubMessages();
+      }
+
+      function loadSubMessages() {
+        $.getJSON('/recent_api?key='+currentUser+'&id='+currentId, null, handleEmails ).fail(
+          function(jqxhr, textStatus, error) {
+            setTimeout(loadSubMessages, 60000);
+          });
+      }
+
+      function populateAlert(alertText) {
+          var alertElem = document.getElementById('latestContainer');
+          alertElem.innerHTML = '';
+          var splitText = alertText.split("[[br]]");
+          for (var i = 0; i < splitText.length; i++) {
+            if (i != 0) {
+                alertElem.appendChild(document.createElement("br"));
+            }
+            alertElem.appendChild(document.createTextNode(splitText[i]));
+          }
+      }
+      function handleEmails(resp) {
+        var latest = resp.latest;
+        populateAlert(resp.latest);
+        var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color'};
+        for (var key in styleProps) {
+            var val = styleProps[key];
+            if (resp[key]) {
+                $("#latestContainer").css(val, resp[key]);
+            }
+        }
+        setTimeout(loadSubMessages, DEFAULT_ALERT_TIME);
+      }
+
+      if (params.key != undefined) {
+        currentUser = params.key;
+      }
+      if (params.id != undefined) {
+        currentId = params.id;
+      }
+      if (params.bgColor != undefined) {
+          document.body.style.backgroundColor = params.bgColor;
+      }
+      start();
+
+
+    </script>
+
+  </body>
+</html>

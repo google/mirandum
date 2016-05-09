@@ -13,7 +13,8 @@
 #  limitations under the License. 
 
 import django.forms as forms
-from main.models import AlertConfig
+from main.models import AlertConfig, RecentConfig
+import main.appconfig
 
 class AlertForm(forms.ModelForm):
     class Meta:
@@ -25,3 +26,10 @@ class AlertForm(forms.ModelForm):
             'alert_text': forms.TextInput(attrs={'size': 50}),
         }
 
+class RecentForm(forms.ModelForm):
+    class Meta:
+        model = RecentConfig
+        fields = ['format', 'count', 'seperator', 'type', 'font', 'font_size', 'font_color']
+        widgets = {
+            'type': forms.widgets.Select(choices=main.appconfig.type_choices())
+        }

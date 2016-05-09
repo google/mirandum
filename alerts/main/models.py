@@ -64,3 +64,13 @@ class UpdaterEvent(models.Model):
     external_id = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     base_updater = models.ForeignKey(Updater, blank=True, null=True)
+
+class RecentConfig(models.Model):
+    user = models.ForeignKey(User)
+    count = models.IntegerField(default=3)
+    format = models.CharField(default='[[name]]', max_length=1000)
+    seperator = models.CharField(default=', ', max_length=100)
+    type = models.CharField(max_length=50)
+    font = models.CharField(blank=True, null=True, max_length=255)
+    font_size = models.CharField(blank=True, null=True, max_length=255)
+    font_color = models.CharField(blank=True, null=True, max_length=255)

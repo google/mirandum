@@ -46,3 +46,8 @@ def ac(module_name, form, config, form_sample=None):
             
         return render(request, "%s/alert.html" % module_name, {'form': f, 'new': alert_id is None})
     return alert_config
+
+def formatter(format, data):
+    for k, v in data.items():
+        format = format.replace("[[%s]]" % k, str(v))
+    return format
