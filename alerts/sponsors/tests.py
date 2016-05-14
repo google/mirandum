@@ -41,11 +41,11 @@ def create_sponsor(name):
         'etag': name,
         'kind': 'youtube#sponsor',
         'snippet': {
+            'sponsorSince': '2016-05-07T04:49:13.882Z',
             'channelId': 'UC%s' % name,
             'sponsorDetails': {
                 'channelUrl': 'http://www.youtube.com/channel/UC%s' % name,
                 'displayName': name,
-                'sponsorSince': '2016-05-07T04:49:13.882Z'
             }
 
         }
@@ -86,9 +86,10 @@ class InsertSponsors(TestCase):
 
         run_sponsors(self.updater, sponsor_data)
         self.assertEqual(SponsorEvent.objects.count(), 4, "Additional runs do not recreate the same sponsors; 4 total")
-        d_event = SponsorEvent.objects.get(external_id='d')
-        c_event = SponsorEvent.objects.get(external_id='c')
+        d_event = SponsorEvent.objects.get(external_id__contains='UCd')
+        c_event = SponsorEvent.objects.get(external_id__contains='UCc')
         self.assertTrue(c_event.id < d_event.id, 'Insert new sponsors in reverse order')
+        self.assertFalse('unknown' in c_event.external_id)
 
         run_sponsors(self.updater, sponsor_data)
         self.assertEqual(SponsorEvent.objects.count(), 4, "Additional runs do not recreate the same sponsors; 4 total")

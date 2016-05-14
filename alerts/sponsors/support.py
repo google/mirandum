@@ -39,11 +39,13 @@ def run_sponsors(updater, loader=load_sponsor_data):
     events = []
     if 'items' in data:
         for i in data['items']:
-            if SponsorEvent.objects.filter(external_id=i['etag'], updater=updater).count() > 0:
+            snippet = i['snippet']
+            unique_id = "%s-%s" % (snippet.get('channelId', "unknown-channel"), snippet.get('sponsorSince', 'unknown'))
+            if SponsorEvent.objects.filter(external_id=unique_id, updater=updater).count() > 0:
                 break
             details = json.dumps(i)
             try:
-                ffe = SponsorEvent(external_id=i['etag'], updater=updater, details=details)
+                ffe = SponsorEvent(external_id=unique_id, updater=updater, details=details)
                 events.append(ffe)
             except Exception, E:
                 print "Failed in individual sponsor run: %s\nData:\n%s" % (E, details)
