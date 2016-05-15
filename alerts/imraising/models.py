@@ -27,9 +27,10 @@ class ImraisingEvent(main.models.UpdaterEvent):
         details = json.loads(self.details)
         info = {
             'name': details['nickname'],
-            'amount': " ".join([str(details['amount']['display']['total']), details['amount']['display']['currency']]),
             'comment': details['message'],
             'donation_amount': float(details['amount']['display']['total']),
+            'currency': details['amount']['display']['currency'],
+            'amount': " ".join([str(details['amount']['display']['total']), details['amount']['display']['currency']]),
         }
         return info
 
