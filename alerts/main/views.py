@@ -22,6 +22,7 @@ from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig
 from main.support import formatter
 from main.forms import RecentForm
 from main.appconfig import type_data
+from donations.models import Donation
 
 # Create your views here.
 @login_required
@@ -97,13 +98,19 @@ def recent_api(request):
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
     config = RecentConfig.objects.get(pk=request.GET['id'])
-    if config.user != k.user or not config.type in type_data:
+    if config.user != k.user:
         return HttpResponseBadRequest()
-    event = type_data[config.type]['event']
-    events = event.objects.filter(updater__user=k.user).order_by("-id")[0:config.count]
     output = []
-    for i in events:
-        output.append(formatter(config.format, i.as_dict()))
+    if config.type != "donations":
+        event = type_data[config.type]['event']
+        events = event.objects.filter(updater__user=k.user).order_by("-id")[0:config.count]
+        for i in events:
+            output.append(formatter(config.format, i.as_dict()))
+    else:
+        donation = Donation.objects.filter(user=k.user).order_by("-timestamp")[0:config.count]
+        for i in donation:
+            output.append(formatter(config.format, i.as_dict()))
+
     output = {
       'latest': config.seperator.join(output),
       'font': config.font or None,

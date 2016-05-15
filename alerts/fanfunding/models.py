@@ -30,9 +30,16 @@ class FanFundingEvent(main.models.UpdaterEvent):
         if 'supporterDetails' in details['snippet']:
             name = details['snippet']['supporterDetails']['displayName']
         info = {
+            # general 
             'name': name,
-            'amount': details['snippet']['displayString'],
             'comment': details['snippet'].get('commentText', ""),
+            'donation_amount': float(details['snippet']['amountMicros']) / 1000000.,
+            'currency': details['snippet']['currency'],
+            
+            # Display-friendly
+            'amount': details['snippet']['displayString'],
+            
+            # Filtering friendly
             'amount_micros': int(details['snippet']['amountMicros'])
         }
         return info

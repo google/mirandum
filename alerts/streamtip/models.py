@@ -36,7 +36,8 @@ class StreamtipEvent(main.models.UpdaterEvent):
             'name': name,
             'amount': amount,
             'comment': details['note'],
-            'donation_amount': details['amount'],
+            'donation_amount': float(details['amount']),
+            'currency': details['currencyCode']
         }
         return info
 

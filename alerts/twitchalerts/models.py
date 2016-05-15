@@ -42,6 +42,7 @@ class TwitchalertsEvent(main.models.UpdaterEvent):
             'amount': amount,
             'comment': message,
             'donation_amount': float(details['amount']),
+            'currency': details['currency'],
         }
         return info
 

@@ -72,6 +72,8 @@ urlpatterns = patterns('',
     url(r'^upload/$', 'upload.views.list'),
     url(r'^upload/upload$', 'upload.views.upload'),
 
+    url(r'^donations/$', 'donations.views.list'),
+
     url(r'^ytsubs/$', 'ytsubs.views.home'),
     url(r'^ytsubs/setup$', 'ytsubs.views.setup'),
     url(r'^ytsubs/test_alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.test_alert'),
