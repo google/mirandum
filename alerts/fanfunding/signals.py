@@ -45,19 +45,19 @@ def event(instance, **kwargs):
     alerts = AlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     amount_micros = info['amount_micros']
     for alert in alerts:
-        if alert.filter_type == "1equal":
+        if alert.filter_type == "1equal" and alert.filter_amount:
             if alert.filter_amount * 1000000 == amount_micros:
                 config_to_alert(alert, info)
                 break
-        elif alert.filter_type == "2gt":
+        elif alert.filter_type == "2gt" and alert.filter_amount:
             if alert.filter_amount * 1000000 < amount_micros:
                 config_to_alert(alert, info)
                 break
-        else:
+        elif alert.filter_type == "3default":
             config_to_alert(alert, info)
 
 if __name__ == "__main__":
     # simple testing.
     import django
     django.setup()
-    event(FanFundingEvent.objects.all()[0])
+    event(FanFundingEvent.objects.get(id=2120))
