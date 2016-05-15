@@ -17,6 +17,7 @@ from django.utils import timezone
 from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from imraising.models import ImraisingEvent, ImraisingAlertConfig
+from donations.support import add_donation
 import json
 
 def config_to_alert(alert, info, test=False):
@@ -52,6 +53,7 @@ def event(instance, **kwargs):
                 break
         else:
             config_to_alert(alert, info)
+    add_donation(instance.as_dict(), user, "imraising")
 
 if __name__ == "__main__":
     # simple testing.

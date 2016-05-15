@@ -18,6 +18,7 @@ from main.models import Alert
 from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from fanfunding.models import FanFundingEvent, AlertConfig
+from donations.support import add_donation
 import json
 
 def config_to_alert(alert, info, test=False):
@@ -55,6 +56,8 @@ def event(instance, **kwargs):
                 break
         else:
             config_to_alert(alert, info)
+    add_donation(instance.as_dict(), user, "fanfunding")
+
 
 if __name__ == "__main__":
     # simple testing.

@@ -33,8 +33,8 @@ class FanFundingEvent(main.models.UpdaterEvent):
             # general 
             'name': name,
             'comment': details['snippet'].get('commentText', ""),
-            'donation_amount': float(details['snippet']['amountMicros']) / 100000.
-            'currency': details['snippet']['currency']
+            'donation_amount': float(details['snippet']['amountMicros']) / 1000000.,
+            'currency': details['snippet']['currency'],
             
             # Display-friendly
             'amount': details['snippet']['displayString'],

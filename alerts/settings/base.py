@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'googaccount',
     'upload',
     'ytsubs',
+    'donations'
 )
 
 MIDDLEWARE_CLASSES = (

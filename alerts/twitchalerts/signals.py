@@ -17,6 +17,7 @@ from django.utils import timezone
 from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from twitchalerts.models import TwitchalertsEvent, TwitchalertsAlertConfig
+from donations.support import add_donation
 import json
 
 def config_to_alert(alert, info, test=False):
@@ -52,3 +53,4 @@ def event(instance, **kwargs):
                 break
         else:
             config_to_alert(alert, info)
+    add_donation(instance.as_dict(), user, "twitchalerts")

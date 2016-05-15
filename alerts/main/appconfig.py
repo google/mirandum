@@ -46,7 +46,8 @@ type_data = {
         'runner': run_imraising,
         'prop': 'imraisingupdate',
         'event': ImraisingEvent,
-    }
+    },
+    'donations': {}
 }
 
 def type_choices():
