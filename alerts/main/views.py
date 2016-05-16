@@ -133,7 +133,10 @@ def recent_api(request):
      
     output_s = json.dumps(output)
     return HttpResponse(output_s, content_type='text/plain')
-    
+
+def label_manager(request):
+    return render(request, "label_manager.html")
+
 @login_required
 def recent_config(request, recent_id=None):
     config = RecentConfig
