@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Livestream Alerts - Label Manager</title>
+<style>
+#output {
+  text-align: center;
+  padding: 1em;
+  display: block;
+  font-size: 1.2em;
+}
+html { 
+background: #b2c28a;
+font-family: "Open Sans", arial;
+}
+</style>
+</head>
+<body>
+<h1>LiveStream Alerts Label Manager</h1>
+
+<table>
+<tr>
+<td>Directory</td><td><input type="text" size=70 id="directory" /> <input type="submit" value="Choose Directory" id="choose_dir" /></td>
+</tr>
+<tr>
+<td>API Key</td>
+<td><input size=70 type="text" id="api_key" /> <input type="submit" value="Update key" id="update_key" /></td>
+</tr>
+</table>
+
+
+<div id="output"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
