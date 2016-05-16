@@ -37,6 +37,11 @@ class AlertConfig(models.Model):
     font_color = models.CharField(blank=True, null=True, max_length=255)
     user = models.ForeignKey(User)
     type = models.CharField(max_length=255)
+    def friendly_type(self):
+        from main.appconfig import type_data
+        appdata = type_data.get(self.type, None)
+        if not appdata: return self.type
+        return appdata.get('label', self.type)
 
 class Alert(models.Model):
     text = models.TextField()
@@ -59,6 +64,12 @@ class Updater(models.Model):
     failure_count = models.IntegerField(default=0)
     user = models.ForeignKey(User, blank=True, null=True)
     type = models.CharField(max_length=255)
+    def friendly_type(self):
+        from main.appconfig import type_data
+        appdata = type_data.get(self.type, None)
+        if not appdata: return self.type
+        return appdata.get('label', self.type)
+
 
 class UpdaterEvent(models.Model):
     external_id = models.CharField(max_length=255)

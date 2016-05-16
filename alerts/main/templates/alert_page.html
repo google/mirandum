@@ -33,7 +33,7 @@ limitations under the License.
   <p>You have {{configs|length}} configured alerts.</p>
   <ul>
   {% for alert in configs %}
-    <li><b>{{alert.type}}</b>: {{alert.alert_text}} -- {{alert.alert_set.count}} alerts sent. (<a href="/{{alert.type}}/test_alert/{{alert.id}}?ret=alerts">test</a>) (<a href="/{{alert.type}}/alert/{{alert.id}}">edit</a>)</li>
+    <li><b>{{alert.friendly_type}}</b>: {{alert.alert_text}} -- {{alert.alert_set.count}} alerts sent. (<a href="/{{alert.type}}/test_alert/{{alert.id}}?ret=alerts">test</a>) (<a href="/{{alert.type}}/alert/{{alert.id}}">edit</a>)</li>
   {% endfor %}  
   </ul>  
 {% endblock %}

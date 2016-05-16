@@ -35,8 +35,9 @@ def home(request):
     configs = AlertConfig.objects.filter(user=request.user)
     recents = RecentConfig.objects.filter(user=request.user)
     bad_updaters = Updater.objects.filter(user=request.user, failure_count=5)
-
-    return render(request, "home.html", {'key': key, 'configs': configs, 'recents': recents, 'bad_updaters': bad_updaters})    
+    all_updaters = Updater.objects.filter(user=request.user)
+    types = set([updater.friendly_type() for updater in all_updaters])
+    return render(request, "home.html", {'key': key, 'configs': configs, 'recents': recents, 'bad_updaters': bad_updaters, 'updater_types': sorted(types)})    
 
 @login_required
 def alert_page(request):

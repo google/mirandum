@@ -37,13 +37,22 @@ limitations under the License.
   </td><td width="40%">
   <p>You have {{recents|length}} configured lists. <br /><a href="/lists">More Info</a>.</p>
   </td></tr></table>
+  {% if updater_types %}
+  <h2>Configured Services</h2>
+  <p>You have configured the following services.</p>
+  <ul>
+  {% for service in updater_types %}
+    <li>{{service}}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
 
   {% if bad_updaters %}
   <h2>Broken Alerts</h2>
   <p>You currently have alerts which are not receiving updates.</p>
   <ul>
   {% for updater in bad_updaters %}
-    <li>{{updater.type}} - Last updated {{updater.last_update|timesince}} ago. <a href="/{{updater.type}}/">More info</a></li>
+    <li>{{updater.friendly_type}} - Last updated {{updater.last_update|timesince}} ago. <a href="/{{updater.type}}/">More info</a></li>
   {% endfor %}
   {% endif %}
 {% endblock %}
