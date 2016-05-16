@@ -90,6 +90,29 @@ def alert_api(request):
     response['Access-Control-Allow-Headers'] = 'accept, x-requested-with'
     return response
 
+def output_for_recent(config):
+    output = []
+    if config.type != "donations":
+        event = type_data[config.type]['event']
+        events = event.objects.filter(updater__user=config.user).order_by("-id")[0:config.count]
+        for i in events:
+            output.append(formatter(config.format, i.as_dict()))
+    else:
+        donation = Donation.objects.filter(user=config.user).order_by("-timestamp")[0:config.count]
+        for i in donation:
+            output.append(formatter(config.format, i.as_dict()))
+    return config.seperator.join(output)
+
+def all_recents(request):
+    if not 'key' in request.GET: 
+        return HttpResponseBadRequest()
+    key = request.GET['key']
+    k = AccessKey.objects.get(key=key)
+    output = {}
+    for i in RecentConfig.objects.filter(user=k.user):
+        output['%s-%s' % (i.type, i.id)] = output_for_recent(i)
+    output_s = json.dumps(output)
+    return HttpResponse(output_s, content_type='text/plain')
 
 
 def recent_api(request):
@@ -100,19 +123,9 @@ def recent_api(request):
     config = RecentConfig.objects.get(pk=request.GET['id'])
     if config.user != k.user:
         return HttpResponseBadRequest()
-    output = []
-    if config.type != "donations":
-        event = type_data[config.type]['event']
-        events = event.objects.filter(updater__user=k.user).order_by("-id")[0:config.count]
-        for i in events:
-            output.append(formatter(config.format, i.as_dict()))
-    else:
-        donation = Donation.objects.filter(user=k.user).order_by("-timestamp")[0:config.count]
-        for i in donation:
-            output.append(formatter(config.format, i.as_dict()))
-
+    data = output_for_recent(config)
     output = {
-      'latest': config.seperator.join(output),
+      'latest': data,
       'font': config.font or None,
       'font_size': config.font_size or None,
       'font_color': config.font_color or None,
