@@ -156,10 +156,10 @@ def recent_config(request, recent_id=None):
         try:
             ac = config.objects.get(pk=int(recent_id), user=request.user)
         except ObjectDoesNotExist:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lists')
         if request.POST and 'delete' in request.POST:
             ac.delete()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lists')
     if request.POST:
         f = form(request.POST, instance=ac)
     else:
