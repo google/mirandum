@@ -27,13 +27,32 @@ limitations under the License.
     }
   </script>
 
+  <p>Your key is {{key.key}}. (<a href="/reset_key">reset</a>)</p>
   <p>Use this URL in your streaming software for alerts.</p>
   <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" id="alerturl" />
   <p><input id="enablebg" type="checkbox" onchange="updateURL()" /> Add background (for Chroma) Color: <input type="text" value="#00ff00" id="bgcolor" onchange="updateURL()" /></p>
-  <p>You have {{configs|length}} configured alerts.</p>
+  <table width="100%">
+  <tr><td width="40%">
+  <p>You have {{configs|length}} configured alerts. <br /><a href="/alert_page">More info</a>.</p>
+  </td><td width="40%">
+  <p>You have {{recents|length}} configured lists. <br /><a href="/lists">More Info</a>.</p>
+  </td></tr></table>
+  {% if updater_types %}
+  <h2>Configured Services</h2>
+  <p>You have configured the following services.</p>
   <ul>
-  {% for alert in configs %}
-    <li><b>{{alert.friendly_type}}</b>: {{alert.alert_text}} -- {{alert.alert_set.count}} alerts sent. (<a href="/{{alert.type}}/test_alert/{{alert.id}}?ret=alerts">test</a>) (<a href="/{{alert.type}}/alert/{{alert.id}}">edit</a>)</li>
-  {% endfor %}  
-  </ul>  
+  {% for service in updater_types %}
+    <li>{{service}}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if bad_updaters %}
+  <h2>Broken Alerts</h2>
+  <p>You currently have alerts which are not receiving updates.</p>
+  <ul>
+  {% for updater in bad_updaters %}
+    <li>{{updater.friendly_type}} - Last updated {{updater.last_update|timesince}} ago. <a href="/{{updater.type}}/">More info</a></li>
+  {% endfor %}
+  {% endif %}
 {% endblock %}

@@ -27,7 +27,17 @@ from donations.models import Donation
 # Create your views here.
 @login_required
 def home(request):
-    return HttpResponseRedirect("/alert_page")
+    key, created = AccessKey.objects.get_or_create(user=request.user)
+    if created:
+        k = md5.md5(str(random.random())).hexdigest()
+        key.key = k
+        key.save()
+    configs = AlertConfig.objects.filter(user=request.user)
+    recents = RecentConfig.objects.filter(user=request.user)
+    bad_updaters = Updater.objects.filter(user=request.user, failure_count=5)
+    all_updaters = Updater.objects.filter(user=request.user)
+    types = set([updater.friendly_type() for updater in all_updaters])
+    return render(request, "home.html", {'key': key, 'configs': configs, 'recents': recents, 'bad_updaters': bad_updaters, 'updater_types': sorted(types)})    
 
 @login_required
 def alert_page(request):
@@ -133,7 +143,10 @@ def recent_api(request):
      
     output_s = json.dumps(output)
     return HttpResponse(output_s, content_type='text/plain')
-    
+
+def label_manager(request):
+    return render(request, "label_manager.html")
+
 @login_required
 def recent_config(request, recent_id=None):
     config = RecentConfig
@@ -143,23 +156,46 @@ def recent_config(request, recent_id=None):
         try:
             ac = config.objects.get(pk=int(recent_id), user=request.user)
         except ObjectDoesNotExist:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lists')
         if request.POST and 'delete' in request.POST:
             ac.delete()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/lists')
     if request.POST:
         f = form(request.POST, instance=ac)
     else:
-        #initial = form_sample
         if ac:
             f = form(instance=ac)
         else:
-#            f = form(initial=initial)
             f = form()
     if f.is_valid():
         ac = f.save(commit=False)
         ac.user = request.user
         ac.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/lists")
         
     return render(request, "recent_config.html", {'form': f, 'new': recent_id is None})
+
+@login_required
+def lists(request):
+    if request.method == "POST" and 'add' in request.POST:
+        config = RecentConfig(
+            user = request.user,
+            count = 1
+        )
+        if request.POST['add'] == "Add Recent Donation":
+            config.type = "donations"
+            config.format = "[[name]] ([[currencysymbol]][[amount]]"
+            config.save()
+        elif request.POST['add'] == "Add Recent Sponsor":
+            config.type = "sponsors"
+            config.format = "[[name]]"
+            config.save()
+        elif request.POST['add'] == "Add Recent Subscriber":
+            config.type = "ytsubs"
+            config.format = "[[name]]"
+            config.save()
+
+    recents = RecentConfig.objects.filter(user=request.user)
+    return render(request, "lists.html", {'recents': recents})
+        
+

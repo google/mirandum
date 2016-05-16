@@ -21,33 +21,41 @@ type_data = {
         'runner': run_fan_funding,
         'prop': 'fanfundingupdate',
         'event': FanFundingEvent,
+        'label': 'Fan Funding',
     },
     'ytsubs': {
         'runner': run_subs,
         'prop': 'subupdate',
         'event': SubEvent,
+        'label': 'YouTube Subscribers',
     },
     'sponsors': {
         'runner': run_sponsors,
         'prop': 'sponsorupdate',
         'event': SponsorEvent,
+        'label': 'YouTube Sponsors',
     },
     'streamtip': {
         'runner': run_streamtip,
         'prop': 'streamtipupdate',
-        'event': StreamtipEvent
+        'event': StreamtipEvent,
+        'label': 'StreamTip',
     },
     'twitchalerts': {
         'runner': run_twitchalerts,
         'prop': 'twitchalertsupdate',
         'event': TwitchalertsEvent,
+        'label': 'TwitchAlerts',
     },
     'imraising': {
         'runner': run_imraising,
         'prop': 'imraisingupdate',
         'event': ImraisingEvent,
+        'label': 'Imraising',
     },
-    'donations': {}
+    'donations': {
+        'label': 'Overall Donations'
+    }
 }
 
 def type_choices():

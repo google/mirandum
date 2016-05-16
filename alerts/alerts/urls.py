@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     url(r'^recent_config$', 'main.views.recent_config'),
     url(r'^recent_config/(?P<recent_id>[0-9]+)$', 'main.views.recent_config'),
     url(r'^recent_popup$', 'main.views.recent_popup', name='recent_popup'),
+    url(r'^label_manager$', 'main.views.label_manager', name='label_manager'),
+    url(r'^lists$', 'main.views.lists', name='lists'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^googleaccount/$', 'googaccount.views.accounts'),
