@@ -177,6 +177,11 @@ def recent_config(request, recent_id=None):
 
 @login_required
 def lists(request):
+    key, created = AccessKey.objects.get_or_create(user=request.user)
+    if created:
+        k = md5.md5(str(random.random())).hexdigest()
+        key.key = k
+        key.save()
     if request.method == "POST" and 'add' in request.POST:
         config = RecentConfig(
             user = request.user,
@@ -196,6 +201,6 @@ def lists(request):
             config.save()
 
     recents = RecentConfig.objects.filter(user=request.user)
-    return render(request, "lists.html", {'recents': recents})
+    return render(request, "lists.html", {'recents': recents, 'key': key})
         
 
