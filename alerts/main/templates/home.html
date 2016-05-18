@@ -27,7 +27,7 @@ limitations under the License.
     }
   </script>
 
-  <p>Your key is {{key.key}}. (<a href="/reset_key">reset</a>)</p>
+  <p style="font-size: 1.2em">Your <b>access key</b> is {{key.key}}. (<a href="/reset_key">reset</a>)</p>
   <p>Use this URL in your streaming software for alerts.</p>
   <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" id="alerturl" />
   <p><input id="enablebg" type="checkbox" onchange="updateURL()" /> Add background (for Chroma) Color: <input type="text" value="#00ff00" id="bgcolor" onchange="updateURL()" /></p>

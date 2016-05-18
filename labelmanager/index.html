@@ -12,24 +12,39 @@ html {
 background: #b2c28a;
 font-family: "Open Sans", arial;
 }
+h1 {
+width: 700px; padding: 10px; margin: 0px auto; position: relative; background-color: #003100; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5); color: white;
+}
+#page-border {
+width: 700px; background: none repeat scroll 0% 0% rgb(255, 255, 255); margin: 10px auto; position: relative; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+padding: 10px;
+}
 </style>
 </head>
 <body>
+
 <h1>LiveStream Alerts Label Manager</h1>
 
+<div id="page-border">
 <table>
 <tr>
-<td>Directory</td><td><input type="text" size=70 id="directory" /> <input type="submit" value="Choose Directory" id="choose_dir" /></td>
+<td>Directory</td><td><input type="text" size=70 id="directory" readonly /> <input type="submit" value="Choose Directory" id="choose_dir" /></td>
 </tr>
 <tr>
 <td>API Key</td>
-<td><input size=70 type="text" id="api_key" /> <input type="submit" value="Update key" id="update_key" /></td>
+<td><input size=70 type="text" id="api_key" /> <input type="submit" value="Update key" id="update_key" />
+<p>Your access key is listed at the homepage of <a href="https://www.livestreamalerts.com" target="_blank">Livestream Alerts</a>.</p>
+</td>
 </tr>
 </table>
 
 
 <div id="output"></div>
 
+<p>
+  This app syncs your Lists, as configured on your <a href="https://www.livestreamalerts.com/lists" target="_blank">lists page</a> on the website. Configure your lists there.
+</p>
 <script src="js/app.js"></script>
+</div>
 </body>
 </html>
