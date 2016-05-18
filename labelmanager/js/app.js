@@ -69,16 +69,20 @@ function handleData(data) {
         writeFile(chosenDirectory, i + ".txt", data[i]);
         count += 1;
     }
-    output.innerHTML = "Updated " + count + " files.";
+    var d = new Date();
+    var dateString = "(@" + d.getHours() + ":" + d.getMinutes() + ")";
+    output.innerHTML = "Updated " + count + " files. " + dateString;
 
 }
 
 function run() {
+    var d = new Date();
+    var dateString = "(@" + d.getHours() + ":" + d.getMinutes() + ")";
     if (apiKey && chosenDirectory) {
-        output.innerHTML = "Updating...";
+        output.innerHTML = "Updating... " + dateString;
         getJSON('https://www.livestreamalerts.com/recent_api_all?key='+apiKey, handleData);
     } else {
-        output.innerHTML = "Not running.";
+        output.innerHTML = "Not running. " + dateString;
     }
 }
 

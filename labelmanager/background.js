@@ -14,7 +14,7 @@ Copyright 2016 Google Inc. All Rights Reserved.
   limitations under the License. 
 */
 chrome.app.runtime.onLaunched.addListener(function(launchData) {
-  chrome.app.window.create('index.html', {id:"fileWin", innerBounds: {width: 800, height: 500}}, function(win) {
+  chrome.app.window.create('index.html', {id:"fileWin", innerBounds: {width: 800, height: 300}}, function(win) {
     win.contentWindow.launchData = launchData;
   });
 });
