@@ -49,5 +49,7 @@ def ac(module_name, form, config, form_sample=None):
 
 def formatter(format, data):
     for k, v in data.items():
-        format = format.replace("[[%s]]" % k, str(v))
+        if type(v) not in [str, unicode]:
+            v = str(v)
+        format = format.replace("[[%s]]" % k, v)
     return format
