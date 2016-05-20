@@ -13,6 +13,10 @@
 #  limitations under the License. 
 from django.utils import timezone
 from donations.models import Donation
+from django.conf import settings
+import json
+
+TARGET_CURRENCY = "USD"
 
 def add_donation(info, user, type):
     timestamp = info.get("timestamp", timezone.now())
@@ -25,5 +29,17 @@ def add_donation(info, user, type):
         currency = info['currency'],
         type = type
     )
+    primary_amount = currency_conversion(info['donation_amount'], info['currency'], TARGET_CURRENCY)
+    if primary_amount:
+        d.primary_amount = primary_amount
+        d.primary_currency = TARGET_CURRENCY
     d.save()
     return d
+
+def currency_conversion(amount, f, t):
+    fixerdata = json.load(open(settings.CURRENCY_CONVERSION)) 
+    fixerdata['rates']['EUR'] = 1
+    rates = fixerdata['rates']
+    if not f in rates or not t in rates:
+        return None
+    return amount * rates[t] / rates[f]

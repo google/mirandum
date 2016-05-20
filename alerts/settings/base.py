@@ -115,4 +115,4 @@ DEFAULT_TO_EMAIL = 'crschmidt@crschmidt.net'
 LOGIN_URL = '/accounts/login/'
 SERVER_BASE = "http://localhost:8000/"
 GCS_BUCKET = "storage.livestreamalerts.com"
-
+CURRENCY_CONVERSION = "datafiles/currency.json"
