@@ -15,6 +15,8 @@
 from django.db import models
 import main.models
 import json
+from django.utils import timezone
+import datetime
 
 class TwitchalertsUpdate(main.models.Updater):
     access_token = models.CharField(max_length=255)
@@ -36,13 +38,15 @@ class TwitchalertsEvent(main.models.UpdaterEvent):
             message = details['message']
         amount = "%.2f" % float(details['amount']) 
         amount = " ".join([amount, details['currency']])
-
+        timestamp = datetime.datetime.utcfromtimestamp(int(details['created_at']))
+        timestamp = timezone.make_aware(timestamp, timezone.utc)
         info = {
             'name': name,
             'amount': amount,
             'comment': message,
             'donation_amount': float(details['amount']),
             'currency': details['currency'],
+            'timestamp': timestamp,
         }
         return info
 

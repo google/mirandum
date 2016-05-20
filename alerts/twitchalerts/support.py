@@ -41,8 +41,7 @@ def refresh_twitch(ffu):
     ffu.refresh_before = timezone.now()+datetime.timedelta(seconds=3000)
     ffu.save()
 
-def run_twitchalerts(ffu):
-    added = 0
+def call_twitchalerts(ffu):
     now = timezone.now()
     if now > ffu.refresh_before:
         refresh_twitch(ffu)    
@@ -54,6 +53,11 @@ def run_twitchalerts(ffu):
     data = json.loads(contents)
     if 'error' in data:
         raise Exception("TwitchAlerts API returned error: %s\n%s" % (data['error'], data['message']))
+    return data
+
+def run_twitchalerts(ffu, producer=call_twitchalerts):
+    added = 0
+    data = producer(ffu)
     for i in data['data']:
         if TwitchalertsEvent.objects.filter(external_id=i['donation_id'], updater=ffu).count() > 0:
             break

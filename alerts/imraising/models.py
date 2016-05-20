@@ -25,12 +25,15 @@ class ImraisingEvent(main.models.UpdaterEvent):
     
     def as_dict(self):
         details = json.loads(self.details)
+
+        datetime = iso8601.parse_date(details['time'])    
         info = {
             'name': details['nickname'],
             'comment': details['message'],
             'donation_amount': float(details['amount']['display']['total']),
             'currency': details['amount']['display']['currency'],
             'amount': " ".join([str(details['amount']['display']['total']), details['amount']['display']['currency']]),
+            'timestamp': datetime,
         }
         return info
 

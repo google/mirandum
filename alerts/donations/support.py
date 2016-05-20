@@ -15,11 +15,12 @@ from django.utils import timezone
 from donations.models import Donation
 
 def add_donation(info, user, type):
+    timestamp = info.get("timestamp", timezone.now())
     d = Donation(
         user = user,
         name = info['name'],
         comment = info['comment'],
-        timestamp = timezone.now(),
+        timestamp = timestamp,
         amount = info['donation_amount'],
         currency = info['currency'],
         type = type

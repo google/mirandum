@@ -40,6 +40,7 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=StreamtipEvent)
 def event(instance, **kwargs):
     user = instance.updater.user
+    alerts = StreamtipAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     info = instance.as_dict()
     for alert in alerts:
         config_to_alert(alert, info)

@@ -15,6 +15,7 @@
 from django.db import models
 import main.models
 import json
+import iso8601
 
 class StreamtipUpdate(main.models.Updater):
     client_id = models.CharField(max_length=255)
@@ -32,12 +33,14 @@ class StreamtipEvent(main.models.UpdaterEvent):
             name = details['user']['displayName']
         elif 'username' in details:
             name = details['username']
+        timestamp = iso8601.parse_date(details['date'])
         info = {
             'name': name,
             'amount': amount,
             'comment': details['note'],
             'donation_amount': float(details['amount']),
-            'currency': details['currencyCode']
+            'currency': details['currencyCode'],
+            'timestamp': timestamp,
         }
         return info
 

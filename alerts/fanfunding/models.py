@@ -16,6 +16,7 @@ from django.db import models
 from googaccount.models import AppCreds
 import main.models
 import json
+import iso8601
 
 class FanFundingUpdate(main.models.Updater):
     credentials = models.ForeignKey(AppCreds)
@@ -29,6 +30,7 @@ class FanFundingEvent(main.models.UpdaterEvent):
         name = "Anonymous Donor"
         if 'supporterDetails' in details['snippet']:
             name = details['snippet']['supporterDetails']['displayName']
+        datetime = iso8601.parse_date(details['snippet']['createdAt'])    
         info = {
             # general 
             'name': name,
@@ -40,7 +42,9 @@ class FanFundingEvent(main.models.UpdaterEvent):
             'amount': details['snippet']['displayString'],
             
             # Filtering friendly
-            'amount_micros': int(details['snippet']['amountMicros'])
+            'amount_micros': int(details['snippet']['amountMicros']),
+
+            'timestamp': datetime,
         }
         return info
 
