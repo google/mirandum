@@ -110,13 +110,9 @@ ALLOWED_HOSTS = ['www.livestreamalerts.com', 'livestreamalerts.com', '*']
 AUTH_PROFILE_MODULE = 'main.UserProfile'
 
 ACCOUNT_ACTIVATION_DAYS = 7
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'crschmidt@crschmidt.net'
-EMAIL_HOST_PASSWORD = 'C19r84s^'
 DEFAULT_FROM_EMAIL = 'crschmidt@crschmidt.net'
 DEFAULT_TO_EMAIL = 'crschmidt@crschmidt.net'
 LOGIN_URL = '/accounts/login/'
 SERVER_BASE = "http://localhost:8000/"
 GCS_BUCKET = "storage.livestreamalerts.com"
+CURRENCY_CONVERSION = "datafiles/currency.json"
