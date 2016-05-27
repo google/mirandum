@@ -24,6 +24,10 @@ from main.forms import RecentForm
 from main.appconfig import type_data
 from donations.models import Donation
 
+@login_required
+def home_redirect(request):
+    return HttpResponseRedirect("/")
+
 # Create your views here.
 @login_required
 def home(request):
