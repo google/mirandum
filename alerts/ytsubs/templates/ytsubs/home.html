@@ -16,9 +16,25 @@ limitations under the License.
 {% endcomment %}
 
 {% block content %}
+<h2>This mode is deprecated</h2>
+<p>
+
+ Previously, you needed to scrape users email in order to access a list of 
+ subscribers. This was always terrible, and YouTube has now released a new
+ API to fetch subscribers. Please go to:</p>
+
+   <div style="font-size:1.3em; padding: 10px;"><a href="/youtubesubs/">New Subscribers Setup</a></div>
+
+ <p>to add subscriber alerts.</p>  
+
+<p>Before you start using the new alerts, you should delete any
+   existing accounts, at which point you will not get notifications
+   from both systems.</p>
+
+
+
 <h2>Accounts</h2>
 <p>You have {{configs|length}} configured accounts for YouTube subs.</p>
-<a href="setup" class="button">Add new account</a>
 <ul>
   {% for config in configs %}
     <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago) (<a href="/delete_updater/{{config.id}}">delete</a>)
