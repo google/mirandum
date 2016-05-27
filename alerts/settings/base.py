@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'googaccount',
     'upload',
     'ytsubs',
+    'youtubesubs',
     'donations'
 )
 

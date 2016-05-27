@@ -83,6 +83,12 @@ urlpatterns = patterns('',
     url(r'^ytsubs/alert$', 'ytsubs.views.alert_config'),
     url(r'^ytsubs/alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.alert_config'),
     
+    url(r'^youtubesubs/$', 'youtubesubs.views.home'),
+    url(r'^youtubesubs/setup$', 'youtubesubs.views.setup'),
+    url(r'^youtubesubs/test_alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.test_alert'),
+    url(r'^youtubesubs/alert$', 'youtubesubs.views.alert_config'),
+    url(r'^youtubesubs/alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.alert_config'),
+    
     url(r'^accounts/', include('registration.backends.simple.urls')),
 
 )

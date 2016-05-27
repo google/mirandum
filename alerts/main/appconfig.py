@@ -16,6 +16,9 @@ from twitchalerts.models import TwitchalertsEvent
 from imraising.support import run_imraising
 from imraising.models import ImraisingEvent
 
+from youtubesubs.support import run_youtubesubs
+from youtubesubs.models import YoutubeSubEvent
+
 type_data = {
     'fanfunding': {
         'runner': run_fan_funding,
@@ -27,7 +30,13 @@ type_data = {
         'runner': run_subs,
         'prop': 'subupdate',
         'event': SubEvent,
-        'label': 'YouTube Subscribers',
+        'label': 'YouTube Subscribers (email-based)',
+    },
+    'youtubesubs': {
+        'runner': run_youtubesubs,
+        'prop': 'youtubesubupdate',
+        'event': YoutubeSubEvent,
+        'label': 'YouTube Subscribers (new)',
     },
     'sponsors': {
         'runner': run_sponsors,
