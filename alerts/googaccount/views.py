@@ -29,7 +29,7 @@ CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '..', 'client_secrets.j
 
 FLOW = flow_from_clientsecrets(
     CLIENT_SECRETS,
-    scope=['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/gmail.readonly'],
+    scope=['https://www.googleapis.com/auth/youtube'],
     redirect_uri='%sgoogleaccount/oauth2callback' % settings.SERVER_BASE)
 FLOW.params['access_type'] = 'offline'
 FLOW.params['approval_prompt'] = 'force'
