@@ -20,6 +20,7 @@ import django
 django.setup()
 
 import math
+import threading
 import time
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -27,38 +28,62 @@ from main.models import Updater
 from main.appconfig import type_data
 
 
+from django.conf import settings
+
+DEBUG = settings.RUNNER_DEBUG
+
 DEFAULT_UPDATE_INTERVAL = 15
 
+def thread_runner(instance):
+    if DEBUG:
+        print "running instance", instance.id
+    runtime = time.time()
+    try:
+        updater_props = type_data.get(instance.type, None)
+        runner = updater_props['runner']
+        instance = getattr(instance, updater_props['prop'])
+        runner(instance)
+        instance.last_update = timezone.now()
+        instance.next_update = timezone.now() + timedelta(seconds=DEFAULT_UPDATE_INTERVAL)
+        # We leave messages + timestamps so we can see old failures even if the system recovered.
+        instance.failure_count = 0
+        instance.running = False
+        instance.save()
+    except Exception, E:
+        msg = "Attempting to update %s failed for %s: \n   %s: %s" % (instance.type, instance.id, type(E), E)
+        print msg
+        # we don't update last_update on failure.
+        instance.last_failure = timezone.now()
+        instance.last_failure_message = msg
+        instance.failure_count = instance.failure_count + 1
+        # exponential backoff
+        update_time = DEFAULT_UPDATE_INTERVAL * math.pow(2, instance.failure_count)
+        instance.next_update = timezone.now() + timedelta(seconds=update_time)
+        instance.running = False
+        instance.save()
+    if DEBUG:
+        print "finished", instance.id, " in ", time.time()-runtime
+
 def run():
+    # Reset any running tasks at runner start; if anything got stuck
+    # because of a restart, we want to clear it when we start.
+    for i in Updater.objects.filter(running=True):
+        i.running = False
+        i.save()
     while True:
         try:
             time_threshold = timezone.now()
-            for i in Updater.objects.filter(next_update__lt=time_threshold, failure_count__lt=5).order_by('next_update'):
+            for i in Updater.objects.filter(next_update__lt=time_threshold, failure_count__lt=5, running=False).order_by('next_update'):
                 updater_props = type_data.get(i.type, None)
                 if not updater_props: continue
                 
-                runner = updater_props['runner']
-
                 i = getattr(i, updater_props['prop'])
+                # Set next update here; then reset it again when the function actually finishes.
+                i.running = True
+                i.save()
+                t = threading.Thread(target=thread_runner, args=[i])
+                t.start()
 
-                try:
-                    runner(i)
-                    i.last_update = timezone.now()
-                    i.next_update = timezone.now() + timedelta(seconds=DEFAULT_UPDATE_INTERVAL)
-                    # We leave messages + timestamps so we can see old failures even if the system recovered.
-                    i.failure_count = 0
-                    i.save()
-                except Exception, E:
-                    msg = "Attempting to update %s failed for %s: \n   %s: %s" % (i.type, i.id, type(E), E)
-                    print msg
-                    # we don't update last_update on failure.
-                    i.last_failure = timezone.now()
-                    i.last_failure_message = msg
-                    i.failure_count = i.failure_count + 1
-                    # exponential backoff
-                    update_time = DEFAULT_UPDATE_INTERVAL * math.pow(2, i.failure_count)
-                    i.next_update = timezone.now() + timedelta(seconds=update_time)
-                    i.save()
         except Exception, E:
             print "Something very basic went wrong with something: %s" % E
         time.sleep(1)

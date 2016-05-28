@@ -63,6 +63,7 @@ class Updater(models.Model):
     last_failure_message = models.TextField(blank=True, null=True)
     failure_count = models.IntegerField(default=0)
     user = models.ForeignKey(User, blank=True, null=True)
+    running = models.BooleanField(default=False)
     type = models.CharField(max_length=255)
     def friendly_type(self):
         from main.appconfig import type_data
