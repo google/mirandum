@@ -97,6 +97,7 @@ def alert_api(request):
             'font': alert.style.font,
             'font_size': alert.style.font_size,
             'font_color': alert.style.font_color,
+            'type': alert.config.type,
         })
     output = json.dumps({'alerts': alert_response})
     response = HttpResponse(output)
