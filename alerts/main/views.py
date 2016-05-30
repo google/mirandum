@@ -201,7 +201,7 @@ def lists(request):
             config.format = "[[name]]"
             config.save()
         elif request.POST['add'] == "Add Recent Subscriber":
-            config.type = "ytsubs"
+            config.type = "youtubesubs"
             config.format = "[[name]]"
             config.save()
 

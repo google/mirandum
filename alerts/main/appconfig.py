@@ -60,7 +60,7 @@ type_data = {
         'runner': run_imraising,
         'prop': 'imraisingupdate',
         'event': ImraisingEvent,
-        'label': 'Imraising',
+        'label': 'ImRaising',
     },
     'donations': {
         'label': 'Overall Donations'
@@ -70,5 +70,5 @@ type_data = {
 def type_choices():
     output = []
     for key in type_data:
-        output.append((key, key))
+        output.append((key, type_data[key].get('label',key)))
     return sorted(output)
