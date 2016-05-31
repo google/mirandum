@@ -16,16 +16,19 @@ import json
 import urllib2
 from imraising.models import *
 
-def run_imraising(ffu):
+def run_imraising(ffu, producer=None):
     added = 0
     k = ffu.api_key
-    request = urllib2.Request("https://imraising.tv/api/v1/donations?limit=10", 
-        headers={
-            "Content-Type" : "application/json",
-            "Authorization": 'APIKey apikey="%s"' % k
-            })
-    contents = urllib2.urlopen(request).read()
-    data = json.loads(contents)
+    if producer:
+        data = producer()
+    else:
+        request = urllib2.Request("https://imraising.tv/api/v1/donations?limit=10", 
+            headers={
+                "Content-Type" : "application/json",
+                "Authorization": 'APIKey apikey="%s"' % k
+                })
+        contents = urllib2.urlopen(request).read()
+        data = json.loads(contents)
     for i in data:
         if ImraisingEvent.objects.filter(external_id=i['_id'], updater=ffu).count() > 0:
             break

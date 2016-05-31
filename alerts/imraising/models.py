@@ -15,6 +15,7 @@
 from django.db import models
 import main.models
 import json
+import iso8601
 
 class ImraisingUpdate(main.models.Updater):
     api_key = models.CharField(max_length=255)
