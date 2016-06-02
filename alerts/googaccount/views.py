@@ -75,6 +75,8 @@ def unlink(request, id):
 
 @login_required
 def unlink_confirm(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+
   # Delete updaters
   all_updaters = Updater.objects.filter(user=request.user)
   for updater in all_updaters:
@@ -85,7 +87,6 @@ def unlink_confirm(request, id):
   storage.delete()
 
   # Delete AppsCred
-  ac = AppCreds.objects.get(user=request.user, id=id)
   ac.delete()
 
   return HttpResponseRedirect("/googleaccount/")
