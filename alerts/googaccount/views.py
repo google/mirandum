@@ -28,8 +28,6 @@ from oauth2client.contrib.django_orm import Storage
 
 from django.shortcuts import render
 
-from main.models import Updater
-
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '..', 'client_secrets.json')
 
 FLOW = flow_from_clientsecrets(
