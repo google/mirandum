@@ -67,14 +67,14 @@ def finalize(request):
   return HttpResponseRedirect("/googleaccount/")
 
 @login_required
-def delete(request, id):
+def unlink(request, id):
   ac = AppCreds.objects.get(user=request.user, id=id)
   all_updaters = Updater.objects.filter(user=request.user)
   data = {'account': ac, 'all_updaters': all_updaters}
   return render(request, "googaccount/unlink.html", data)
 
 @login_required
-def delete_confirm(request, id):
+def unlink_confirm(request, id):
   ac = AppCreds.objects.get(user=request.user, id=id)
   all_updaters = Updater.objects.filter(user=request.user)
   data = {'account': ac, 'all_updaters': all_updaters}
