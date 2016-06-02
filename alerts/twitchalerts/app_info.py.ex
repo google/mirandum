@@ -4,3 +4,4 @@ TWITCH_INFO = {
     'client_secret': '',
     'redirect_uri': 'http://localhost:8000/twitchalerts/authorize'
 }
+
