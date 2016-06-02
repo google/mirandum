@@ -71,6 +71,9 @@ class Updater(models.Model):
         if not appdata: return self.type
         return appdata.get('label', self.type)
 
+    def __str__(self):
+        return 'Updater{type=%s}' % self.type
+
 
 class UpdaterEvent(models.Model):
     external_id = models.CharField(max_length=255)

@@ -14,16 +14,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
-
-
-
-{% block title %}Log in{% endblock %}
-
 {% block content %}
-  <a href="/accounts/register/">Register a new account</a><br />
-  <form action="." method="post" class="login_form">{% csrf_token %}
-    {{ form.as_p }}
-    <p class="submit"><button type="submit" name="submit" value="Login">Log in</button></p>
-    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-  </form>
+<h2>Google account unlinking</h2>
+<p>
+  This will <span class="warning">unlink</span> the following
+  Google account: <b>{{account.label}}</b>
+</p>
+{% if all_updaters %}
+    <p><span class="warning">The account will also be removed from:</span></p>
+    <ul>
+    {% for updater in all_updaters %}
+    <li>{{updater.friendly_type}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<p>Note: no alert will be removed.</p>
+<a href="/googleaccount/unlink_confirm/{{account.id}}" class="button">Unlink account</a>
+<a href="/googleaccount/" class="button grey">Cancel</a>
 {% endblock %}

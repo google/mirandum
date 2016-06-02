@@ -25,6 +25,8 @@ from oauth2client.contrib.django_orm import Storage
 
 from django.shortcuts import render
 
+from main.models import Updater
+
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '..', 'client_secrets.json')
 
 FLOW = flow_from_clientsecrets(
@@ -62,4 +64,28 @@ def finalize(request):
   internal_label = "%s-%s" % (request.user.id, request.POST['label'])
   storage = Storage(CredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
+  return HttpResponseRedirect("/googleaccount/")
+
+@login_required
+def delete(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+  all_updaters = Updater.objects.filter(user=request.user)
+  data = {'account': ac, 'all_updaters': all_updaters}
+  return render(request, "googaccount/unlink.html", data)
+
+@login_required
+def delete_confirm(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+  all_updaters = Updater.objects.filter(user=request.user)
+  data = {'account': ac, 'all_updaters': all_updaters}
+  for updater in all_updaters:
+    updater.delete()
+
+  # Delete credential
+  storage = Storage(CredentialsModel, 'id', ac, 'credential')
+  storage.delete()
+
+  # Delete AppsCred
+  ac.delete()
+
   return HttpResponseRedirect("/googleaccount/")
