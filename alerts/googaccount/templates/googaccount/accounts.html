@@ -22,7 +22,7 @@ limitations under the License.
 <br />
 <ul>
 {% for account in accounts %}
-  <li>{{account.label}}</li>
+  <li>{{account.label}} (<a href="unlink/{{account.id}}">unlink</a>)</li>
 {% endfor %} 
 </ul>
 {% endblock %}

@@ -38,6 +38,8 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^googleaccount/$', 'googaccount.views.accounts'),
+    url(r'^googleaccount/unlink/(?P<id>[0-9]+)', 'googaccount.views.unlink'),
+    url(r'^googleaccount/unlink_confirm/(?P<id>[0-9]+)', 'googaccount.views.unlink_confirm'),
     url(r'^googleaccount/setup', 'googaccount.views.setup'),
     url(r'^googleaccount/oauth2callback', 'googaccount.views.auth_return'),
     url(r'^googleaccount/finalize', 'googaccount.views.finalize'),

@@ -17,6 +17,9 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from datetime import datetime
 from googaccount.models import CredentialsModel, AppCreds
+from fanfunding.models import FanFundingUpdate
+from sponsors.models import SponsorUpdate
+from youtubesubs.models import YoutubeSubUpdate
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from oauth2client.contrib import xsrfutil
@@ -36,8 +39,8 @@ FLOW.params['approval_prompt'] = 'force'
 
 @login_required
 def accounts(request):
-    accounts = AppCreds.objects.filter(user=request.user)
-    return render(request, "googaccount/accounts.html", {'accounts': accounts})
+  accounts = AppCreds.objects.filter(user=request.user)
+  return render(request, "googaccount/accounts.html", {'accounts': accounts})
 
 @login_required
 def setup(request):
@@ -56,10 +59,52 @@ def auth_return(request):
 
 @login_required
 def finalize(request):
-  ac = AppCreds(user=request.user, label=request.POST['label']) 
+  ac = AppCreds(user=request.user, label=request.POST['label'])
   ac.save()
   credential = FLOW.step2_exchange(request.POST)
   internal_label = "%s-%s" % (request.user.id, request.POST['label'])
   storage = Storage(CredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
   return HttpResponseRedirect("/googleaccount/")
+
+@login_required
+def unlink(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+  updaters = _get_updaters(request.user, ac)
+  data = {'account': ac, 'updaters': updaters}
+  return render(request, "googaccount/unlink.html", data)
+
+@login_required
+def unlink_confirm(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+
+  # Delete updaters
+  updaters = _get_updaters(request.user, ac)
+  for updater in updaters:
+    updater.delete()
+
+  # Delete credential
+  storage = Storage(CredentialsModel, 'id', ac, 'credential')
+  storage.delete()
+
+  # Delete AppsCred
+  ac.delete()
+
+  return HttpResponseRedirect("/googleaccount/")
+
+def _get_updaters(user, app_creds):
+  # We need to get updaters from each specific class, otherwise we cannot
+  # filter by credentials so using Updater.objects.filter would return all
+  # the user's updaters.
+
+  updaters = []
+  # YouTube subscribers
+  updaters.extend(YoutubeSubUpdate.objects.filter(user=user,
+                                                  credentials=app_creds))
+  # Sponsors
+  updaters.extend(SponsorUpdate.objects.filter(user=user,
+                                               credentials=app_creds))
+  # Fan funding
+  updaters.extend(FanFundingUpdate.objects.filter(user=user,
+                                                  credentials=app_creds))
+  return updaters
