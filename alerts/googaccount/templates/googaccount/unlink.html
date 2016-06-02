@@ -20,10 +20,10 @@ limitations under the License.
   This will <span class="warning">unlink</span> the following
   Google account: <b>{{account.label}}</b>
 </p>
-{% if all_updaters %}
+{% if updaters %}
     <p><span class="warning">The account will also be removed from:</span></p>
     <ul>
-    {% for updater in all_updaters %}
+    {% for updater in updaters %}
     <li>{{updater.friendly_type}}</li>
     {% endfor %}
 </ul>
