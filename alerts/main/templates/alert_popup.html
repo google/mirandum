@@ -90,6 +90,14 @@ limitations under the License.
       function setVisible(element, visible) {
         if (visible) {
           element.removeAttribute('hidden');
+          if (element.nodeName == 'IMG') {
+            // Reload image src to force the browser to replay animated GIFs
+            // Due to how browsers cache work, this does not make an
+            // HTTP request.
+            src = element.src;
+            element.src = '';
+            element.src = src;
+          }
         } else {
           element.setAttribute('hidden', '');
         }
