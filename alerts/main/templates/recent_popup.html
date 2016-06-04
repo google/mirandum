@@ -68,7 +68,7 @@ limitations under the License.
       }
 
       function loadSubMessages() {
-        $.getJSON('/recent_api?key='+currentUser+'&id='+currentId, null, handleEmails ).fail(
+        $.getJSON('/recent_api?key='+currentUser+'&id='+currentId+'&type='+currentType, null, handleEmails ).fail(
           function(jqxhr, textStatus, error) {
             setTimeout(loadSubMessages, 60000);
           });
@@ -103,6 +103,9 @@ limitations under the License.
       }
       if (params.id != undefined) {
         currentId = params.id;
+      }
+      if (params.type != undefined) {
+        currentType = params.type;
       }
       if (params.bgColor != undefined) {
           document.body.style.backgroundColor = params.bgColor;

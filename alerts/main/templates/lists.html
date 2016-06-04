@@ -18,11 +18,17 @@ limitations under the License.
 {% block content %}
 <h2>Lists</h2>
  <p>Lists let you show recent subscribers, sponsors, or donors, for each configured service.</p>
-  <p>You have {{recents|length}} configured lists.</p>
+  <p>You have {{recents|length}} lists of recent actions.</p>
   <ul>
   {% for recent in recents %}
     <li><b>{{recent.type}} - {{recent.id}}</b>: List {{recent.count}} items, <i>{{recent.format}}</i> (<a href="/recent_config/{{recent.id}}">edit</a>) (<a href="/recent_popup?id={{recent.id}}&key={{key.key}}">open</a>)</li>
   {% endfor %}  
+  </ul>
+  <p>You have {{tops|length}} lists of top donations.</p>
+  <ul>
+  {% for top in tops %}
+    <li><b>top - {{top.type}} - {{top.id}}</b>: List {{top.count}} items, <i>{{top.format}}</i>{% if top.type == "limited" %}, {{top.days}} days{% endif %} (<a href="/donations/top/{{top.id}}">edit</a>) (<a href="/recent_popup?id={{top.id}}&key={{key.key}}&type=top">open</a>)</li>
+  {% endfor %}
   </ul>
   <p>
     Quick-lists: Pre-add some commonly used lists to get started!
@@ -31,9 +37,16 @@ limitations under the License.
     <input type="submit" name="add" value="Add Recent Donation" />
     <input type="submit" name="add" value="Add Recent Sponsor" />
     <input type="submit" name="add" value="Add Recent Subscriber" />
+    <input type="submit" name="add" value="Add Top Donor (session)" />
   </form>
   or add a custom list:
-  <a href="/recent_config">Add New List</a>
+  <a href="/recent_config">Add New Recent List</a> or <a href="/donations/top">add new Top Donations</a>.
+<hr />
+  {% if session %}
+  <form method="POST" action="/reset_session">{%csrf_token%}<b>Your session was last reset:</b> {{session.session_start|timesince}} ago. <input type="submit" value="Reset Session" name="reset" /></form>
+  {% endif %}
+<hr />
+
 <h2>Add Lists to your Stream</h2>
 <p>
   Want to add these lists to your stream as text files? Check out:

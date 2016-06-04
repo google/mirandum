@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     url(r'^recent_popup$', 'main.views.recent_popup', name='recent_popup'),
     url(r'^label_manager$', 'main.views.label_manager', name='label_manager'),
     url(r'^lists$', 'main.views.lists', name='lists'),
+    url(r'^reset_session$', 'main.views.reset_session', name='reset_session'),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^googleaccount/$', 'googaccount.views.accounts'),
@@ -79,6 +80,8 @@ urlpatterns = patterns('',
     url(r'^upload/upload$', 'upload.views.upload'),
 
     url(r'^donations/$', 'donations.views.list'),
+    url(r'^donations/top$', 'donations.views.top_config'),
+    url(r'^donations/top/(?P<top_id>[0-9]+)$', 'donations.views.top_config'),
 
     url(r'^ytsubs/$', 'ytsubs.views.home'),
     url(r'^ytsubs/test_alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.test_alert'),

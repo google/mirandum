@@ -18,11 +18,13 @@ import random
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig
+from django.utils import timezone
+from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session
 from main.support import formatter
 from main.forms import RecentForm
 from main.appconfig import type_data
-from donations.models import Donation
+from donations.models import Donation, TopList
+from donations.support import output_for_top
 
 @login_required
 def home_redirect(request):
@@ -126,6 +128,8 @@ def all_recents(request):
     output = {}
     for i in RecentConfig.objects.filter(user=k.user):
         output['%s-%s' % (i.type, i.id)] = output_for_recent(i)
+    for i in TopList.objects.filter(user=k.user):
+        output['top-%s-%s' % (i.type, i.id)] = output_for_top(i)
     output_s = json.dumps(output)
     return HttpResponse(output_s, content_type='text/plain')
 
@@ -135,10 +139,16 @@ def recent_api(request):
         return HttpResponseBadRequest()
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
-    config = RecentConfig.objects.get(pk=request.GET['id'])
-    if config.user != k.user:
-        return HttpResponseBadRequest()
-    data = output_for_recent(config)
+    if request.GET.get("type") == "top":
+        config = TopList.objects.get(pk=request.GET['id'])
+        if config.user != k.user:
+            return HttpResponseBadRequest()
+        data = output_for_top(config)
+    else:
+        config = RecentConfig.objects.get(pk=request.GET['id'])
+        if config.user != k.user:
+            return HttpResponseBadRequest()
+        data = output_for_recent(config)
     output = {
       'latest': data,
       'font': config.font or None,
@@ -181,6 +191,18 @@ def recent_config(request, recent_id=None):
     return render(request, "recent_config.html", {'form': f, 'new': recent_id is None})
 
 @login_required
+def reset_session(request):
+    if request.POST['reset']:
+        user = request.user
+        if 'key' in request.POST:
+            ak = AccessKey.objects.get(key=key)
+            user = ak.user
+        s, created = Session.objects.get_or_create(user=user)
+        s.session_start=timezone.now()
+        s.save()
+    return HttpResponseRedirect("/lists")
+
+@login_required
 def lists(request):
     key, created = AccessKey.objects.get_or_create(user=request.user)
     if created:
@@ -205,7 +227,18 @@ def lists(request):
             config.format = "[[name]]"
             config.save()
 
+        elif request.POST['add'] == "Add Top Donor (session)":
+            config = TopList(user=request.user, type="session")
+            config.save()
+            if not Session.objects.filter(user=request.user).count():
+                s = Session(user=request.user, session_start=timezone.now())
+                s.save()
+
     recents = RecentConfig.objects.filter(user=request.user)
-    return render(request, "lists.html", {'recents': recents, 'key': key})
+    tops = TopList.objects.filter(user=request.user)
+    session = None
+    if Session.objects.filter(user=request.user):
+        session = Session.objects.get(user=request.user)
+    return render(request, "lists.html", {'recents': recents, 'tops': tops, 'key': key, 'session': session})
         
 
