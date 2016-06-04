@@ -201,6 +201,12 @@ def reset_session(request):
         s, created = Session.objects.get_or_create(user=user)
         s.session_start=timezone.now()
         s.save()
+
+    if 'key' in request.POST:
+        response = HttpResponse("")
+        response['Access-Control-Allow-Origin'] = "*"
+        response['Access-Control-Allow-Headers'] = 'accept, x-requested-with'
+        return response
     return HttpResponseRedirect("/lists")
 
 @login_required
