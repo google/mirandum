@@ -17,8 +17,10 @@ var apiKey = null;
 var chooseDirButton = document.querySelector('#choose_dir');
 var updateKeyButton = document.querySelector('#update_key');
 var apiKeyBox = document.querySelector('#api_key');
+var resetSessionButton = document.querySelector('#reset_session');
 var directoryBox = document.querySelector('#directory');
 var output = document.querySelector('#output');
+
 
 function loadInitialFile(launchData) {
     chrome.storage.local.get(['selectedDir', 'apiKey'], function(items) {
@@ -61,6 +63,14 @@ function getJSON(url, callback){
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
         
+}
+
+function resetSession(){
+    var xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "http://localhost:8000/reset_session", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("reset=true&key="+apiKey);
 }
 
 function handleData(data) {
@@ -127,4 +137,7 @@ function writeFile(dir, filename, contents) {
     });
 }
 
+resetSessionButton.onclick=resetSession;
+
 loadInitialFile(launchData);
+
