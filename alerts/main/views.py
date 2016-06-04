@@ -25,6 +25,7 @@ from main.forms import RecentForm
 from main.appconfig import type_data
 from donations.models import Donation, TopList
 from donations.support import output_for_top
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def home_redirect(request):
@@ -190,12 +191,12 @@ def recent_config(request, recent_id=None):
         
     return render(request, "recent_config.html", {'form': f, 'new': recent_id is None})
 
-@login_required
+@csrf_exempt
 def reset_session(request):
     if request.POST['reset']:
         user = request.user
         if 'key' in request.POST:
-            ak = AccessKey.objects.get(key=key)
+            ak = AccessKey.objects.get(key=request.POST['key'])
             user = ak.user
         s, created = Session.objects.get_or_create(user=user)
         s.session_start=timezone.now()
