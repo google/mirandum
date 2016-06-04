@@ -33,3 +33,18 @@ class Donation(models.Model):
             'currency': self.currency,
             'currencysymbol': SYMBOLS.get(self.currency, ""),
         }
+
+class TopList(models.Model):
+    user = models.ForeignKey(User)
+    count = models.IntegerField(default=1)
+    format = models.CharField(default='[[name]]: [[currencysymbol]][[amount]]', max_length=1000)
+    seperator = models.CharField(default=', ', max_length=100)
+    font = models.CharField(blank=True, null=True, max_length=255)
+    font_size = models.CharField(blank=True, null=True, max_length=255)
+    font_color = models.CharField(blank=True, null=True, max_length=255)
+    days = models.IntegerField(blank=True, null=True)
+    type = models.CharField(max_length=50, choices=(
+        ('session', 'Session'),
+        ('limited', 'Number of Days'),
+        ('alltime', 'All Time'),
+    ), default='session')

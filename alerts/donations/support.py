@@ -13,7 +13,12 @@
 #  limitations under the License. 
 from django.utils import timezone
 from donations.models import Donation
+from main.models import Session
+from main.support import formatter
 from django.conf import settings
+from datetime import timedelta
+from django.db.models import Sum, Max
+from donations.currencymap import SYMBOLS
 import json
 
 TARGET_CURRENCY = "USD"
@@ -43,3 +48,30 @@ def currency_conversion(amount, f, t):
     if not f in rates or not t in rates:
         return None
     return amount * rates[t] / rates[f]
+
+def output_for_top(top):
+    donations = Donation.objects.filter(user=top.user) 
+    if top.type == 'session':
+        session = Session.objects.filter(user=top.user)
+        if session.count():
+            session = session[0]
+            donations = donations.filter(timestamp__gt=session.session_start)
+    elif top.type == "limited" and top.days:
+        old_time = timezone.now() - timedelta(days=top.days)
+        donations = donations.filter(timestamp__gt=old_time)
+    
+    donations = donations.values('name').annotate(
+        donations=Sum('primary_amount'), 
+        local_donations=Sum('amount'), 
+        local_currency=Max('currency')).order_by("-donations")
+    output = []
+    for i in donations[0:top.count]:
+        symbol = SYMBOLS.get(i['local_currency'], "")
+        d = {
+            'name': i['name'], 
+            'amount': "%.2f" % i['local_donations'], 
+            'currency': i['local_currency'], 
+            'currencysymbol': symbol
+        }
+        output.append(formatter(top.format, d)) 
+    return top.seperator.join(output)    

@@ -89,3 +89,7 @@ class RecentConfig(models.Model):
     font = models.CharField(blank=True, null=True, max_length=255)
     font_size = models.CharField(blank=True, null=True, max_length=255)
     font_color = models.CharField(blank=True, null=True, max_length=255)
+
+class Session(models.Model):
+    user = models.ForeignKey(User)
+    session_start = models.DateTimeField()
