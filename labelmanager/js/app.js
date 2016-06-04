@@ -68,7 +68,7 @@ function getJSON(url, callback){
 function resetSession(){
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "http://localhost:8000/reset_session", true);
+    xmlhttp.open("POST", "https://www.livestreamalerts.com/reset_session", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("reset=true&key="+apiKey);
 }
