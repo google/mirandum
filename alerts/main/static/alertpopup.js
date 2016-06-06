@@ -64,11 +64,13 @@ function preload(alerts) {
           fonts.push(alert.font);
       }
    }
+   if (fonts) {
    WebFont.load({
        google: {
            families: fonts
        }
    });
+   }
 }
 
 function handleAlerts(resp) {

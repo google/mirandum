@@ -111,11 +111,13 @@ limitations under the License.
                 fonts.push(alert.font);
             }
          }
+         if (fonts) {
          WebFont.load({
              google: {
                  families: fonts
              }
          });
+         }
       }
       // Actual functionality
       function start() {
