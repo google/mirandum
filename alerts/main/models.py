@@ -15,7 +15,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import md5, random, datetime
-
+from main.support import animations_list, font_effects
 
 class AlertStyle(models.Model):
     image = models.TextField(blank=True,null=True)
@@ -35,6 +35,14 @@ class AlertConfig(models.Model):
     font = models.CharField(blank=True, null=True, max_length=255)
     font_size = models.CharField(blank=True, null=True, max_length=255)
     font_color = models.CharField(blank=True, null=True, max_length=255)
+    layout = models.CharField(blank=True, null=True, max_length=100, choices=(
+        ('vertical', "Image above text"),
+        ('side', 'Image next to text'),
+        ('above', 'Text on top of image'),
+    ), help_text="Alert layout (only available with v2 AlertBox)")
+    animation_in = models.CharField(blank=True, null=True, max_length=100, choices=animations_list("in"), default="fadeIn", help_text="(only available with v2 AlertBox)")
+    animation_out = models.CharField(blank=True, null=True, max_length=100, choices=animations_list("out"), default="fadeOut", help_text="(only available with v2 AlertBox)")
+    font_effect = models.CharField(blank=True, null=True, max_length=100, choices=font_effects(), default="shadow", help_text="(only available with v2 AlertBox)")
     user = models.ForeignKey(User)
     type = models.CharField(max_length=255)
     def friendly_type(self):

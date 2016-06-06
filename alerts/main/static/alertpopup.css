@@ -1,0 +1,126 @@
+/*
+  Copyright 2016 Google Inc. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. 
+*/  
+#widget {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+}
+
+.widgetAlertWrapper {
+  position: relative; }
+
+body, html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; }
+
+#wrap {
+  position: relative;
+  height: 100%;
+  width: 100%; }
+
+#alertBox {
+  height: 100%;
+  width: 100%;
+  position: absolute; }
+
+#alertBox.hidden, .hidden {
+  opacity: 0; }
+
+#alertText {
+  padding: 20px;
+   }
+
+#alertMessage {
+  text-align: center; }
+
+#imageContainer {
+  position: relative; }
+
+/* standard layout, image above the text */
+body.layoutVertical #wrap, .widgetAlertWrapper.layoutVertical #wrap {
+  display: table; }
+
+body.layoutVertical #imageContainer, .widgetAlertWrapper.layoutVertical #imageContainer {
+  height: 100%;
+  display: table-cell;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: contain; }
+
+body.layoutVertical #alertText, .widgetAlertWrapper.layoutVertical #alertText {
+  display: table-cell;
+  text-align: center; }
+
+body.layoutVertical #imageContainerWrapper, body.layoutVertical #alertTextWrapper, .widgetAlertWrapper.layoutVertical #imageContainerWrapper, .widgetAlertWrapper.layoutVertical #alertTextWrapper {
+  display: table-row; }
+
+/* image and text centered and stretched for text over an image */
+body.layoutAbove #imageContainer, .widgetAlertWrapper.layoutAbove #imageContainer {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain; }
+
+body.layoutAbove #imageContainerWrapper, body.layoutAbove #alertTextWrapper, .widgetAlertWrapper.layoutAbove #imageContainerWrapper, .widgetAlertWrapper.layoutAbove #alertTextWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: table;
+  height: 100%;
+  width: 100%; }
+
+body.layoutAbove #imageContainer, body.layoutAbove #alertText, .widgetAlertWrapper.layoutAbove #imageContainer, .widgetAlertWrapper.layoutAbove #alertText {
+  display: table-cell;
+  height: 100%;
+  width: 100%;
+  vertical-align: middle;
+  text-align: center; }
+
+/* image on left side */
+body.layoutSide #alertBox, .widgetAlertWrapper.layoutSide #alertBox {
+  display: table; }
+
+body.layoutSide #wrap, .widgetAlertWrapper.layoutSide #wrap {
+  display: table-row; }
+
+body.layoutSide #imageContainerWrapper, .widgetAlertWrapper.layoutSide #imageContainerWrapper {
+  width: 30%;
+  height: 100%;
+  display: table-cell; }
+
+body.layoutSide #imageContainer, .widgetAlertWrapper.layoutSide #imageContainer {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  height: 100%; }
+
+body.layoutSide #alertTextWrapper, .widgetAlertWrapper.layoutSide #alertTextWrapper {
+  width: 70%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left; }
+
+body.layoutSide #alertText, .widgetAlertWrapper.layoutSide #alertText {
+  display: inline-block; }
+
+.hidden { display:none; }
+
+

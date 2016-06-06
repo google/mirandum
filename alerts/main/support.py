@@ -53,3 +53,64 @@ def formatter(format, data):
             v = str(v)
         format = format.replace("[[%s]]" % k, v)
     return format
+
+def animations_list(type="in"):
+    upper_type = type.title()    
+    return (
+      ("fade%s" % upper_type, "Fade %s" % upper_type),
+      ("fade%sDown" % upper_type, "Fade %s Down" % upper_type),
+      ("fade%sDownBig" % upper_type, "Fade %s Down Big" % upper_type),
+      ("fade%sLeft" % upper_type, "Fade %s Left" % upper_type),
+      ("fade%sLeftBig" % upper_type, "Fade %s Left Big" % upper_type),
+      ("fade%sRight" % upper_type, "Fade %s Right" % upper_type),
+      ("fade%sRightBig" % upper_type, "Fade %s" % upper_type),
+      ("fade%sUp" % upper_type, "Fade %s Up" % upper_type),
+      ("fade%sUpBig" % upper_type, "Fade %s Up Big" % upper_type),
+    
+      ("zoom%s" % upper_type, "Zoom %s" % upper_type),
+      ("zoom%sDown" % upper_type, "Zoom %s Down" % upper_type),
+      ("zoom%sLeft" % upper_type, "Zoom %s Left" % upper_type),
+      ("zoom%sRight" % upper_type, "Zoom %s Right" % upper_type),
+      ("zoom%sUp" % upper_type, "Zoom %s Up" % upper_type),
+    
+      ("bounce%s" % upper_type, "Bounce %s" % upper_type),
+      ("bounce%sDown" % upper_type, "Bounce %s Down" % upper_type),
+      ("bounce%sLeft" % upper_type, "Bounce %s Left" % upper_type),
+      ("bounce%sRight" % upper_type, "Bounce %s Right" % upper_type),
+      ("bounce%sUp" % upper_type, "Bounce %s Up" % upper_type),
+    
+      ("slide%sUp" % upper_type, "Slide %s Up" % upper_type),
+      ("slide%sDown" % upper_type, "Slide %s Down" % upper_type),
+      ("slide%sLeft" % upper_type, "Slide %s Left" % upper_type),
+      ("slide%sRight" % upper_type, "Slide %s Right" % upper_type)
+    )
+def font_effects():
+    return (
+        ("shadow", "Normal Shadow"),
+        ("anaglyph", "Anaglyph"),
+        ("brick-sign", "Brick Sign"),
+        ("canvas-print", "Canvas Print"),
+        ("crackle", "Crackle"),
+        ("decaying", "Decaying"),
+        ("destruction", "Destruction"),
+        ("distressed", "Distressed"),
+        ("distressed-wood", "Distressed Wood"),
+        ("emboss", "Emboss"),
+        ("fire", "Fire"),
+        ("fire-animation", "Fire Animation"),
+        ("fragile", "Fragile"),
+        ("grass", "Grass"),
+        ("ice", "Ice"),
+        ("mitosis", "Mitosis"),
+        ("neon", "Neon"),
+        ("outline", "Outline"),
+        ("putting-green", "Putting Green"),
+        ("scuffed-steel", "Scuffed Steel"),
+        ("splintered", "Splintered"),
+        ("static", "Static"),
+        ("stonewash", "Stonewash"),
+        ("3d", "3d"),
+        ("3d-float", "3d Float"),
+        ("vintage", "Vintage"),
+        ("wallpaper", "Wallpaper"),
+    )

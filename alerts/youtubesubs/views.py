@@ -59,7 +59,7 @@ def test_alert(request, alert_id=None):
 class AlertForm(ModelForm):
     class Meta:
         model = YoutubeSubAlertConfig
-        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color']
+        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'layout', 'animation_in', 'animation_out', 'font_effect']
         widgets = {
             'image_url': forms.TextInput(attrs={'size': 50}),
             'sound_url': forms.TextInput(attrs={'size': 50}),

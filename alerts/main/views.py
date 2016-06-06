@@ -81,6 +81,9 @@ def delete_updater(request, id):
         return render(request, "delete_update.html")
 
 def alert_popup(request):
+    if 'v' in request.GET:
+        if request.GET['v'] == '2':
+            return render(request, "alert_popupv2.html")
     return render(request, "alert_popup.html")
 
 def recent_popup(request):
@@ -101,6 +104,10 @@ def alert_api(request):
             'font_size': alert.style.font_size,
             'font_color': alert.style.font_color,
             'type': alert.config.type,
+            'layout': alert.config.layout,
+            'font_effect': alert.config.font_effect,
+            'animation_out': alert.config.animation_out,
+            'animation_in': alert.config.animation_in,
         })
     output = json.dumps({'alerts': alert_response})
     response = HttpResponse(output)

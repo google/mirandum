@@ -1,0 +1,143 @@
+/*
+  Copyright 2016 Google Inc. All Rights Reserved.
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. 
+*/  
+.font-effect-shadow { text-shadow: 0px 0px 1px #000, 0px 0px 2px #000, 0px 0px 3px #000, 0px 0px 4px #000, 0px 0px 5px #000; }
+.font-effect-anaglyph {
+  text-shadow: -0.06em 0 red, 0.06em 0 cyan;
+}
+.font-effect-brick-sign {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/brick-sign.png);
+  color: #600;
+}
+.font-effect-canvas-print {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/canvas-print.png);
+  color: #776d63;
+}
+.font-effect-crackle {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/crackle.png);
+  color: #963;
+}
+.font-effect-decaying {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/decaying.png);
+  color: #958e75;
+}
+.font-effect-destruction {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/destruction.png);
+  color: #000;
+}
+.font-effect-distressed {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/distress-light.png);
+  color: #306;
+}
+.font-effect-distressed-wood {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/distressed-wood.png);
+  color: #4d2e0d;
+}
+.font-effect-emboss {
+  text-shadow: 0px 1px 1px #fff, 0 -1px 1px #000;
+  color: #ddd;
+}
+.font-effect-fire {
+  text-shadow: 0 -0.05em 0.2em #FFF, 0.01em -0.02em 0.15em #FE0, 0.01em -0.05em 0.15em #FC0, 0.02em -0.15em 0.2em #F90, 0.04em -0.20em 0.3em #F70, 0.05em -0.25em 0.4em #F70, 0.06em -0.2em 0.9em #F50, 0.1em -0.1em 1.0em #F40;
+  color: #ffe;
+}
+@-webkit-keyframes font-effect-fire-animation-keyframes {
+  0% {
+    text-shadow: 0 -0.05em 0.2em #FFF, 0.01em -0.02em 0.15em #FE0, 0.01em -0.05em 0.15em #FC0, 0.02em -0.15em 0.2em #F90, 0.04em -0.20em 0.3em #F70,0.05em -0.25em 0.4em #F70, 0.06em -0.2em 0.9em #F50, 0.1em -0.1em 1.0em #F40;
+  }
+  25% {
+    text-shadow: 0 -0.05em 0.2em #FFF, 0 -0.05em 0.17em #FE0, 0.04em -0.12em 0.22em #FC0, 0.04em -0.13em 0.27em #F90, 0.05em -0.23em 0.33em #F70, 0.07em -0.28em 0.47em #F70, 0.1em -0.3em 0.8em #F50, 0.1em -0.3em 0.9em #F40;
+  }
+  50% {    text-shadow: 0 -0.05em 0.2em #FFF, 0.01em -0.02em 0.15em #FE0, 0.01em -0.05em 0.15em #FC0, 0.02em -0.15em 0.2em #F90, 0.04em -0.20em 0.3em #F70,0.05em -0.25em 0.4em #F70, 0.06em -0.2em 0.9em #F50, 0.1em -0.1em 1.0em #F40;
+  }
+  75% {
+    text-shadow: 0 -0.05em 0.2em #FFF, 0 -0.06em 0.18em #FE0, 0.05em -0.15em 0.23em #FC0, 0.05em -0.15em 0.3em #F90, 0.07em -0.25em 0.4em #F70, 0.09em -0.3em 0.5em #F70, 0.1em -0.3em 0.9em #F50, 0.1em -0.3em 1.0em #F40;
+  }
+  100% {
+    text-shadow: 0 -0.05em 0.2em #FFF, 0.01em -0.02em 0.15em #FE0, 0.01em -0.05em 0.15em #FC0, 0.02em -0.15em 0.2em #F90, 0.04em -0.20em 0.3em #F70,0.05em -0.25em 0.4em #F70, 0.06em -0.2em 0.9em #F50, 0.1em -0.1em 1.0em #F40;
+  }
+}
+.font-effect-fire-animation {
+  -webkit-animation-duration:0.8s;
+  -webkit-animation-name:font-effect-fire-animation-keyframes;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-direction:alternate;
+  color: #ffe;
+}
+.font-effect-fragile {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/fragile.png);
+  color: #663;
+}
+.font-effect-grass {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/grass.png);
+  color: #390;
+}
+.font-effect-ice {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/ice.png);
+  color: #0cf;
+}
+.font-effect-mitosis {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/mitosis.png);
+  color: #600;
+}
+.font-effect-neon {
+  text-shadow: 0 0 0.1em #fff, 0 0 0.2em #fff, 0 0 0.3em #fff, 0 0 0.4em #f7f,0 0 0.6em #f0f, 0 0 0.8em #f0f, 0 0 1.0em #f0f, 0 0 1.2em #f0f;
+  color: #fff;
+}
+.font-effect-outline {
+  text-shadow:0 1px 1px #000, 0 -1px 1px #000, 1px 0 1px #000, -1px 0 1px #000;
+  color: #fff;
+}
+.font-effect-putting-green {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/putting-green.png);
+  color: #390;
+}
+.font-effect-scuffed-steel {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/scuffed-steel.png);
+  color: #acacac;
+}
+.font-effect-shadow-multiple {
+  text-shadow: .04em .04em 0 #fff,.08em .08em 0 #aaa;
+  -webkit-text-shadow: .04em .04em 0 #fff, .08em .08em 0 #aaa;
+}
+.font-effect-splintered {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/splintered.png);
+  color: #5a3723;
+}
+.font-effect-static {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/static.png);
+  text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #999999, 0 0 10px #000000;
+  color: #343956;
+}
+.font-effect-stonewash {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/stonewash.png);
+  color: #343956;
+}
+.font-effect-3d {
+  text-shadow: 0px 1px 0px #c7c8ca, 0px 2px 0px #b1b3b6, 0px 3px 0px #9d9fa2, 0px 4px 0px #8a8c8e, 0px 5px 0px #77787b, 0px 6px 0px #636466, 0px 7px 0px #4d4d4f, 0px 8px 7px #001135;
+  color: #fff;
+}
+.font-effect-3d-float {
+  text-shadow: 0 0.032em 0 #b0b0b0, 0px 0.15em 0.11em rgba(0,0,0,0.15), 0px 0.25em 0.021em rgba(0,0,0,0.1), 0px 0.32em 0.32em rgba(0,0,0,0.1);
+  color: #fff;
+}
+.font-effect-vintage {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/distress-medium.png);
+  color: #db8;
+}
+.font-effect-wallpaper {
+  -webkit-mask-image: url(//themes.googleusercontent.com/static/patterns/wallpaper.png);
+  color: #9c7;
+}
