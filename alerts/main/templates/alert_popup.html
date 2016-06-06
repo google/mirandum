@@ -19,7 +19,7 @@ limitations under the License.
     <meta charset='utf-8' />
     <title>Sub Alerts</title>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
   </head>
   <body class="styled">
     <style>
@@ -103,6 +103,20 @@ limitations under the License.
         }
       }
 
+      function preload(alerts) {
+         var fonts = [];
+         for (var i = 0; i < alerts.length; i++) {
+            var alert = alerts[i];
+            if (alert.google_font) {
+                fonts.push(alert.font);
+            }
+         }
+         WebFont.load({
+             google: {
+                 families: fonts
+             }
+         });
+      }
       // Actual functionality
       function start() {
         clearAlert();
@@ -129,6 +143,7 @@ limitations under the License.
       }
       function handleEmails(resp) {
         var alerts = resp.alerts;
+        preload(alerts);
         var subs = [];
         for (var i = 0; i < alerts.length-1; i++) {
             var data = alerts[i];
@@ -167,6 +182,13 @@ limitations under the License.
             var sound = document.getElementById('sound');
             sound.src = alertObj.sound;
             sound.play();
+        }
+        if (alertObj['google_font']) {
+            WebFont.load({
+                google: {
+                    families: [alertObj['font']]
+                }
+            });
         }
         var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color'};
         for (var key in styleProps) {
@@ -213,6 +235,5 @@ limitations under the License.
 
 
     </script>
-
   </body>
 </html>

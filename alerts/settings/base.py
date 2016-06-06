@@ -117,4 +117,5 @@ LOGIN_URL = '/accounts/login/'
 SERVER_BASE = "http://localhost:8000/"
 GCS_BUCKET = "storage.livestreamalerts.com"
 CURRENCY_CONVERSION = "datafiles/currency.json"
+FONT_LIST = "datafiles/font_list.txt"
 RUNNER_DEBUG=DEBUG

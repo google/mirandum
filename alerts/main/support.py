@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.conf import settings
 
 def ac(module_name, form, config, form_sample=None):
     @login_required
@@ -114,3 +115,10 @@ def font_effects():
         ("vintage", "Vintage"),
         ("wallpaper", "Wallpaper"),
     )
+
+def check_google_font(font):
+    f = open(settings.FONT_LIST)
+    for line in f:
+        if line.strip() == font:
+            return True
+    return False

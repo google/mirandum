@@ -56,8 +56,26 @@ function loadAlerts() {
     });
 }
 
+function preload(alerts) {
+   var fonts = [];
+   for (var i = 0; i < alerts.length; i++) {
+      var alert = alerts[i];
+      if (alert.google_font) {
+          fonts.push(alert.font);
+      }
+   }
+   WebFont.load({
+       google: {
+           families: fonts
+       }
+   });
+}
+
 function handleAlerts(resp) {
   var alerts = resp.alerts;
+  if (firstLoad) {
+    preload(alerts);
+  }
   var subs = [];
   for (var i = 0; i < alerts.length-1; i++) {
       var data = alerts[i];
@@ -110,7 +128,15 @@ function showAlert() {
   } else {
       $("#widget").addClass("layoutVertical");
   }    
-  
+ 
+  if (currentAlert['google_font']) {
+      WebFont.load({
+          google: {
+              families: [currentAlert['font']]
+          }
+      });
+  }
+
   // Assign text style properties.
   var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color'};
   for (var key in styleProps) {

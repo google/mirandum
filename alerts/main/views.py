@@ -20,7 +20,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session
-from main.support import formatter
+from main.support import formatter, check_google_font
 from main.forms import RecentForm
 from main.appconfig import type_data
 from donations.models import Donation, TopList
@@ -95,12 +95,18 @@ def alert_api(request):
     alerts = Alert.objects.filter(user=k.user).order_by("-id")
     alert_response = []
     for alert in alerts[0:10]:
+        google_font = False
+        try:
+            google_font = check_google_font(alert.style.font)
+        except Exception, E:
+            print "Failed to check font", E
         alert_response.append({
             'id': alert.id,
             'text': alert.text,
             'image': alert.style.image,
             'sound': alert.style.sound,
             'font': alert.style.font,
+            'google_font': google_font,
             'font_size': alert.style.font_size,
             'font_color': alert.style.font_color,
             'type': alert.config.type,
