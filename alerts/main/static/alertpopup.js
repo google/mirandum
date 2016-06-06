@@ -132,11 +132,10 @@ function showAlert() {
   });
   
   // Fill in image div.
-  var imgDiv = document.getElementById('imageContainer');
-  $("#imageContainer").css("backgroundImage", null);
+  $("#imageContainer").css("backgroundImage", '');
   if (currentAlert.image) {
     $("#imageContainer").css("backgroundImage", "url('"+currentAlert.image+"')");
-    restartAnimation($("#imageContainer"));
+    restartAnimation(currentAlert.image, $("#imageContainer"));
   }
 
 
