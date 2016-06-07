@@ -64,7 +64,7 @@ function preload(alerts) {
           fonts.push(alert.font);
       }
    }
-   if (fonts) {
+   if (fonts.length) {
    WebFont.load({
        google: {
            families: fonts
