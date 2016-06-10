@@ -40,9 +40,6 @@ def config_to_alert(alert, info, test=False):
 @receiver(post_save, sender=YoutubeSubEvent)
 def event(instance, **kwargs):
     user = instance.updater.credentials.user
-    if YoutubeSubEvent.objects.filter(updater=instance.updater, details=instance.details).count() > 1:
-        # No unsub/resub
-        return
     alerts = YoutubeSubAlertConfig.objects.filter(user=user)
     info = instance.as_dict()
     for alert in alerts:
