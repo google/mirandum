@@ -20,6 +20,7 @@ from googaccount.models import CredentialsModel, AppCreds
 from fanfunding.models import FanFundingUpdate
 from sponsors.models import SponsorUpdate
 from youtubesubs.models import YoutubeSubUpdate
+from ytsubs.models import SubUpdate
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from oauth2client.contrib import xsrfutil
@@ -98,9 +99,11 @@ def _get_updaters(user, app_creds):
   # the user's updaters.
 
   updaters = []
-  # YouTube subscribers
+  # YouTube subscribers (new)
   updaters.extend(YoutubeSubUpdate.objects.filter(user=user,
                                                   credentials=app_creds))
+  # YouTube subscribers (old)
+  updaters.extend(SubUpdate.objects.filter(user=user, credentials=app_creds))
   # Sponsors
   updaters.extend(SponsorUpdate.objects.filter(user=user,
                                                credentials=app_creds))
