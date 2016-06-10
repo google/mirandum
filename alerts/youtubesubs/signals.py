@@ -19,6 +19,7 @@ from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from youtubesubs.models import YoutubeSubEvent, YoutubeSubAlertConfig
 import json
+import random
 
 def config_to_alert(alert, info, test=False):
     add = True
@@ -42,5 +43,5 @@ def event(instance, **kwargs):
     user = instance.updater.credentials.user
     alerts = YoutubeSubAlertConfig.objects.filter(user=user)
     info = instance.as_dict()
-    for alert in alerts:
-        config_to_alert(alert, info)
+    chosen_config = random.choice(alerts)
+    config_to_alert(chosen_config, info)
