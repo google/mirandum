@@ -33,7 +33,7 @@ class AlertConfig(models.Model):
     sound_url = models.TextField(blank=True,null=True)
     alert_text = models.TextField(blank=True,null=True)
     font = models.CharField(blank=True, null=True, max_length=255)
-    font_size = models.CharField(blank=True, null=True, max_length=255)
+    font_size = models.CharField(blank=True, null=True, max_length=255, help_text="Use CSS font sizes, e.g. '64px'", default="64px")
     font_color = models.CharField(blank=True, null=True, max_length=255)
     layout = models.CharField(blank=True, null=True, max_length=100, choices=(
         ('vertical', "Image above text"),
