@@ -60,7 +60,7 @@ def output_for_top(top):
         old_time = timezone.now() - timedelta(days=top.days)
         donations = donations.filter(timestamp__gt=old_time)
     
-    donations = donations.values('name').annotate(
+    donations = donations.values('name').filter(primary_amount__gt=0).annotate(
         donations=Sum('primary_amount'), 
         local_donations=Sum('amount'), 
         local_currency=Max('currency')).order_by("-donations")
