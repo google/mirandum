@@ -84,7 +84,7 @@ class Updater(models.Model):
 
 
 class UpdaterEvent(models.Model):
-    external_id = models.CharField(max_length=255)
+    external_id = models.CharField(max_length=255, db_index=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     base_updater = models.ForeignKey(Updater, blank=True, null=True)
 
