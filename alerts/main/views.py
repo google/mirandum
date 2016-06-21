@@ -18,11 +18,14 @@ import random
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig
-from main.support import formatter
+from django.utils import timezone
+from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session
+from main.support import formatter, check_google_font
 from main.forms import RecentForm
 from main.appconfig import type_data
-from donations.models import Donation
+from donations.models import Donation, TopList
+from donations.support import output_for_top
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def home_redirect(request):
@@ -78,6 +81,9 @@ def delete_updater(request, id):
         return render(request, "delete_update.html")
 
 def alert_popup(request):
+    if 'v' in request.GET:
+        if request.GET['v'] == '2':
+            return render(request, "alert_popupv2.html")
     return render(request, "alert_popup.html")
 
 def recent_popup(request):
@@ -89,15 +95,25 @@ def alert_api(request):
     alerts = Alert.objects.filter(user=k.user).order_by("-id")
     alert_response = []
     for alert in alerts[0:10]:
+        google_font = False
+        try:
+            google_font = check_google_font(alert.style.font)
+        except Exception, E:
+            print "Failed to check font", E
         alert_response.append({
             'id': alert.id,
             'text': alert.text,
             'image': alert.style.image,
             'sound': alert.style.sound,
             'font': alert.style.font,
+            'google_font': google_font,
             'font_size': alert.style.font_size,
             'font_color': alert.style.font_color,
             'type': alert.config.type,
+            'layout': alert.config.layout,
+            'font_effect': alert.config.font_effect,
+            'animation_out': alert.config.animation_out,
+            'animation_in': alert.config.animation_in,
         })
     output = json.dumps({'alerts': alert_response})
     response = HttpResponse(output)
@@ -126,6 +142,8 @@ def all_recents(request):
     output = {}
     for i in RecentConfig.objects.filter(user=k.user):
         output['%s-%s' % (i.type, i.id)] = output_for_recent(i)
+    for i in TopList.objects.filter(user=k.user):
+        output['top-%s-%s' % (i.type, i.id)] = output_for_top(i)
     output_s = json.dumps(output)
     return HttpResponse(output_s, content_type='text/plain')
 
@@ -135,10 +153,16 @@ def recent_api(request):
         return HttpResponseBadRequest()
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
-    config = RecentConfig.objects.get(pk=request.GET['id'])
-    if config.user != k.user:
-        return HttpResponseBadRequest()
-    data = output_for_recent(config)
+    if request.GET.get("type") == "top":
+        config = TopList.objects.get(pk=request.GET['id'])
+        if config.user != k.user:
+            return HttpResponseBadRequest()
+        data = output_for_top(config)
+    else:
+        config = RecentConfig.objects.get(pk=request.GET['id'])
+        if config.user != k.user:
+            return HttpResponseBadRequest()
+        data = output_for_recent(config)
     output = {
       'latest': data,
       'font': config.font or None,
@@ -180,6 +204,24 @@ def recent_config(request, recent_id=None):
         
     return render(request, "recent_config.html", {'form': f, 'new': recent_id is None})
 
+@csrf_exempt
+def reset_session(request):
+    if request.POST['reset']:
+        user = request.user
+        if 'key' in request.POST:
+            ak = AccessKey.objects.get(key=request.POST['key'])
+            user = ak.user
+        s, created = Session.objects.get_or_create(user=user)
+        s.session_start=timezone.now()
+        s.save()
+
+    if 'key' in request.POST:
+        response = HttpResponse("")
+        response['Access-Control-Allow-Origin'] = "*"
+        response['Access-Control-Allow-Headers'] = 'accept, x-requested-with'
+        return response
+    return HttpResponseRedirect("/lists")
+
 @login_required
 def lists(request):
     key, created = AccessKey.objects.get_or_create(user=request.user)
@@ -205,7 +247,17 @@ def lists(request):
             config.format = "[[name]]"
             config.save()
 
-    recents = RecentConfig.objects.filter(user=request.user)
-    return render(request, "lists.html", {'recents': recents, 'key': key})
-        
+        elif request.POST['add'] == "Add Top Donor (session)":
+            config = TopList(user=request.user, type="session")
+            config.save()
+            if not Session.objects.filter(user=request.user).count():
+                s = Session(user=request.user, session_start=timezone.now())
+                s.save()
 
+    recents = RecentConfig.objects.filter(user=request.user)
+    tops = TopList.objects.filter(user=request.user)
+    session = None
+    if Session.objects.filter(user=request.user):
+        session = Session.objects.get(user=request.user)
+    return render(request, "lists.html", {'recents': recents, 'tops': tops, 'key': key, 'session': session})
+        
