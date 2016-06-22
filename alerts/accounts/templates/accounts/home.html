@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+{% block content %}
+<h2>Accounts</h2>
+<h3>Google</h3>
+{% if goog_accounts %}
+  <p>You have {{goog_accounts|length}} linked Google account(s).<br/>
+  <b>Pro tip:</b> Once an account is linked, remember to register it
+  for subscriber, fan funding and/or sponsor notifications using the menus above.</p>
+  <ul>
+  {% for goog_account in goog_accounts %}
+    <li>{{goog_account.label}} (<a href="/googleaccount/unlink/{{goog_account.id}}">unlink</a>)</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no Google account registered.</p>
+{% endif %}
+<a href="/googleaccount/setup" class="button">Link new account</a>
+
+<h3>ImRaising</h3>
+{% if imraising_accounts %}
+  <p>You have {{imraising_accounts|length}} registered ImRaising account(s).</p>
+  <ul>
+  {% for imraising_account in imraising_accounts %}
+    <li>{{imraising_account.credentials.label}} (last update: {{imraising_account.last_update|timesince}} ago) (<a href="/delete_updater/{{imraising_account.id}}">unregister</a>)
+   {% if config.failure_count %} <br />
+   <b>{{imraising_account.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
+   {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no ImRaising account registered.</p>
+{% endif %}
+<a href="/imraising/setup" class="button">Register new account</a>
+
+<h3>StreamTip</h3>
+{% if streamtip_accounts %}
+  <p>You have {{streamtip_accounts|length}} registered StreamTip account(s).</p>
+  <ul>
+  {% for streamtip_account in streamtip_accounts %}
+    <li>{{streamtip_account.credentials.label}} (last update: {{streamtip_account.last_update|timesince}} ago) (<a href="/delete_updater/{{streamtip_account.id}}">unregister</a>)
+   {% if config.failure_count %} <br />
+   <b>{{streamtip_account.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
+   {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no StreamTip account registered.</p>
+{% endif %}
+<a href="/streamtip/setup" class="button">Register new account</a>
+
+<h3>TwitchAlerts</h3>
+{% if twitchalerts_accounts %}
+  <p>You have {{twitchalerts_accounts|length}} registered TwitchAlerts account(s).</p>
+  <ul>
+  {% for twitchalerts_account in twitchalerts_accounts %}
+    <li>{{twitchalerts_account.credentials.label}} (last update: {{twitchalerts_account.last_update|timesince}} ago) (<a href="/delete_updater/{{twitchalerts_account.id}}">unregister</a>)
+   {% if config.failure_count %} <br />
+   <b>{{twitchalerts_account.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
+   {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no TwitchAlerts account registered.</p>
+{% endif %}
+<a href="/twitchalerts/setup" class="button">Register new account</a>
+
+{% endblock %}

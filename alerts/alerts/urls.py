@@ -38,7 +38,9 @@ urlpatterns = patterns('',
     url(r'^reset_session$', 'main.views.reset_session', name='reset_session'),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^googleaccount/$', 'googaccount.views.accounts'),
+
+    url(r'^accounts/$', 'accounts.views.home'),
+    
     url(r'^googleaccount/unlink/(?P<id>[0-9]+)', 'googaccount.views.unlink'),
     url(r'^googleaccount/unlink_confirm/(?P<id>[0-9]+)', 'googaccount.views.unlink_confirm'),
     url(r'^googleaccount/setup', 'googaccount.views.setup'),

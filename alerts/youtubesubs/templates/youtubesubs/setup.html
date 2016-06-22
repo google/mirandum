@@ -19,11 +19,12 @@ limitations under the License.
 <p>When selecting an account to connect for subscriber notifications, it should
    be your <b>YouTube Account</b>, not your gmail account.</p>
 
+<p><a href="/accounts" class="button">Manage Google accounts</a></p>
 <form method="POST"> {% csrf_token %}
-<a href="/googleaccount/">Manage Google Accounts</a>
 <table>
   {{form.as_table}}
 </table>
-<input type="submit" value="Add" />
-</form>  
+<input type="submit" value="Register" />
+</form>
+
 {% endblock %}

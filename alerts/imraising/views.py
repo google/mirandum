@@ -44,7 +44,7 @@ def setup(request):
             key = f.cleaned_data['key']
             ffu = ImraisingUpdate(api_key=key, type="imraising", user=request.user)
             ffu.save()
-            return HttpResponseRedirect("/imraising/")
+            return HttpResponseRedirect("/accounts/")
     else:
         f = ImraisingForm()
     return render(request, "imraising/setup.html", {'form': f})
