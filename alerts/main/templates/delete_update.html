@@ -17,7 +17,8 @@ limitations under the License.
 {% block content %}
 Do you want to unregister this account?
 <form method="POST">{% csrf_token %}
-  <input type="submit" value="Unregister" />
+  <input type="submit" value="Unregister" class="button" />
+  <a href="javascript:window.history.back()" class="button grey">Cancel</a>
   {% if r %}
   <input type="hidden" name="redirect" value="y"/>
   {% endif %}
