@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+{% block content %}
+
+<table width="100%">
+  <tr>
+   <th>Amount</th>
+   <th>Start Date</th>
+   <th>End Date</th>
+   <th>Comment</th>
+   <th></th>
+   <th></th>
+ </tr>
+ 
+   
+    
+{% for goal in goals %}
+  <tr>
+    <td>{{goal.amount}}</td>
+    <td>{{goal.start_date}}</td>
+    <td>{{goal.end_date}}</td>
+    <td>{{goal.description}}</td>
+    <td><a href="/donations/goal/{{goal.id}}">Edit</a></td>
+    <td><a href="/donations/goal_view/{{goal.id}}">View</a></td>
+  </tr>
+{% endfor %}
+</table>
+
+<a href="/donations/goal">Add new Goal</a>
+
+{% endblock %}    

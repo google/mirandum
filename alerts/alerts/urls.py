@@ -82,6 +82,8 @@ urlpatterns = patterns('',
     url(r'^donations/$', 'donations.views.list'),
     url(r'^donations/top$', 'donations.views.top_config'),
     url(r'^donations/top/(?P<top_id>[0-9]+)$', 'donations.views.top_config'),
+    url(r'^donations/goal$', 'donations.views.goal_config'),
+    url(r'^donations/goal/(?P<goal_id>[0-9]+)$', 'donations.views.goal_config'),
 
     url(r'^ytsubs/$', 'ytsubs.views.home'),
     url(r'^ytsubs/test_alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.test_alert'),

@@ -48,3 +48,10 @@ class TopList(models.Model):
         ('limited', 'Number of Days'),
         ('alltime', 'All Time'),
     ), default='session')
+
+class Goal(models.Model):
+    user = models.ForeignKey(User)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField(blank=True, null=True)
+    amount = models.FloatField()
+    description = models.CharField(max_length=1000, blank=True, null=True)
