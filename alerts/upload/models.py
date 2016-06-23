@@ -13,11 +13,16 @@
 #  limitations under the License. 
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 class Upload(models.Model):
+    def to_string(self):
+        if self.external:
+            return self.remote_path
+        else:
+            return self.local_name
     local_name = models.CharField(max_length=500)
     remote_path = models.CharField(max_length=500)
     type = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User)
     uploaded = models.DateTimeField(auto_now_add=True)
+    external = models.BooleanField(default=False)

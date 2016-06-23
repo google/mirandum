@@ -17,10 +17,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
+import django.forms as forms
 
 def ac(module_name, form, config, form_sample=None):
     @login_required
     def alert_config(request, alert_id=None):
+        from upload.models import Upload
         ac = None
         if alert_id:
             try:
@@ -38,6 +40,18 @@ def ac(module_name, form, config, form_sample=None):
                 f = form(instance=ac)
             else:
                 f = form(initial=initial)
+        if 'image_url' in f.fields:
+            uploads = Upload.objects.filter(user=request.user, type__in=['unknown', 'image'])
+            choices = [(None, '(none)')]
+            for upload in uploads:
+                choices.append((upload.remote_path, upload.to_string()))
+            f.fields['image_url'].widget = forms.widgets.Select(choices=choices)
+        if 'sound_url' in f.fields:
+            uploads = Upload.objects.filter(user=request.user, type__in=['sound', 'unknown'])
+            choices = []
+            for upload in uploads:
+                choices.append((upload.remote_path, upload.to_string()))
+            f.fields['sound_url'].widget = forms.widgets.Select(choices=choices)
         if f.is_valid():
             ac = f.save(commit=False)
             ac.type = module_name

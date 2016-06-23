@@ -22,6 +22,7 @@ import boto
 
 class UploadForm(forms.Form):
     file = forms.FileField()
+    type = forms.ChoiceField(choices=(('image', 'Image'), ('sound', 'Sound')))
 
 def handle_uploaded_file(f, user):
     gcs_bucket = settings.GCS_BUCKET

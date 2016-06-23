@@ -29,8 +29,10 @@ class AlertStyle(models.Model):
         ), default='center')
 
 class AlertConfig(models.Model):
-    image_url = models.TextField(blank=True,null=True)
-    sound_url = models.TextField(blank=True,null=True)
+    image_url = models.TextField(blank=True,null=True,
+        help_text='<a href="/upload/upload">Upload new file</a>')
+    sound_url = models.TextField(blank=True,null=True,
+        help_text='<a href="/upload/upload">Upload new files</a>. Note: You need to use a .wav file in most broadcasting software.')
     alert_text = models.TextField(blank=True,null=True)
     font = models.CharField(blank=True, null=True, max_length=255)
     font_size = models.CharField(blank=True, null=True, max_length=255, help_text="Use CSS font sizes, e.g. '64px'", default="64px")
