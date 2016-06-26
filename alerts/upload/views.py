@@ -47,7 +47,7 @@ def upload(request):
             path = handle_uploaded_file(request.FILES['file'], request.user)
             local_name = request.FILES['file'].name
             local_name = local_name.split("/")[-1]
-            up = Upload(local_name=local_name, remote_path = path, user=request.user)
+            up = Upload(local_name=local_name, remote_path = path, user=request.user, type=request.POST['type'])
             up.save()
             return HttpResponseRedirect("/upload/")
     else:

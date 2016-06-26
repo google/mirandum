@@ -20,8 +20,8 @@ class Upload(models.Model):
             return self.remote_path
         else:
             return self.local_name
-    local_name = models.CharField(max_length=500)
-    remote_path = models.CharField(max_length=500)
+    local_name = models.CharField(max_length=20000)
+    remote_path = models.CharField(max_length=20000)
     type = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User)
     uploaded = models.DateTimeField(auto_now_add=True)
