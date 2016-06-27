@@ -39,11 +39,6 @@ FLOW.params['access_type'] = 'offline'
 FLOW.params['approval_prompt'] = 'force'
 
 @login_required
-def accounts(request):
-  accounts = AppCreds.objects.filter(user=request.user)
-  return render(request, "googaccount/accounts.html", {'accounts': accounts})
-
-@login_required
 def setup(request):
   FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
                                                  request.user.username)
@@ -66,7 +61,7 @@ def finalize(request):
   internal_label = "%s-%s" % (request.user.id, request.POST['label'])
   storage = Storage(CredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
-  return HttpResponseRedirect("/googleaccount/")
+  return HttpResponseRedirect("/accounts/")
 
 @login_required
 def unlink(request, id):
@@ -91,7 +86,7 @@ def unlink_confirm(request, id):
   # Delete AppsCred
   ac.delete()
 
-  return HttpResponseRedirect("/googleaccount/")
+  return HttpResponseRedirect("/accounts/")
 
 def _get_updaters(user, app_creds):
   # We need to get updaters from each specific class, otherwise we cannot

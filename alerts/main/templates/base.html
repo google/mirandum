@@ -18,12 +18,14 @@ limitations under the License.
 <style type="text/css">
 .button {
   background-color: #d38715;
+  border: none;
   color: white;
-  line-height: 1.5em;
+  line-height: normal;
   padding: 8px 20px;
   box-shadow: 0 -2px rgba(0, 0, 0, 0.1) inset;
   border-radius: 3px;
   text-decoration: none;
+  font-size: 17px;
 }
 .button.grey {
   background-color: #999;
@@ -38,16 +40,42 @@ width: 1200px; padding: 10px; margin: 0px auto; position: relative; background-c
 .warning {
 color: orange; font-weight: bold;
 }
-#header {
+
+#menu {
 width: 1200px; background-color: #406533; margin: 10px auto; position: relative; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 padding: 10px;
 }
-#header div {
-  display: inline-block;
-  padding: 0px 10px;
-  color: white;
+#menu li {
+  display: inline; position: relative; padding: 10px; color: white;
+  -webkit-transition: .3s;
 }
-#header a { color: white; }
+#menu li:hover { background-color: #538242; }
+#menu a { color: white; }
+#menu li:hover ul { display: block; }
+#menu ul {
+  z-index: 9999;
+  position: absolute;
+  padding: 0;
+  left:0; top:100%;
+  width: 100%;
+  display: none;
+}
+#menu ul li {
+  background-color: #406533;
+  display: inline-block;
+  position: relative;
+  padding: 5px 0;
+  text-align: center;
+  width: 100%;
+}
+
+#last_menu {
+  float: right;
+  clear: both !important;
+  margin: 0;
+  top: -10px;
+}
+
 #page-border {
 width: 1200px; min-height: 500px; background: none repeat scroll 0% 0% rgb(255, 255, 255); margin: 10px auto; position: relative; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 padding: 10px;
@@ -57,17 +85,22 @@ padding: 10px;
 </head>
 <body>
 <h1>Livestream Alerts</h1>
-<div id="header">
-<div class="item"><a href="/home/">Home</a></div>
-<div class="item"><a href="/youtubesubs/">Subscribers (new)</a></div>
-<div class="item"><a href="/ytsubs/">Subscribers (old)</a></div>
-<div class="item"><a href="/fanfunding/">Fan Funding</a></div>
-<div class="item"><a href="/sponsors/">Sponsors</a></div>
-<div class="item"><a href="/imraising/">ImRaising</a></div>
-<div class="item"><a href="/streamtip/">StreamTip</a></div>
-<div class="item"><a href="/twitchalerts/">TwitchAlerts</a></div>
-<div class="item" style="float:right">{% if user.is_authenticated %}{{user}} | <a href="/accounts/logout/">Logout</a>{% else %}<a href="/accounts/login/">Login</a>{% endif %}</div>
-</div>
+<ul id="menu">
+  <li><a href="/home/">Home</a></li>
+  <li><a href="/accounts/">Accounts</a></li>
+  <li>Subscribers ▾
+    <ul>
+      <li><a href="/youtubesubs/">Normal</a></li>
+      <li><a href="/ytsubs/">Scraping (old)</a></li>
+    </ul>
+  </li>
+  <li><a href="/fanfunding/">Fan Funding</a></li>
+  <li><a href="/sponsors/">Sponsors</a></li>
+  <li><a href="/imraising/">ImRaising</a></li>
+  <li><a href="/streamtip/">StreamTip</a></li>
+  <li><a href="/twitchalerts/">TwitchAlerts</a></li>
+  <li id="last_menu">{% if user.is_authenticated %}{{user}} | <a href="/accounts/logout/">Logout</a>{% else %}<a href="/accounts/login/">Login</a>{% endif %}</li>
+</ul>
 <div id="page-border" >
 {% block content %}
 {% endblock %}

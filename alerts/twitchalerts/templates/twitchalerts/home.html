@@ -16,17 +16,19 @@ limitations under the License.
 {% endcomment %}
 {% block content %}
 <h2>Accounts</h2>
-<p>You have {{configs|length}} configured TwitchAlerts accounts.</p>
-<a href="setup" class="button">Add new account</a>
+<p>You have {{configs|length}} registered TwitchAlerts accounts.</p>
+
 <ul>
   {% for config in configs %}
-    <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago) (<a href="/delete_updater/{{config.id}}">delete</a>)
+    <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago)
    {% if config.failure_count %} <br />
    <b>{{config.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
    {% endif %}
     </li>
   {% endfor %}
 </ul>
+
+<p><a href="/accounts" class="button">Manage accounts</a></p>
 
 <h2>Alerts</h2>
 <p>You have {{alerts|length}} configured TwitchAlerts alerts.</p>
