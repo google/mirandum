@@ -43,5 +43,6 @@ def event(instance, **kwargs):
     user = instance.updater.credentials.user
     alerts = YoutubeSubAlertConfig.objects.filter(user=user)
     info = instance.as_dict()
-    chosen_config = random.choice(alerts)
-    config_to_alert(chosen_config, info)
+    if alerts.count():
+        chosen_config = random.choice(alerts)
+        config_to_alert(chosen_config, info)
