@@ -19,7 +19,7 @@ limitations under the License.
 {% block title %}Logged out{% endblock %}
 
 {% block content %}
-  <a href="/accounts/register/">Register</a><br />
+  <a href="/accounts/register/">Register a new account</a><br />
   <form action="{% url "django.contrib.auth.views.login" %}" method="post" class="login_form">{% csrf_token %}
     <p><label for="id_username">Username</label> <input type="text" name="username" id="id_username"></p>
     <p><label for="id_password">Password</label> <input type="password" name="password" id="id_password"></p>

@@ -15,11 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
+<p><a href="/accounts" class="button">Manage Google accounts</a></p>
 <form method="POST"> {% csrf_token %}
-<a href="/googleaccount/">Manage Google Accounts</a>
+    
 <table>
   {{form.as_table}}
 </table>
-<input type="submit" value="Add" />
-</form>  
+<input type="submit" value="Register" />
+</form>
+
 {% endblock %}

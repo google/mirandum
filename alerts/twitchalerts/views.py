@@ -77,7 +77,7 @@ def setup(request):
         refresh_before=refresh_before,
     )
     tau.save()
-    return HttpResponseRedirect("/twitchalerts/")
+    return HttpResponseRedirect("/accounts/")
 
 class AlertForm(forms.ModelForm):
     class Meta:

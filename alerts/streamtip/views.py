@@ -48,7 +48,7 @@ def setup(request):
                 type="streamtip", 
                 user=request.user)
             ffu.save()
-            return HttpResponseRedirect("/streamtip/")
+            return HttpResponseRedirect("/accounts/")
     else:
         f = StreamtipForm()
     return render(request, "streamtip/setup.html", {'form': f})

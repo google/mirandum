@@ -59,7 +59,8 @@ INSTALLED_APPS = (
     'upload',
     'ytsubs',
     'youtubesubs',
-    'donations'
+    'donations',
+    'accounts'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -76,9 +76,10 @@ def delete_updater(request, id):
         if 'redirect' in request.POST:
             return HttpResponseRedirect("/%s/" % u.type)
         else:
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/accounts/")
     else:
-        return render(request, "delete_update.html")
+        r = True if 'r' in request.GET else None
+        return render(request, "delete_update.html", {'r': r})
 
 def alert_popup(request):
     if 'v' in request.GET:
@@ -261,4 +262,3 @@ def lists(request):
         session = Session.objects.get(user=request.user)
     return render(request, "lists.html", {'recents': recents, 'tops': tops, 'key': key, 'session': session})
         
-
