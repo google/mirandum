@@ -102,5 +102,16 @@ urlpatterns = patterns('',
     url(r'^youtubesubs/alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.alert_config'),
     
     url(r'^accounts/', include('registration.backends.simple.urls')),
-
+   url(r'^account/password/reset/$', 
+        'django.contrib.auth.views.password_reset', 
+        {'post_reset_redirect' : '/account/password/reset/done/'},
+        name="password_reset"),
+    (r'^account/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done'),
+    url(r'^account/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+        'django.contrib.auth.views.password_reset_confirm', 
+        {'post_reset_redirect' : '/account/password/done/'}, 
+        name="password_reset_confirm"),
+    (r'^account/password/done/$', 
+        'django.contrib.auth.views.password_reset_complete'),
 )
