@@ -31,7 +31,7 @@ def config_to_alert(alert, info, test=False):
     text = alert.alert_text
     text = text.replace("[[name]]", info['name'])
     text = text.replace("[[amount]]", str(info['amount']))
-    text += "[[br]]" + info['comment']
+    text = text.replace("[[comment]]", str(info['comment']))
     style = AlertStyle(image=alert.image_url, sound=alert.sound_url, font=alert.font, font_size=alert.font_size, font_color=alert.font_color)
     style.save()
     a = Alert(text=text, time=timezone.now(), user=alert.user, style=style, test=test, config=alert)
