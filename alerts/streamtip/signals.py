@@ -43,11 +43,6 @@ def event(instance, **kwargs):
     alerts = StreamtipAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     info = instance.as_dict()
     for alert in alerts:
-        config_to_alert(alert, info)
-    user = instance.updater.user
-    alerts = StreamtipAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
-    info = instance.as_dict()
-    for alert in alerts:
         if alert.filter_type == "1equal":
             if alert.filter_amount == info['donation_amount']:
                 config_to_alert(alert, info)
