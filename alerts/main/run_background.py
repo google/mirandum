@@ -38,13 +38,15 @@ def thread_runner(instance):
     if DEBUG:
         print "running instance", instance.id
     runtime = time.time()
+    delay = DEFAULT_UPDATE_INTERVAL
     try:
         updater_props = type_data.get(instance.type, None)
+        delay = updater_props.get('delay', DEFAULT_UPDATE_INTERVAL)
         runner = updater_props['runner']
         instance = getattr(instance, updater_props['prop'])
         runner(instance)
         instance.last_update = timezone.now()
-        instance.next_update = timezone.now() + timedelta(seconds=DEFAULT_UPDATE_INTERVAL)
+        instance.next_update = timezone.now() + timedelta(seconds=delay)
         # We leave messages + timestamps so we can see old failures even if the system recovered.
         instance.failure_count = 0
         instance.running = False
@@ -57,7 +59,7 @@ def thread_runner(instance):
         instance.last_failure_message = msg
         instance.failure_count = instance.failure_count + 1
         # exponential backoff
-        update_time = DEFAULT_UPDATE_INTERVAL * math.pow(2, instance.failure_count)
+        update_time = delay * math.pow(2, instance.failure_count)
         instance.next_update = timezone.now() + timedelta(seconds=update_time)
         instance.running = False
         instance.save()

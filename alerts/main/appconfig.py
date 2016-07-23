@@ -49,6 +49,7 @@ type_data = {
         'prop': 'streamtipupdate',
         'event': StreamtipEvent,
         'label': 'StreamTip',
+        'delay': 45,
     },
     'twitchalerts': {
         'runner': run_twitchalerts,
