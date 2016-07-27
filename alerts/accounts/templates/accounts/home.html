@@ -48,6 +48,22 @@ limitations under the License.
 {% endif %}
 <a href="/imraising/setup" class="button">Register new account</a>
 
+<h3>StreamJar</h3>
+{% if streamjar_accounts %}
+  <p>You have {{streamjar_accounts|length}} registered StreamJar account(s).</p>
+  <ul>
+  {% for streamjar_account in streamjar_accounts %}
+    <li>{{streamjar_account.credentials.label}} (last update: {{streamjar_account.last_update|timesince}} ago) (<a href="/delete_updater/{{streamjar_account.id}}">unregister</a>)
+   {% if config.failure_count %} <br />
+   <b>{{streamjar_account.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
+   {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no StreamJar account registered.</p>
+{% endif %}
+<a href="/streamjar/setup" class="button">Register new account</a>
 <h3>StreamTip</h3>
 {% if streamtip_accounts %}
   <p>You have {{streamtip_accounts|length}} registered StreamTip account(s).</p>

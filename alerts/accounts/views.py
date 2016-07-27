@@ -18,6 +18,7 @@ from django.shortcuts import render
 from googaccount.models import AppCreds
 from imraising.models import ImraisingUpdate
 from streamtip.models import StreamtipUpdate
+from streamjar.models import StreamjarUpdate
 from twitchalerts.models import TwitchalertsUpdate
 
 
@@ -26,9 +27,11 @@ def home(request):
   goog_accounts = AppCreds.objects.filter(user=request.user)
   imraising_accounts = ImraisingUpdate.objects.filter(user=request.user)
   streamtip_accounts = StreamtipUpdate.objects.filter(user=request.user)
+  streamjar_accounts = StreamjarUpdate.objects.filter(user=request.user)
   twitchalerts_accounts = TwitchalertsUpdate.objects.filter(user=request.user)
   return render(request, "accounts/home.html", {
       'goog_accounts': goog_accounts,
       'imraising_accounts': imraising_accounts,
+      'streamjar_accounts': streamjar_accounts,
       'streamtip_accounts': streamtip_accounts,
       'twitchalerts_accounts': twitchalerts_accounts})

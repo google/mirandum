@@ -7,6 +7,9 @@ from ytsubs.models import SubEvent
 from sponsors.support import run_sponsors
 from sponsors.models import SponsorEvent
 
+from streamjar.support import run_streamjar
+from streamjar.models import StreamjarEvent
+
 from streamtip.support import run_streamtip
 from streamtip.models import StreamtipEvent
 
@@ -43,6 +46,12 @@ type_data = {
         'prop': 'sponsorupdate',
         'event': SponsorEvent,
         'label': 'YouTube Sponsors',
+    },
+    'streamjar': {
+        'runner': run_streamjar,
+        'prop': 'streamjarupdate',
+        'event': StreamtipEvent,
+        'label': 'StreamTip',
     },
     'streamtip': {
         'runner': run_streamtip,

@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'registration',
     'sponsors',
     'twitchalerts',
+    'streamjar',
     'streamtip',
     'googaccount',
     'upload',

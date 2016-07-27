@@ -59,6 +59,12 @@ urlpatterns = patterns('',
     url(r'^streamtip/alert$', 'streamtip.views.alert_config'),
     url(r'^streamtip/alert/(?P<alert_id>[0-9]*)$', 'streamtip.views.alert_config'),
     
+    url(r'^streamjar/$', 'streamjar.views.home'),
+    url(r'^streamjar/setup$', 'streamjar.views.setup'),
+    url(r'^streamjar/test_alert/(?P<alert_id>[0-9]*)$', 'streamjar.views.test_alert'),
+    url(r'^streamjar/alert$', 'streamjar.views.alert_config'),
+    url(r'^streamjar/alert/(?P<alert_id>[0-9]*)$', 'streamjar.views.alert_config'),
+    
     url(r'^imraising/$', 'imraising.views.home'),
     url(r'^imraising/setup$', 'imraising.views.setup'),
     url(r'^imraising/test_alert/(?P<alert_id>[0-9]*)$', 'imraising.views.test_alert'),
