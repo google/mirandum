@@ -21,7 +21,6 @@ import traceback
 def run_streamjar(ffu):
     added = 0
     url = "https://streamjar.tv/api/v1/donations?test=true&apikey=%s" % ffu.access_token
-    print url
     request = urllib2.Request(url,
         headers={"Accept" : "application/json", "User-Agent": "Livestream Alerts (python-urllib2)"}
     ) 
@@ -30,11 +29,9 @@ def run_streamjar(ffu):
     data = json.loads(contents)
     for i in data:
         unique_id = i['id']
-        print unique_id
         if StreamjarEvent.objects.filter(external_id=unique_id, updater=ffu).count() > 0:
             break
         details = json.dumps(i)
-        print details
         try:
             ffe = StreamjarEvent(external_id=unique_id, updater=ffu, details=details)
             ffe.save()

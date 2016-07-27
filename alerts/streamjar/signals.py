@@ -43,7 +43,6 @@ def event(instance, **kwargs):
     user = instance.updater.user
     alerts = StreamjarAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     info = instance.as_dict()
-    print "or here"
     for alert in alerts:
         if alert.filter_type == "1equal":
             if alert.filter_amount == info['donation_amount']:

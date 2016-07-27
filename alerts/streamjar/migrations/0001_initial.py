@@ -20,7 +20,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0018_auto_20160727_0236'),
+        ('main', '0017_donation_comment'),
     ]
 
     operations = [
