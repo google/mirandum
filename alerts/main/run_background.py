@@ -24,7 +24,7 @@ import threading
 import time
 from datetime import datetime, timedelta
 from django.utils import timezone
-from main.models import Updater
+from main.models import Updater, LastActivity
 from main.appconfig import type_data
 
 
@@ -42,6 +42,13 @@ def thread_runner(instance):
     try:
         updater_props = type_data.get(instance.type, None)
         delay = updater_props.get('delay', DEFAULT_UPDATE_INTERVAL)
+        lu = LastActivity.objects.filter(user=instance.user)
+        recent = timezone.now() - timedelta(seconds=120)
+        if not lu.count() or lu[0].timestamp < recent:
+            if DEBUG: print "Not active"
+            delay = delay * 8
+        else:
+            if DEBUG: print "Active"
         runner = updater_props['runner']
         instance = getattr(instance, updater_props['prop'])
         runner(instance)
@@ -59,7 +66,7 @@ def thread_runner(instance):
         instance.last_failure_message = msg
         instance.failure_count = instance.failure_count + 1
         # exponential backoff
-        update_time = delay * math.pow(2, instance.failure_count)
+        update_time = delay * math.pow(3, instance.failure_count)
         instance.next_update = timezone.now() + timedelta(seconds=update_time)
         instance.running = False
         instance.save()
