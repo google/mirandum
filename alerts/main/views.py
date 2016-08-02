@@ -20,7 +20,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session
-from main.support import formatter, check_google_font
+from main.support import formatter, check_google_font, update_last_activity
 from main.forms import RecentForm
 from main.appconfig import type_data
 from donations.models import Donation, TopList
@@ -34,6 +34,7 @@ def home_redirect(request):
 # Create your views here.
 @login_required
 def home(request):
+    update_last_activity(request.user)
     key, created = AccessKey.objects.get_or_create(user=request.user)
     if created:
         k = md5.md5(str(random.random())).hexdigest()
@@ -55,6 +56,7 @@ def alert_page(request):
         key.save()
     configs = AlertConfig.objects.filter(user=request.user)
     recents = RecentConfig.objects.filter(user=request.user)
+    update_last_activity(request.user)
     return render(request, "alert_page.html", {'key': key, 'configs': configs, 'recents': recents})    
 
 @login_required
@@ -93,6 +95,7 @@ def recent_popup(request):
 def alert_api(request):
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
+    update_last_activity(k.user)
     alerts = Alert.objects.filter(user=k.user).order_by("-id")
     alert_response = []
     for alert in alerts[0:10]:
@@ -140,6 +143,7 @@ def all_recents(request):
         return HttpResponseBadRequest()
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
+    update_last_activity(k.user)
     output = {}
     for i in RecentConfig.objects.filter(user=k.user):
         output['%s-%s' % (i.type, i.id)] = output_for_recent(i)
@@ -154,6 +158,7 @@ def recent_api(request):
         return HttpResponseBadRequest()
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
+    update_last_activity(k.user)
     if request.GET.get("type") == "top":
         config = TopList.objects.get(pk=request.GET['id'])
         if config.user != k.user:

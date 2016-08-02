@@ -18,6 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
 import django.forms as forms
+from django.utils import timezone
 
 def ac(module_name, form, config, form_sample=None):
     @login_required
@@ -136,3 +137,15 @@ def check_google_font(font):
         if line.strip() == font:
             return True
     return False
+
+def update_last_activity(user):
+    from main.models import LastActivity
+    now = timezone.now()
+    lu = LastActivity.objects.filter(user=user)
+    if lu.count():
+        lu = lu[0]
+        lu.timestamp = now
+    else:
+        lu = LastActivity(user=user, timestamp=now)
+    lu.save()
+    return True

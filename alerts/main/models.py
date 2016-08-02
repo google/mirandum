@@ -17,6 +17,10 @@ from django.contrib.auth.models import User
 import md5, random, datetime
 from main.support import animations_list, font_effects
 
+class LastActivity(models.Model):
+    user = models.ForeignKey(User)
+    timestamp = models.DateTimeField()
+
 class AlertStyle(models.Model):
     image = models.TextField(blank=True,null=True)
     sound = models.TextField(blank=True,null=True)
