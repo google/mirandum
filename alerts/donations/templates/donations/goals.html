@@ -35,7 +35,7 @@ limitations under the License.
     <td>{{goal.end_date}}</td>
     <td>{{goal.description}}</td>
     <td><a href="/donations/goal/{{goal.id}}">Edit</a></td>
-    <td><a href="/donations/goal_view/{{goal.id}}">View</a></td>
+    <td><a href="/donations/goal_popup?id={{goal.id}}&key={{accesskey}}">View</a></td>
   </tr>
 {% endfor %}
 </table>

@@ -87,7 +87,10 @@ def goal_config(request, goal_id=None):
 @login_required
 def list_goals(request):
     goals = Goal.objects.filter(user=request.user)
-    return render(request, "donations/goals.html", {'goals': goals})
+    key = AccessKey.objects.filter(user=request.user)
+
+
+    return render(request, "donations/goals.html", {'goals': goals, 'accesskey': key.count() and key[0].key})
 
 def goal_api(request):
     if not 'key' in request.GET or not 'id' in request.GET: 
