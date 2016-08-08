@@ -38,7 +38,7 @@ function getQueryParams(qs) {
 var params = getQueryParams(window.location.search);
 function handleAlerts(data) {
   console.log(data);
-  $("#goal_amount").html("$"+data['target_amount']);
+  $("#goal_amount").html("$"+data['target_amount'].toFixed(2));
   var ratio = (parseFloat(data['amount'])/data['target_amount']) * 100;
   ratio = ratio.toFixed(2);
   var capped_ratio = Math.min(ratio, 100);
@@ -76,5 +76,10 @@ loadAlerts();
 </div>
 
 </div>
+<script>
+if (params.bgColor != undefined) {
+    document.body.style.backgroundColor = params.bgColor;
+}
+</script>
   </body>
 </html>  
