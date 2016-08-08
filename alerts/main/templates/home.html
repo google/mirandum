@@ -60,5 +60,8 @@ limitations under the License.
   {% for updater in bad_updaters %}
     <li>{{updater.friendly_type}} - Last updated {{updater.last_update|timesince}} ago. <a href="/{{updater.type}}/">More info</a></li>
   {% endfor %}
+  </ul>
   {% endif %}
+  <h2>Donation Information</h2>
+  <p>You can see your historical donations, and configuration donation goals, at your <a href="/donations/">donations</a> page.</p>
 {% endblock %}
