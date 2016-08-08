@@ -20,8 +20,28 @@ from main.models import AccessKey
 from django.db.models import Sum, Max
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponse
+from django.db import connection
 
 import json
+
+@login_required
+def home(request):
+    # FIXME: Will break in django 1.10
+    truncate_date = connection.ops.date_trunc_sql('month', 'timestamp')
+    monthly_donations = Donation.objects.filter(user=request.user).extra({'month': truncate_date}
+        ).values('month'
+        ).annotate(c=Sum('primary_amount')
+        ).values('month', 'c').order_by("-month")
+    monthly_donations = filter(lambda x: x['c'] != None, monthly_donations)
+    data = {'monthly_donations': monthly_donations}
+    goals = Goal.objects.filter(user=request.user).order_by("-start_date")
+    if goals.count():
+        data['goal'] = goals[0]
+    key = AccessKey.objects.filter(user=request.user)
+    if key.count():
+        data['key'] = key[0]
+    return render(request, "donations/home.html", data)
+
 
 @login_required
 def list(request):

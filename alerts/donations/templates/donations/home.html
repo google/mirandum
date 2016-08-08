@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% comment %}
+Copyright 2016 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+{% endcomment %}
+{% block content %}
+<h2>Donations</h2>
+Livestream Alerts tracks donations for the purposes of recent, top donations, and historical data.
+
+You can access a <a href="/donations/list">list of your donations</a> with names, dates, and amounts.
+
+<h3>Goals</h3>
+<p>
+  You can create a donation goal to use in your stream. You can manage your 
+  donation goals on the <a href="/donations/goals">donation goals</a> page, or simply <a href="/donations/goal">add a new goal</a>.
+</p>
+{% if goal %}
+  Current Goal: <a href="/donations/goal_popup?id={{goal.id}}&key={{key.key}}">{{goal.description}} (${{goal.amount|floatformat:2}})</a>
+
+{% endif %}
+
+<h3>Donation History</h3>
+<table>
+  <tr>
+    <td>Month</td>
+    <td>Donations</td>
+  </tr>
+  {% for month in monthly_donations %}
+  <tr>
+    <td>{{month.month}}</td>
+    <td>${{month.c|floatformat:2}} (USD)</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
