@@ -49,7 +49,7 @@ def ac(module_name, form, config, form_sample=None):
             f.fields['image_url'].widget = forms.widgets.Select(choices=choices)
         if 'sound_url' in f.fields:
             uploads = Upload.objects.filter(user=request.user, type__in=['sound', 'unknown'])
-            choices = []
+            choices = [(None, '(none)')]
             for upload in uploads:
                 choices.append((upload.remote_path, upload.to_string()))
             f.fields['sound_url'].widget = forms.widgets.Select(choices=choices)

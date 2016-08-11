@@ -207,6 +207,10 @@ if (params.key != undefined) {
 if (params.bgColor != undefined) {
     document.body.style.backgroundColor = params.bgColor;
 }
+if (params.vol != undefined) {
+    var sound = document.getElementById('sound');
+    sound.volume = parseInt(params.vol)/100.0;
+}
 
 resetHelperImages = {};
 function restartAnimation(bgImg, elem) {
