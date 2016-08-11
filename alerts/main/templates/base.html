@@ -80,6 +80,10 @@ padding: 10px;
 width: 1200px; min-height: 500px; background: none repeat scroll 0% 0% rgb(255, 255, 255); margin: 10px auto; position: relative; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 padding: 10px;
 }
+#footer {
+width: 1200px; background: none repeat scroll 0% 0% rgb(255, 255, 255); margin: 10px auto; position: relative; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+padding: 10px;
+}
 </style>
 <title>{% block title %}Livestream Alerts{% endblock %}</title>
 </head>
@@ -105,6 +109,9 @@ padding: 10px;
 <div id="page-border" >
 {% block content %}
 {% endblock %}
+</div>
+<div id="footer" style="background-color: white;">
+<a href="/static/privacy.html">Privacy Policy</a>
 </div>
 </body>
 </html>

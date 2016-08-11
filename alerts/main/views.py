@@ -92,6 +92,9 @@ def alert_popup(request):
 def recent_popup(request):
     return render(request, "recent_popup.html")
 
+def contact(request):
+    return render(request, "contact.html")
+
 def alert_api(request):
     key = request.GET['key']
     k = AccessKey.objects.get(key=key)
