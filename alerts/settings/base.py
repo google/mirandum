@@ -61,6 +61,8 @@ INSTALLED_APPS = (
     'ytsubs',
     'youtubesubs',
     'donations',
+    'twitchaccount',
+    'twitchfollows',
     'accounts'
 )
 

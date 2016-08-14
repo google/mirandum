@@ -16,6 +16,10 @@ from streamtip.models import StreamtipEvent
 from twitchalerts.support import run_twitchalerts
 from twitchalerts.models import TwitchalertsEvent
 
+from twitchfollows.support import run_twitchfollows
+from twitchfollows.models import TwitchFollowEvent
+
+
 from imraising.support import run_imraising
 from imraising.models import ImraisingEvent
 
@@ -65,6 +69,12 @@ type_data = {
         'prop': 'twitchalertsupdate',
         'event': TwitchalertsEvent,
         'label': 'TwitchAlerts',
+    },
+    'twitchfollows': {
+        'runner': run_twitchfollows,
+        'prop': 'twitchfollowupdate',
+        'event': TwitchFollowEvent,
+        'label': 'Twitch Follow',
     },
     'imraising': {
         'runner': run_imraising,

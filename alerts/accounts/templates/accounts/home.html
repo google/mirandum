@@ -31,6 +31,21 @@ limitations under the License.
 {% endif %}
 <a href="/googleaccount/setup" class="button">Link new account</a>
 
+<h3>Twitch</h3>
+{% if twitch_accounts %}
+  <p>You have {{twitch_accounts|length}} linked Twitch account(s).<br/>
+  <b>Pro tip:</b> Once an account is linked, remember to register it
+  for subscriber, fan funding and/or sponsor notifications using the menus above.</p>
+  <ul>
+  {% for twitch_account in twitch_accounts %}
+    <li>{{twitch_account.label}} (<a href="/twitchaccount/unlink/{{twitch_account.id}}">unlink</a>)</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>You have no Twitch account registered.</p>
+{% endif %}
+<a href="/twitchaccount/setup" class="button">Link new account</a>
+
 <h3>ImRaising</h3>
 {% if imraising_accounts %}
   <p>You have {{imraising_accounts|length}} registered ImRaising account(s).</p>
