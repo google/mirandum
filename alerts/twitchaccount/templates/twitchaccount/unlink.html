@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% comment %}
-Copyright 2016 Google Inc. All Rights Reserved.
+Copyright 2016 Twitch Inc. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
-<h2>Google account unlinking</h2>
+<h2>Twitch account unlinking</h2>
 <p>
   This will <span class="warning">unlink</span> the following
-  Google account: <b>{{account.label}}</b>
+  Twitch account: <b>{{account.label}}</b>
 </p>
 {% if updaters %}
     <p><span class="warning">The account will also be removed from:</span></p>
@@ -29,6 +29,6 @@ limitations under the License.
 </ul>
 {% endif %}
 <p>Note: no alert will be removed.</p>
-<a href="/googleaccount/unlink_confirm/{{account.id}}" class="button">Unlink account</a>
-<a href="/googleaccount/" class="button grey">Cancel</a>
+<a href="/twitchaccount/unlink_confirm/{{account.id}}" class="button">Unlink account</a>
+<a href="/twitchaccount/" class="button grey">Cancel</a>
 {% endblock %}

@@ -66,7 +66,7 @@ def auth_return(request):
   print data
   ac = TwitchAppCreds(user=request.user, label=data['name'])
   ac.save()
-  return HttpResponseRedirect("/twitchaccount/")
+  return HttpResponseRedirect("/accounts/")
   return render(request, "twitchaccount/label.html", data)
 
 @login_required
@@ -75,7 +75,7 @@ def finalize(request):
   internal_label = "%s-%s" % (request.user.id, request.POST['label'])
   storage = Storage(TwitchCredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
-  return HttpResponseRedirect("/twitchaccount/")
+  return HttpResponseRedirect("/accounts/")
 
 @login_required
 def unlink(request, id):
@@ -100,7 +100,7 @@ def unlink_confirm(request, id):
   # Delete AppsCred
   ac.delete()
 
-  return HttpResponseRedirect("/twitchaccount/")
+  return HttpResponseRedirect("/accounts/")
 
 def _get_updaters(user, app_creds):
   # We need to get updaters from each specific class, otherwise we cannot

@@ -20,10 +20,13 @@ limitations under the License.
 {% block title %}Log in{% endblock %}
 
 {% block content %}
-  <a href="/accounts/register/">Register a new account</a><br />
+  <a href="/accounts/register/">Register a new account</a> | 
+  <a href="/accounts/password/reset/">Forgot password</a>
+  <br />
   <form action="." method="post" class="login_form">{% csrf_token %}
     {{ form.as_p }}
     <p class="submit"><button type="submit" name="submit" value="Login">Log in</button></p>
     {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
   </form>
+
 {% endblock %}
