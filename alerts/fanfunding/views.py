@@ -52,7 +52,7 @@ def setup(request):
 class AlertForm(forms.ModelForm):
     class Meta:
         model = AlertConfig
-        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'filter_type', 'filter_amount', 'layout', 'animation_in', 'animation_out', 'font_effect']
+        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'text_to_speech', 'filter_type', 'filter_amount', 'layout', 'animation_in', 'animation_out', 'font_effect']
         widgets = {
             'image_url': forms.TextInput(attrs={'size': 50}),
             'sound_url': forms.TextInput(attrs={'size': 50}),
@@ -62,7 +62,7 @@ class AlertForm(forms.ModelForm):
 @login_required
 def test_alert(request, alert_id=None):
     ac = AlertConfig.objects.get(pk=int(alert_id), user=request.user)
-    config_to_alert(ac, {'name': 'Livestream Alerts', 'amount': '$17.32', 'comment': 'Test Donation from Livestream Alerts'}, True)
+    config_to_alert(ac, {'name': 'Livestream Alerts', 'amount': '$17.32', 'comment': 'Test Donation from Livestream Alerts', 'id': 'tmp-%s' % ac.id}, True)
     if request.GET.get('ret') == 'alerts':
         return HttpResponseRedirect("/alert_page")
     return HttpResponseRedirect("/fanfunding/")

@@ -20,6 +20,7 @@ from main.models import AlertStyle, Alert
 from fanfunding.models import FanFundingEvent, AlertConfig
 from donations.support import add_donation
 import json
+from fanfunding.tts import do_it
 
 def config_to_alert(alert, info, test=False):
     if alert.blacklist:
@@ -33,7 +34,14 @@ def config_to_alert(alert, info, test=False):
     text = text.replace("[[name]]", info['name'])
     text = text.replace("[[amount]]", info['amount'])
     text = text.replace("[[comment]]", info['comment'])
-    style = AlertStyle(image=alert.image_url, sound=alert.sound_url, font=alert.font, font_size=alert.font_size, font_color=alert.font_color)
+    sound_url = alert.sound_url
+    if alert.text_to_speech:
+        try:
+            do_it(alert.sound_url, info['comment'], str(info['id'])) 
+            sound_url = "https://www.livestreamalerts.com/static/sounds/%s.wav" % info['id']
+        except:
+            print "Failed text to speech on %s" % info['id']
+    style = AlertStyle(image=alert.image_url, sound=sound_url, font=alert.font, font_size=alert.font_size, font_color=alert.font_color)
     style.save()
     a = Alert(text=text, time=timezone.now(), user=alert.user, style=style, test=test, config=alert)
     a.save()
@@ -43,6 +51,7 @@ def event(instance, **kwargs):
     user = instance.updater.credentials.user
     details = json.loads(instance.details)
     info = instance.as_dict()
+    info['id'] = instance.id
     alerts = AlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     amount_micros = info['amount_micros']
     for alert in alerts:
