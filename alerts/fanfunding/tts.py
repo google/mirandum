@@ -11,7 +11,6 @@ def get_sound(url):
     tf = tempfile.NamedTemporaryFile(suffix=".%s" % ext, delete=False)
     tf.write(u.read())
     tf.close()
-    # "http://storage.livestreamalerts.com/c75461422c7dbc106c11ae5940282351/sting-3s-thats.wav")
     return tf.name
 
 def generate_text(text):
