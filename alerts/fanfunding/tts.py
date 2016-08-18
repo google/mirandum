@@ -3,7 +3,9 @@ import subprocess, os
 import urllib
 
 SOUND_PATH = "/webapps/alerts/static/sounds"
+
 def get_sound(url):
+    """Write a given URL to disk, maintaining extension."""
     u = urllib.urlopen(url)
     ext = url.split(".")[-1]
     if len(ext) != 3:
@@ -14,6 +16,7 @@ def get_sound(url):
     return tf.name
 
 def generate_text(text):
+    """Generate the svox output for the given text"""
     tf = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
     tf.close()
     args = ['pico2wave']
@@ -23,6 +26,7 @@ def generate_text(text):
     return tf.name
 
 def combine_files(sound_name, text_name, id):
+    """Combine the two files."""
     # Convert both files to 44.1Khz with 2 channels
     for i in [sound_name, text_name]:
         args = "sox %s -r 44100 -c 2 %s-out.wav rate" % (i, i)
