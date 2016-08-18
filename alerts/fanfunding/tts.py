@@ -29,8 +29,8 @@ def combine_files(sound_name, text_name, id):
     """Combine the two files."""
     # Convert both files to 44.1Khz with 2 channels
     for i in [sound_name, text_name]:
-        args = "sox %s -r 44100 -c 2 %s-out.wav rate" % (i, i)
-        subprocess.check_output(args.split(" "))
+        args = ["sox", i, "-r", "44100", "-c", "2", "%s-out.wav" % i, "rate"]
+        subprocess.check_output(args)
     args = ['sox', '%s-out.wav' % sound_name, '-c', '2', '%s-out.wav' % text_name, '-r', '44100', os.path.join(SOUND_PATH, '%s.wav' % id)]
     subprocess.check_output(args)
     return True
