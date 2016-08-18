@@ -75,4 +75,4 @@ alert_config = ac(
     MODULE_NAME,
     AlertForm,
     StreamtipAlertConfig,
-    {"alert_text": "[[name]] has donated [[amount]]!"})
+    {"alert_text": "[[name]] has donated [[amount]]![[br]][[comment]]"})
