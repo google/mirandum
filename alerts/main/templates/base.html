@@ -101,15 +101,18 @@ padding: 10px;
 <ul id="menu">
   <li><a href="/home/">Home</a></li>
   <li><a href="/accounts/">Accounts</a></li>
+  <li><a href="/alert_page">Alerts</a></li>
+  <li><a href="/lists">Lists</a></li>
   <li>Subscribers/Followers ▾
     <ul>
-      <li><a href="/youtubesubs/">Normal</a></li>
-      <li><a href="/ytsubs/">Scraping (old)</a></li>
+      <li><a href="/youtubesubs/">YouTube</a></li>
+      <li><a href="/ytsubs/">YouTube Scraping (old)</a></li>
       <li><a href="/twitchfollows/">Twitch Followers</a></li>
     </ul>
   </li>
-  <li>Donations ▾
+  <li>Donations/Tips ▾
    <ul>
+    <li><a href="/donations/">Donation History/Goals</a></li>
     <li><a href="/fanfunding/">Fan Funding</a></li>
     <li><a href="/twitchalerts/">TwitchAlerts</a></li>
     <li><a href="/streamtip/">StreamTip</a></li>
@@ -117,7 +120,13 @@ padding: 10px;
     <li><a href="/streamjar/">StreamJar</a> (Beta)</li>
    </ul>
   </li> 
-  <li><a href="/sponsors/">Sponsors</a></li>
+  <li>Recurring Support ▾
+   <ul>
+    <li><a href="/sponsors/">Sponsors</a></li>
+    <li>Patreon (coming soon)</li>
+    <li>Twitch Subscribers (coming soon)</li>
+   </ul>
+  </li> 
   <li id="last_menu">{% if user.is_authenticated %}{{user}} | <a href="/accounts/logout/">Logout</a>{% else %}<a href="/accounts/login/">Login</a>{% endif %}</li>
 </ul>
 <div id="page-border" >

@@ -37,7 +37,7 @@ limitations under the License.
   <input type="text" size="100" value="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" id="alerturl" style="padding: 5px;" />
   <a id="golink" href="http://www.livestreamalerts.com/alert_popup?key={{key.key}}" target="_blank">Go</a>
   <p><input id="enablebg" type="checkbox" onchange="updateURL()" /> Add background (for Chroma) Color: <input type="text" value="#00ff00" id="bgcolor" onchange="updateURL()" /></p>
-  <p>Choose a version of the alert page: <select id="version" onchange="updateURL()"><option value="1">v1</option><option value="2">v2 (beta)</option></select></p>
+  <p>Choose a version of the alert page: <select id="version" onchange="updateURL()"><option value="1">v1</option><option value="2" selected="selected">v2</option></select> <br />(v2 became the default on 2016/08/21; feel free to continue to use v1 if you prefer!)</p>
   <table width="100%">
   <tr><td width="40%">
   <p>You have {{configs|length}} configured alerts. <br /><a href="/alert_page">More info</a>.</p>
