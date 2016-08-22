@@ -35,7 +35,7 @@ def config_to_alert(alert, info, test=False):
     text = text.replace("[[amount]]", info['amount'])
     text = text.replace("[[comment]]", info['comment'])
     sound_url = alert.sound_url
-    if alert.text_to_speech:
+    if alert.text_to_speech and info['comment']:
         try:
             do_it(alert.sound_url, info['comment'], str(info['id'])) 
             sound_url = "https://www.livestreamalerts.com/static/sounds/%s.wav" % info['id']
