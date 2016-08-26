@@ -46,3 +46,4 @@ class ImraisingAlertConfig(main.models.AlertConfig):
         ('3default', 'Default'),
     ), default='3default', help_text="When filtering for specific amounts, comparison to use.")
     filter_amount = models.FloatField(blank=True, null=True)
+    text_to_speech = models.BooleanField(default=False)
