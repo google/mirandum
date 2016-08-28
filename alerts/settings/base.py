@@ -123,3 +123,4 @@ GCS_BUCKET = "storage.livestreamalerts.com"
 CURRENCY_CONVERSION = "datafiles/currency.json"
 FONT_LIST = "datafiles/font_list.txt"
 RUNNER_DEBUG=DEBUG
+LOGIN_REDIRECT_URL = '/home/'

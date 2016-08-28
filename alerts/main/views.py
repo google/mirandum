@@ -29,7 +29,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def home_redirect(request):
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/home/")
+
+def splash(request):
+    return render(request, "splash.html")
 
 # Create your views here.
 @login_required

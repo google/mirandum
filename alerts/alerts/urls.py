@@ -18,7 +18,7 @@ from django.contrib import admin
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'alerts.views.home', name='home'),
-    url(r'^$', 'main.views.home', name='home'),
+    url(r'^$', 'main.views.splash', name='splash'),
     url(r'^home/$', 'main.views.home', name='home_quiet'),
     url(r'^contact/$', 'main.views.contact', name='contact'),
     url(r'^accounts/profile/$', 'main.views.home_redirect', name='home_redirect'),
