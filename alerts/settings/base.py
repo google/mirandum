@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'fanfunding',
     'imraising',
     'registration',
+    'patreon',
     'sponsors',
     'twitchalerts',
     'streamjar',
