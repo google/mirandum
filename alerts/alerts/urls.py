@@ -54,6 +54,12 @@ urlpatterns = patterns('',
     url(r'^twitchaccount/oauth2callback', 'twitchaccount.views.auth_return'),
     url(r'^twitchaccount/finalize', 'twitchaccount.views.finalize'),
     
+    url(r'^extralife/$', 'extralife.views.home'),
+    url(r'^extralife/setup$', 'extralife.views.setup'),
+    url(r'^extralife/test_alert/(?P<alert_id>[0-9]*)$', 'extralife.views.test_alert'),
+    url(r'^extralife/alert$', 'extralife.views.alert_config'),
+    url(r'^extralife/alert/(?P<alert_id>[0-9]*)$', 'extralife.views.alert_config'),
+    
     url(r'^fanfunding/$', 'fanfunding.views.home'),
     url(r'^fanfunding/setup$', 'fanfunding.views.setup'),
     url(r'^fanfunding/test_alert/(?P<alert_id>[0-9]*)$', 'fanfunding.views.test_alert'),

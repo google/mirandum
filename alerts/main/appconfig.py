@@ -19,6 +19,8 @@ from twitchalerts.models import TwitchalertsEvent
 from twitchfollows.support import run_twitchfollows
 from twitchfollows.models import TwitchFollowEvent
 
+from extralife.support import run_extralife
+from extralife.models import ExtralifeEvent
 
 from imraising.support import run_imraising
 from imraising.models import ImraisingEvent
@@ -32,6 +34,12 @@ type_data = {
         'prop': 'fanfundingupdate',
         'event': FanFundingEvent,
         'label': 'Fan Funding',
+    },
+    'extralife': {
+        'runner': run_extralife,
+        'prop': 'extralifeupdate',
+        'event': ExtralifeEvent,
+        'label': 'Extra Life',
     },
     'ytsubs': {
         'runner': run_subs,
