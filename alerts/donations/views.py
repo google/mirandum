@@ -120,7 +120,10 @@ def goal_api(request):
     goal = Goal.objects.get(pk=request.GET['id']) 
     if k.user != goal.user:
         return HttpResponseBadRequest()
-    total = Donation.objects.filter(user=k.user, timestamp__gt=goal.start_date).values('user').annotate(total=Sum('primary_amount'))
+    total = Donation.objects.filter(user=k.user, timestamp__gt=goal.start_date)
+    if goal.source_type != '':
+        total = total.filter(type=goal.source_type)
+    total = total.values('user').annotate(total=Sum('primary_amount'))
     total_amount = 0
     if len(total):
         total_amount = total[0]['total']

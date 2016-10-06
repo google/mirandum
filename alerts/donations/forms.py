@@ -24,6 +24,6 @@ class TopForm(forms.ModelForm):
 class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
-        fields = ['start_date', 'end_date', 'amount', 'description']
+        fields = ['start_date', 'end_date', 'amount', 'description', 'source_type']
     start_date = DateField(widget=AdminDateWidget())
     end_date   = DateField(widget=AdminDateWidget(), required=False)
