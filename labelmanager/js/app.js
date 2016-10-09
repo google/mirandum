@@ -121,6 +121,7 @@ updateKeyButton.addEventListener('click', function(e) {
 function writeFile(dir, filename, contents) {
     // String conversion
     contents += '';
+    contents = contents.replace(/\[\[br\]\]/g, "\n");
     dir.getFile(filename, {create: true}, function(fileDirectory) {
         var blob = new Blob([contents.replace(/\\n/g, "\r\n")], {type: 'text/plain'});
         fileDirectory.createWriter(function(writer) {
