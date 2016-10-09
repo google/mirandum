@@ -15,6 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
+
+<p>To register an Extra Life account for donations, simply add your Participant ID. You can find the Participant ID in any of your pages on the Extra Life website: in a URL that looks like <tt>http://www.extra-life.org/index.cfm?fuseaction=portal.home&amp;participantID=<b>224608</b></tt>, the 224608 is the number you include here!</p>
+
 <form method="POST"> {% csrf_token %}
 
 <table>

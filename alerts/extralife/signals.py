@@ -54,18 +54,16 @@ def event(instance, **kwargs):
     info['id'] = instance.id
     alerts = ExtralifeAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     #amount_micros = info['amount_micros']
-    if len(alerts):
-            alert = alerts[0]
-    #for alert in alerts:
-    #    if alert.filter_type == "1equal" and alert.filter_amount:
-    #        if alert.filter_amount * 1000000 == amount_micros:
-    #            config_to_alert(alert, info)
-    #            break
-    #    elif alert.filter_type == "2gt" and alert.filter_amount:
-    #        if alert.filter_amount * 1000000 < amount_micros:
-    #            config_to_alert(alert, info)
-    #            break
-    #    elif alert.filter_type == "3default":
+    for alert in alerts:
+        if alert.filter_type == "1equal" and alert.filter_amount:
+            if alert.filter_amount == info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "2gt" and alert.filter_amount:
+            if alert.filter_amount < amount_info['donation_amount']:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "3default":
             config_to_alert(alert, info)
     add_donation(instance.as_dict(), user, "extralife")
 

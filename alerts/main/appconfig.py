@@ -83,6 +83,7 @@ type_data = {
         'prop': 'twitchfollowupdate',
         'event': TwitchFollowEvent,
         'label': 'Twitch Follow',
+        'delay': 60,
     },
     'imraising': {
         'runner': run_imraising,
