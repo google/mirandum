@@ -19,40 +19,51 @@ from django.contrib.auth.models import User
 from oauth2client.contrib.django_orm import Storage
 
 def load_patreon_data(updater):
-    storage = Storage(CredentialsModel, 'id', updater.credentials, 'credential')
+    storage = Storage(PatreonCredentialsModel, 'id', updater.credentials, 'credential')
     credential = storage.get()
     if credential is None or credential.invalid == True:
         raise Exception("bad creds")
     http = httplib2.Http()
     http = credential.authorize(http)
-    # FIXME
-    resp, data = http.request("%spatreon?part=snippet&maxResults=5&filter=all" % BASE_URL)
+    resp, data = http.request("https://api.patreon.com/oauth2/api/current_user/campaigns?include=pledges")
     data = json.loads(data)
     if 'error' in data:
         raise Exception("Error fetching patreon: %s" % json.dumps(data['error']))
-    return data
+    data_map = {}
+    for i in data['included']:
+        data_map['%s-%s' % (i['id'], i['type'])]  = i
+    pledges = []
+    for campaign in data['data']:
+        for i in campaign['relationships']['pledges']['data']:
+            pledge_id = i['id']
+            pledge_obj = data_map['%s-pledge' % pledge_id]
+            patron_id = pledge_obj['relationships']['patron']['data']['id']
+            user_obj = data_map['%s-user' % patron_id]
+            pledge = user_obj['attributes']
+            pledge.update(pledge_obj['attributes'])
+            pledge['id'] = pledge_id
+            pledges.append(pledge)
+    pledges = sorted(pledges, key=lambda x: x['created_at'], reverse=True)
+    return pledges
 
 def run_patreon(updater, loader=load_patreon_data):
     data = loader(updater)
     added = 0
     events = []
-    if 'items' in data:
-        for i in data['items']:
-            snippet = i['snippet']
-            #FIXME
-            unique_id = "%s-%s" % (snippet.get('channelId', "unknown-channel"), snippet.get('patreonSince', 'unknown'))
-            if PatreonEvent.objects.filter(external_id=unique_id, updater=updater).count() > 0:
-                break
-            details = json.dumps(i)
-            try:
-                ffe = PatreonEvent(external_id=unique_id, updater=updater, details=details)
-                events.append(ffe)
-            except Exception, E:
-                print "Failed in individual patreon run: %s\nData:\n%s" % (E, details)
-        for event in reversed(events):
-            try:
-                event.save()
-                added += 1
-            except Exception, E:
-                print "Failed in individual patreon run: %s\nData:\n%s" % (E, ffe.details)
+    for pledge in data:
+        unique_id = pledge['id']
+        if PatreonEvent.objects.filter(external_id=unique_id, updater=updater).count() > 0:
+            break
+        details = json.dumps(pledge)
+        try:
+            ffe = PatreonEvent(external_id=unique_id, updater=updater, details=details)
+            events.append(ffe)
+        except Exception, E:
+            print "Failed in individual patreon run: %s\nData:\n%s" % (E, details)
+    for event in reversed(events):
+        try:
+            event.save()
+            added += 1
+        except Exception, E:
+            print "Failed in individual patreon run: %s\nData:\n%s" % (E, ffe.details)
     return added

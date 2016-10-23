@@ -15,6 +15,9 @@
 import os
 from datetime import  datetime
 
+import httplib2
+import json
+
 from django.conf import settings
 
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -44,7 +47,7 @@ def home(request):
 class AlertForm(forms.ModelForm):
     class Meta:
         model = PatreonAlertConfig
-        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'layout', 'animation_in', 'animation_out', 'font_effect']
+        fields = ['image_url', 'sound_url', 'alert_text', 'blacklist', 'font', 'font_size', 'font_color', 'layout', 'animation_in', 'animation_out', 'font_effect', 'filter_type', 'filter_amount']
         widgets = {
             'image_url': forms.TextInput(attrs={'size': 50}),
             'sound_url': forms.TextInput(attrs={'size': 50}),
@@ -86,30 +89,20 @@ def auth_return(request):
   if not xsrfutil.validate_token(settings.SECRET_KEY, str(request.GET['state']),
                                  request.user.username):
     return  HttpResponseBadRequest()
-  credential = FLOW.step2_exchange(request.POST)
-#  https://api.patreon.com/oauth2/api/current_user
+  credential = FLOW.step2_exchange(request.GET)
   http = httplib2.Http()
   http = credential.authorize(http)
   resp, data = http.request("https://api.patreon.com/oauth2/api/current_user")
   data = json.loads(data)
-  internal_label = "%s-%s" % (request.user.id, request.POST['label'])
+  name = data['data']['attributes'].get("full_name") or "(unnamed)"
+  internal_label = "%s-%s" % (request.user.id, name)
+  ac = PatreonAppCreds(user=request.user, label=internal_label)
+  ac.save()
   storage = Storage(PatreonCredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
-  ac = PatreonAppCreds(user=request.user, label="1")
-  ac.save()
-  pu = PatreonUpdate(credentials=ac)
+  pu = PatreonUpdate(credentials=ac, user=request.user, type="patreon")
   pu.save()
   return HttpResponseRedirect("/patreon/")
-
-@login_required
-def finalize(request):
-  ac = AppCreds(user=request.user, label=request.POST['label'])
-  ac.save()
-  credential = FLOW.step2_exchange(request.POST)
-  internal_label = "%s-%s" % (request.user.id, request.POST['label'])
-  storage = Storage(CredentialsModel, 'id', ac, 'credential')
-  storage.put(credential)
-  return HttpResponseRedirect("/accounts/")
 
 @login_required
 def unlink(request, id):
@@ -128,7 +121,7 @@ def unlink_confirm(request, id):
     updater.delete()
 
   # Delete credential
-  storage = Storage(CredentialsModel, 'id', ac, 'credential')
+  storage = Storage(PatreonCredentialsModel, 'id', ac, 'credential')
   storage.delete()
 
   # Delete AppsCred

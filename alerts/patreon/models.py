@@ -35,9 +35,18 @@ class PatreonEvent(main.models.UpdaterEvent):
     
     def as_dict(self):
         details = json.loads(self.details)
-        #FIXME
-        info = {}
+        info = {
+            'amount': "$%.2f" % (float(details['amount_cents'])/100.),
+            'name': details['full_name'],
+            'filter_amount': float(details['amount_cents'])/100.,
+        }
         return info
 
 class PatreonAlertConfig(main.models.AlertConfig):
     blacklist = models.TextField(blank=True, null=True)
+    filter_type = models.CharField(max_length=20, choices=(
+        ('1equal', 'Equals'),
+        ('2gt', 'Greater than'),
+        ('3default', 'Default'),
+    ), default='3default', help_text="When filtering for specific amounts, comparison to use.")
+    filter_amount = models.FloatField(blank=True, null=True)

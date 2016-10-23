@@ -37,8 +37,22 @@ def config_to_alert(alert, info, test=False):
 
 @receiver(post_save, sender=PatreonEvent)
 def event(instance, **kwargs):
+    print "do stuff?"
     user = instance.updater.credentials.user
     alerts = PatreonAlertConfig.objects.filter(user=user)
     info = instance.as_dict()
+    alerts = PatreonAlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
+    amount = info['filter_amount']
     for alert in alerts:
-        config_to_alert(alert, info)
+        print "alert"
+        if alert.filter_type == "1equal" and alert.filter_amount:
+            if alert.filter_amount == amount:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "2gt" and alert.filter_amount:
+            if alert.filter_amount < amount:
+                config_to_alert(alert, info)
+                break
+        elif alert.filter_type == "3default":
+            print "default"
+            config_to_alert(alert, info)
