@@ -28,6 +28,9 @@ from imraising.models import ImraisingEvent
 from youtubesubs.support import run_youtubesubs
 from youtubesubs.models import YoutubeSubEvent
 
+from patreon.support import run_patreon
+from patreon.models import PatreonEvent
+
 type_data = {
     'fanfunding': {
         'runner': run_fan_funding,
@@ -90,6 +93,12 @@ type_data = {
         'prop': 'imraisingupdate',
         'event': ImraisingEvent,
         'label': 'ImRaising',
+    },
+    'patreon': {
+        'runner': run_patreon,
+        'prop': 'patreonupdate',
+        'event': PatreonEvent,
+        'label': 'Patreon',
     },
     'donations': {
         'label': 'Overall Donations'
