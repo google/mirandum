@@ -19,6 +19,7 @@ from main.models import AlertStyle, Alert
 from imraising.models import ImraisingEvent, ImraisingAlertConfig
 from donations.support import add_donation
 import json
+from fanfunding.tts import do_it
 
 def config_to_alert(alert, info, test=False):
     if alert.blacklist:

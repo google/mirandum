@@ -24,7 +24,7 @@ def run_twitchfollows(ffu):
     added = 0
     http = httplib2.Http()
     #FIXME
-    resp, data = http.request("https://api.twitch.tv/kraken/channels/%s/follows" % ffu.credentials.label)
+    resp, data = http.request("https://api.twitch.tv/kraken/channels/%s/follows" % ffu.credentials.label, headers={'Client-ID': 'sq54m3rt1l2x3btwvbowxn90a0969zl'})
     data = json.loads(data)
     if 'error' in data:
         raise Exception("Error fetching twitchsubs: %s" % json.dumps(data['error']))

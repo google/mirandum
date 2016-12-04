@@ -59,18 +59,28 @@ if (params.key != undefined) {
 }
 loadAlerts();
     </script>
+    <style type="text/css">
+      #goal_text { text-align: center; color: #FFFFFF; font: 800 22px/1 'Open Sans'; text-shadow: 0 0 1px #222; margin-bottom: 10px; }
+      #wrapper { width: 100%; height: 48px;  position: relative; overflow: hidden; background: #DDDDDD; box-shadow: 0 0 3px #222; }
+      #amount_text { height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; z-index: 11; text-align: center; vertical-align: middle; color: #000000; font: 800 28px/48px 'Open Sans'; }
+      #bar {height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 10; box-shadow: 0 0 2px #000 inset;}
+      #donation_bar { height: 100%; position: absolute; top: 0px; left: 0px; z-index: 9; background: linear-gradient(transparent, rgba(0, 0, 0, 0.15)) #46E65A; box-shadow: 0px 0px 1px rgb(0, 0, 0); }
+      #start { text-align: center; text-transform: uppercase; color: #FFFFFF; height: 32px; font: 800 18px/32px 'Open Sans'; text-shadow: 0 0 1px #222; }
+      #start_left { float: left; color: #FFFFFF; font: 800 28px/32px 'Open Sans'; }
+      #goal_amount { float: right; color: #FFFFFF; font: 800 28px/32px 'Open Sans'; }
+    </style>  
   </head>
   <body class="styled">
 <div id="render">
   <div style="padding: 10px 20px;">
-    <div style="text-align: center; color: #FFFFFF; font: 800 22px/1 'Open Sans'; text-shadow: 0 0 1px #222; margin-bottom: 10px;" id="goal_text"></div>
-    <div style="width: 100%; height: 48px;  position: relative; overflow: hidden; background: #DDDDDD; box-shadow: 0 0 3px #222;">
-        <div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; z-index: 11; text-align: center; vertical-align: middle; color: #000000; font: 800 28px/48px 'Open Sans';" id="amount_text"></div>
-        <div style="height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 10; box-shadow: 0 0 2px #000 inset;"></div>
-        <div class="donation-bar" style="height: 100%; position: absolute; top: 0px; left: 0px; z-index: 9; background: linear-gradient(transparent, rgba(0, 0, 0, 0.15)) #46E65A; box-shadow: 0px 0px 1px rgb(0, 0, 0);" id="donation_bar"></div>
+    <div id="goal_text"></div>
+    <div id="wrapper">
+        <div id="amount_text"></div>
+        <div id="bar"></div>
+        <div class="donation-bar" id="donation_bar"></div>
     </div>
-    <div style="text-align: center; text-transform: uppercase; color: #FFFFFF; height: 32px; font: 800 18px/32px 'Open Sans'; text-shadow: 0 0 1px #222;"><span id="days_left"></span> <div style="float: left; color: #FFFFFF; font: 800 28px/32px 'Open Sans';">$0.00</div>
-        <div style="float: right; color: #FFFFFF; font: 800 28px/32px 'Open Sans';" id="goal_amount"></div>
+    <div id="start"><span id="days_left"></span> <div id="start_left">$0.00</div>
+        <div id="goal_amount"></div>
     </div>
 
 </div>

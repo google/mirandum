@@ -46,7 +46,7 @@ def thread_runner(instance):
         recent = timezone.now() - timedelta(seconds=120)
         if not lu.count() or lu[0].timestamp < recent:
             if DEBUG: print "Not active"
-            delay = delay * 8
+            delay = delay * 20
         else:
             if DEBUG: print "Active"
         runner = updater_props['runner']

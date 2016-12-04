@@ -27,3 +27,4 @@ DATABASES = {
 }
 SERVER_BASE="https://www.livestreamalerts.com/"
 SECRET_KEY="Un!%}$eV&kxw=ZN!&eP@BO!=Oso0b2m-|gf/J-.3FbL/a%q2hk"
+RUNNER_DEBUG=False

@@ -57,7 +57,7 @@ class AlertForm(forms.ModelForm):
 @login_required
 def test_alert(request, alert_id=None):
     ac = PatreonAlertConfig.objects.get(pk=int(alert_id), user=request.user)
-    config_to_alert(ac, {'name': 'Livestream Alerts'}, True)
+    config_to_alert(ac, {'name': 'Livestream Alerts', 'amount': '$5.00'}, True)
     if request.GET.get('ret') == 'alerts':
         return HttpResponseRedirect("/alert_page")
     return HttpResponseRedirect("/patreon/")
@@ -66,7 +66,7 @@ alert_config = ac(
     MODULE_NAME,
     AlertForm,
     PatreonAlertConfig,
-    {"alert_text": "[[name]] is now a Patron!"})
+    {"alert_text": "[[name]] is now a Patron at the [[amount]] level!"})
 
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), '.', 'patreon_secrets.json')
 

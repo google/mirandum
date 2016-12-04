@@ -30,7 +30,7 @@ def run_youtubesubs(ffu):
         return added
     http = httplib2.Http()
     http = credential.authorize(http)
-    resp, data = http.request("%ssubscriptions?part=subscriberSnippet&myRecentSubscribers=true&maxResults=50" % BASE_URL)
+    resp, data = http.request("%ssubscriptions?part=subscriberSnippet&myRecentSubscribers=true&maxResults=25" % BASE_URL)
     data = json.loads(data)
     if 'error' in data:
         raise Exception("Error fetching youtubesubs: %s" % json.dumps(data['error']))

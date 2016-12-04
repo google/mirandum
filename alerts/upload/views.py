@@ -40,6 +40,14 @@ def list(request):
     return render(request, "upload/list.html", {'uploads': uploads})
 
 @login_required
+def delete_upload(request):
+    if request.method == "POST":
+        uploads = Upload.objects.filter(user=request.user, id=request.POST['id'])
+        if uploads.count():
+            uploads[0].delete()
+    return HttpResponseRedirect("/upload/")
+
+@login_required
 def upload(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)

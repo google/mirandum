@@ -18,7 +18,8 @@ limitations under the License.
 <a href="upload">Upload New File</a>
 <ul>
 {% for upload in uploads %}
-  <li><a href="{{upload.remote_path}}">{{upload.local_name}}</a></li>
+<form action="/upload/delete" method="POST">{%csrf_token%}
+  <li><a href="{{upload.remote_path}}">{{upload.local_name}}</a> <input type="hidden" name="id" value="{{upload.id}}" /> <input type="submit" value="Delete" /></li></form>
 {% endfor %}
 </ul>
 {% endblock %} 

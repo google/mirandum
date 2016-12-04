@@ -30,6 +30,8 @@ def load_patreon_data(updater):
     if 'error' in data:
         raise Exception("Error fetching patreon: %s" % json.dumps(data['error']))
     data_map = {}
+    if not 'included' in data:
+        return []
     for i in data['included']:
         data_map['%s-%s' % (i['id'], i['type'])]  = i
     pledges = []
