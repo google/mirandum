@@ -26,11 +26,15 @@ class Donation(models.Model):
     primary_currency = models.CharField(max_length=10, blank=True, null=True)
     type = models.CharField(max_length=20)
     def as_dict(self):
+        short_amount = "%.2f" % self.amount
+        if round(self.amount, 0) == self.amount:
+            short_amount = "%.0f" % self.amount
         return {
             'name': self.name,
             'comment': self.comment,
             'amount': "%.2f" % self.amount,
             'amount_integer': "%.0f" % self.amount,
+            'amount_short': short_amount,
             'currency': self.currency,
             'currencysymbol': SYMBOLS.get(self.currency, ""),
         }
