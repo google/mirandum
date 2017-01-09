@@ -30,6 +30,7 @@ class Donation(models.Model):
             'name': self.name,
             'comment': self.comment,
             'amount': "%.2f" % self.amount,
+            'amount_integer': "%.0f" % self.amount,
             'currency': self.currency,
             'currencysymbol': SYMBOLS.get(self.currency, ""),
         }
