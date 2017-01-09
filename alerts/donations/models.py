@@ -56,7 +56,7 @@ class Goal(models.Model):
     amount = models.FloatField()
     description = models.CharField(max_length=1000, blank=True, null=True)
     source_type = models.CharField(max_length=100, help_text="Limit donations to a specific type of donation for this goal.", default='', choices=(
-        ('', 'All types'),
+        ('all', 'All types'),
         ('extralife', 'Extra Life'),
         ('fanfunding', 'Fan Funding'),
         ('imraising', 'Imraising'),
