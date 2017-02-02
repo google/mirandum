@@ -37,6 +37,13 @@ def home(request):
 
 @login_required
 def setup(request):
+    cred_count = AppCreds.objects.filter(user=request.user).count()
+    ffu_count = SponsorUpdate.objects.filter(user=request.user).count()
+    if cred_count == 1 and ffu_count == 0:
+        creds = AppCreds.objects.get(user=request.user)
+        ffu = SponsorUpdate(credentials=creds, type="sponsors", user=request.user)
+        ffu.save()
+        return HttpResponseRedirect("/sponsors/")
     CredsForm = creds_form(request.user)
     if request.POST:
         f = CredsForm(request.POST)
@@ -47,7 +54,10 @@ def setup(request):
             return HttpResponseRedirect("/sponsors/")
     else:
         f = CredsForm()
-    return render(request, "sponsors/setup.html", {'form': f})
+    cred_count = AppCreds.objects.filter(user=request.user).count()
+    if cred_count == 0:
+        return HttpResponseRedirect("/googleaccount/setup?redir=sponsors")
+    return render(request, "sponsors/setup.html", {'form': f, 'count': cred_count})
 
 class AlertForm(forms.ModelForm):
     class Meta:
