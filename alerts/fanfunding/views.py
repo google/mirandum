@@ -37,6 +37,14 @@ def home(request):
 
 @login_required
 def setup(request):
+    cred_count = AppCreds.objects.filter(user=request.user).count()
+    ffu_count = FanFundingUpdate.objects.filter(user=request.user).count()
+    if cred_count == 1 and ffu_count == 0:
+        creds = AppCreds.objects.get(user=request.user)
+        ffu = FanFundingUpdate(credentials=creds, type="fanfunding", user=request.user)
+        ffu.save()
+        return HttpResponseRedirect("/fanfunding/")
+        
     CredsForm = creds_form(request.user)
     if request.POST:
         f = CredsForm(request.POST)
@@ -47,7 +55,9 @@ def setup(request):
             return HttpResponseRedirect("/fanfunding/")
     else:
         f = CredsForm()
-    return render(request, "fanfunding/setup.html", {'form': f})
+    if cred_count == 0:
+        return HttpResponseRedirect("/googleaccount/setup?redir=ffsetup")
+    return render(request, "fanfunding/setup.html", {'form': f, 'count': cred_count})
 
 class AlertForm(forms.ModelForm):
     class Meta:
