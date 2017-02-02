@@ -63,7 +63,7 @@ class Goal(models.Model):
     source_type = models.CharField(max_length=100, help_text="Limit donations to a specific type of donation for this goal.", default='', choices=(
         ('all', 'All types'),
         ('extralife', 'Extra Life'),
-        ('fanfunding', 'Fan Funding'),
+        ('fanfunding', 'Fan Funding/Super Chat'),
         ('imraising', 'Imraising'),
         ('twitchalerts', 'Twitch Alerts/Stream Labs'),
         ('streamjar', 'Stream Jar'),

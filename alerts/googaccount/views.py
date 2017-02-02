@@ -40,17 +40,25 @@ FLOW.params['approval_prompt'] = 'force'
 
 @login_required
 def setup(request):
-  FLOW.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
+  state_token = xsrfutil.generate_token(settings.SECRET_KEY,
                                                  request.user.username)
+  if 'redir' in request.GET and request.GET['redir'] in ['ffsetup', 'subs', 'sponsors']:
+    state_token = "%s|%s" % (state_token, request.GET['redir'])
+  FLOW.params['state'] = state_token
   authorize_url = FLOW.step1_get_authorize_url()
   return HttpResponseRedirect(authorize_url)
 
 @login_required
 def auth_return(request):
-  if not xsrfutil.validate_token(settings.SECRET_KEY, str(request.GET['state']),
+  bits = request.GET['state'].split("|")
+  state_token = bits[0]
+  redir = ""
+  if len(bits) > 1:
+    redir = bits[1]
+  if not xsrfutil.validate_token(settings.SECRET_KEY, str(state_token),
                                  request.user.username):
     return  HttpResponseBadRequest()
-  data = {'state': request.GET['state'], 'code': request.GET['code']}
+  data = {'state': request.GET['state'], 'code': request.GET['code'], 'redir': redir}
   return render(request, "googaccount/label.html", data)
 
 @login_required
@@ -61,6 +69,13 @@ def finalize(request):
   internal_label = "%s-%s" % (request.user.id, request.POST['label'])
   storage = Storage(CredentialsModel, 'id', ac, 'credential')
   storage.put(credential)
+  if 'redir' in request.POST:
+    if request.POST['redir'] == 'ffsetup':
+        return HttpResponseRedirect("/fanfunding/setup?force=1")
+    if request.POST['redir'] == 'subs':
+        return HttpResponseRedirect("/youtubesubs/setup?force=1")
+    if request.POST['redir'] == 'sponsors':
+        return HttpResponseRedirect("/sponsors/setup?force=1")
   return HttpResponseRedirect("/accounts/")
 
 @login_required

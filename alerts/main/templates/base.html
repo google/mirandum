@@ -100,8 +100,6 @@ padding: 10px;
 <h1>Livestream Alerts</h1>
 <ul id="menu">
   <li><a href="/home/">Home</a></li>
-  <li><a href="/accounts/">Accounts</a></li>
-  <li><a href="/alert_page">Alerts</a></li>
   <li><a href="/lists">Lists</a></li>
   <li>Subscribers/Followers ▾
     <ul>
@@ -113,7 +111,7 @@ padding: 10px;
   <li>Donations/Tips ▾
    <ul>
     <li><a href="/donations/">Donation History/Goals</a></li>
-    <li><a href="/fanfunding/">Fan Funding</a></li>
+    <li><a href="/fanfunding/">Super Chat (and Fan Funding)</a></li>
     <li><a href="/twitchalerts/">TwitchAlerts</a></li>
     <li><a href="/streamtip/">StreamTip</a></li>
     <li><a href="/imraising/">ImRaising</a></li>
@@ -128,6 +126,7 @@ padding: 10px;
     <li>Twitch Subscribers (coming soon)</li>
    </ul>
   </li> 
+  <li><a href="/accounts/">Accounts</a></li>
   <li id="last_menu">{% if user.is_authenticated %}{{user}} | <a href="/accounts/logout/">Logout</a>{% else %}<a href="/accounts/login/">Login</a>{% endif %}</li>
 </ul>
 <div id="page-border" >

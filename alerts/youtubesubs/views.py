@@ -35,6 +35,13 @@ def home(request):
 
 @login_required
 def setup(request):
+    cred_count = AppCreds.objects.filter(user=request.user).count()
+    ffu_count = YoutubeSubUpdate.objects.filter(user=request.user).count()
+    if cred_count == 1 and ffu_count == 0:
+        creds = AppCreds.objects.get(user=request.user)
+        ffu = YoutubeSubUpdate(credentials=creds, type="youtubesubs", user=request.user)
+        ffu.save()
+        return HttpResponseRedirect("/youtubesubs/")
     CredsForm = creds_form(request.user)
     
     if request.POST:

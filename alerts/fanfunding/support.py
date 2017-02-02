@@ -30,7 +30,7 @@ def run_fan_funding(ffu):
         return added
     http = httplib2.Http()
     http = credential.authorize(http)
-    resp, data = http.request("%sfanFundingEvents?part=snippet&maxResults=5" % BASE_URL)
+    resp, data = http.request("%ssuperChatEvents?part=snippet&maxResults=5" % BASE_URL)
     data = json.loads(data)
     if 'error' in data:
         raise Exception("Error fetching fanfunding: %s" % json.dumps(data['error']))
