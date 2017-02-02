@@ -16,7 +16,7 @@ limitations under the License.
 {% endcomment %}
 {% block content %}
 <h2>Accounts</h2>
-<p>You have {{configs|length}} registered Fan Funding accounts.</p>
+<p>You have {{configs|length}} registered Fan Funding/Super Chat accounts.</p>
 
 <ul>
   {% for config in configs %}
@@ -31,7 +31,7 @@ limitations under the License.
 <a href="setup" class="button">Register Google account</a>
 
 <h2>Alerts</h2>
-<p>You have {{alerts|length}} configured Fan Funding alerts.</p>
+<p>You have {{alerts|length}} configured Fan Funding/Super Chat alerts.</p>
 <a href="alert" class="button">Add new alert</a>
 <ul>
   {% for alert in alerts %}

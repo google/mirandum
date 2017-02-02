@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
-<p><a href="/accounts" class="button">Manage Google accounts</a></p>
+<h2>Choose from your {{count}} configured Google account{{count|pluralize}}.</h2>
 <form method="POST"> {% csrf_token %}
 
 <table>
@@ -23,5 +23,6 @@ limitations under the License.
 </table>
 <input type="submit" value="Register" />
 </form>
+<p><a href="/googleaccount/setup?redir=ffsetup" class="button">Add new Google account</a> <a href="/accounts" class="button">Manage Google accounts</a></p>
 
 {% endblock %}
