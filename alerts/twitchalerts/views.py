@@ -68,7 +68,7 @@ def setup(request):
         data = json.load(u)
     except urllib2.HTTPError, E:
         data = json.load(E)
-        raise Exception("TwitchAlerts API Failure: %s: %s" % (data['error'], data['message']))
+        raise Exception("Streamlabs API Failure: %s: %s" % (data['error'], data['message']))
     refresh_before = timezone.now() + datetime.timedelta(seconds=3000)
     label = "Unknown"
     try:
