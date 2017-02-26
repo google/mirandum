@@ -100,6 +100,7 @@ urlpatterns = patterns('',
     url(r'^twitchalerts/test_alert/(?P<alert_id>[0-9]*)$', 'twitchalerts.views.test_alert'),
     url(r'^twitchalerts/alert$', 'twitchalerts.views.alert_config'),
     url(r'^twitchalerts/alert/(?P<alert_id>[0-9]*)$', 'twitchalerts.views.alert_config'),
+    url(r'^twitchalerts/update_users$', 'twitchalerts.views.update_users'),
     
     url(r'^twitchfollows/$', 'twitchfollows.views.home'),
     url(r'^twitchfollows/setup$', 'twitchfollows.views.setup'),

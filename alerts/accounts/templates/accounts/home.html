@@ -101,7 +101,7 @@ limitations under the License.
   <p>You have {{twitchalerts_accounts|length}} registered TwitchAlerts account(s).</p>
   <ul>
   {% for twitchalerts_account in twitchalerts_accounts %}
-    <li>{{twitchalerts_account.credentials.label}} (last update: {{twitchalerts_account.last_update|timesince}} ago) (<a href="/delete_updater/{{twitchalerts_account.id}}">unregister</a>)
+    <li>{{twitchalerts_account.label}} (last update: {{twitchalerts_account.last_update|timesince}} ago) (<a href="/delete_updater/{{twitchalerts_account.id}}">unregister</a>)
    {% if config.failure_count %} <br />
    <b>{{twitchalerts_account.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
    {% endif %}
