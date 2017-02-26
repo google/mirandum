@@ -19,6 +19,7 @@ from django.utils import timezone
 import datetime
 
 class TwitchalertsUpdate(main.models.Updater):
+    label = models.CharField(max_length=255, default="")
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
     last_id = models.CharField(max_length=255, blank=True, null=True)

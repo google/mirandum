@@ -20,6 +20,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 import django.forms as forms
 
@@ -69,12 +70,27 @@ def setup(request):
         data = json.load(E)
         raise Exception("TwitchAlerts API Failure: %s: %s" % (data['error'], data['message']))
     refresh_before = timezone.now() + datetime.timedelta(seconds=3000)
+    label = "Unknown"
+    try:
+        r = urllib2.Request("https://www.twitchalerts.com/api/v1.0/user?access_token=%s" % data['access_token'],
+            headers={
+                "User-Agent": "Livestream Alerts (python-urllib2)",
+                })
+        contents = urllib2.urlopen(r).read()
+        account_data = json.loads(contents)
+        if 'youtube' in account_data and 'title' in account_data['youtube']:
+            label = u"%s (YouTube)" % account_data['youtube']['title'][0:200]
+        if 'twitch' in account_data and 'display_name' in account_data['twitch']:
+            label = u"%s (Twitch)" % account_data['twitch']['display_name']
+    except Exception, E:
+        pass     
     tau = TwitchalertsUpdate(
         access_token = data['access_token'],
         refresh_token = data['refresh_token'],
         user=request.user,
         type="twitchalerts",
         refresh_before=refresh_before,
+        label=label,
     )
     tau.save()
     return HttpResponseRedirect("/accounts/")
@@ -89,6 +105,27 @@ class AlertForm(forms.ModelForm):
             'alert_text': forms.TextInput(attrs={'size': 50}),
         }
 
+@staff_member_required
+def update_users(request):
+    for updater in TwitchalertsUpdate.objects.all():
+        label = "Unknown"
+        try:
+            r = urllib2.Request("https://www.twitchalerts.com/api/v1.0/user?access_token=%s" % updater.access_token,
+                headers={
+                    "User-Agent": "Livestream Alerts (python-urllib2)",
+                    })
+            contents = urllib2.urlopen(r).read()
+            account_data = json.loads(contents)
+            if 'youtube' in account_data and 'title' in account_data['youtube']:
+                label = u"%s (YouTube)" % account_data['youtube']['title'][0:200]
+            if 'twitch' in account_data and 'display_name' in account_data['twitch']:
+                label = u"%s (Twitch)" % account_data['twitch']['display_name']
+        except Exception, E:
+            pass     
+        updater.label = label
+        updater.save()
+    return HttpResponseRedirect("/twitchalerts/")
+    
 @login_required
 def test_alert(request, alert_id=None):
     ac = TwitchalertsAlertConfig.objects.get(pk=int(alert_id), user=request.user)

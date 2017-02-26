@@ -20,7 +20,7 @@ limitations under the License.
 
 <ul>
   {% for config in configs %}
-    <li>{{config.credentials.label}} (last update: {{config.last_update|timesince}} ago)
+    <li>{{config.label}} (last update: {{config.last_update|timesince}} ago)
    {% if config.failure_count %} <br />
    <b>{{config.failure_count}} recent failures</b>. If there are 5 failures, this account is disabled.
    {% endif %}
