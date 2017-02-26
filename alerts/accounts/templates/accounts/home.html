@@ -96,9 +96,9 @@ limitations under the License.
 {% endif %}
 <a href="/streamtip/setup" class="button">Register new account</a>
 
-<h3>TwitchAlerts</h3>
+<h3>StreamLabs</h3>
 {% if twitchalerts_accounts %}
-  <p>You have {{twitchalerts_accounts|length}} registered TwitchAlerts account(s).</p>
+  <p>You have {{twitchalerts_accounts|length}} registered StreamLabs account(s).</p>
   <ul>
   {% for twitchalerts_account in twitchalerts_accounts %}
     <li>{{twitchalerts_account.label}} (last update: {{twitchalerts_account.last_update|timesince}} ago) (<a href="/delete_updater/{{twitchalerts_account.id}}">unregister</a>)
@@ -109,7 +109,7 @@ limitations under the License.
   {% endfor %}
   </ul>
 {% else %}
-  <p>You have no TwitchAlerts account registered.</p>
+  <p>You have no StreamLabs account registered.</p>
 {% endif %}
 <a href="/twitchalerts/setup" class="button">Register new account</a>
 

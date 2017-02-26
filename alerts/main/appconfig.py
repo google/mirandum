@@ -79,7 +79,7 @@ type_data = {
         'runner': run_twitchalerts,
         'prop': 'twitchalertsupdate',
         'event': TwitchalertsEvent,
-        'label': 'TwitchAlerts',
+        'label': 'StreamLabs',
     },
     'twitchfollows': {
         'runner': run_twitchfollows,

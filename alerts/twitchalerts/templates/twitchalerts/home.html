@@ -16,7 +16,7 @@ limitations under the License.
 {% endcomment %}
 {% block content %}
 <h2>Accounts</h2>
-<p>You have {{configs|length}} registered TwitchAlerts accounts.</p>
+<p>You have {{configs|length}} registered Streamlabs accounts.</p>
 
 <ul>
   {% for config in configs %}
@@ -31,7 +31,7 @@ limitations under the License.
 <p><a href="/accounts" class="button">Manage accounts</a></p>
 
 <h2>Alerts</h2>
-<p>You have {{alerts|length}} configured TwitchAlerts alerts.</p>
+<p>You have {{alerts|length}} configured Streamlabs alerts.</p>
 <a href="alert" class="button">Add new alert</a>
 <ul>
   {% for alert in alerts %}
