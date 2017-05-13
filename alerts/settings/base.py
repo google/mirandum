@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'donations',
     'twitchaccount',
     'twitchfollows',
+    'meta',
     'accounts'
 )
 

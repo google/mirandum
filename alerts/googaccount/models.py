@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 class AppCreds(models.Model):
   user = models.ForeignKey(User, blank=True, null=True)
   label = models.CharField(max_length=255)
+  channel_id = models.CharField(default="", max_length=30)
 
 class CredentialsModel(models.Model):
   id = models.ForeignKey(AppCreds, primary_key=True)

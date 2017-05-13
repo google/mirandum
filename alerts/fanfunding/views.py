@@ -72,7 +72,7 @@ class AlertForm(forms.ModelForm):
 @login_required
 def test_alert(request, alert_id=None):
     ac = AlertConfig.objects.get(pk=int(alert_id), user=request.user)
-    config_to_alert(ac, {'name': 'Livestream Alerts', 'amount': '$17.32', 'comment': 'Test Donation from Livestream Alerts', 'id': 'tmp-%s' % ac.id}, True)
+    config_to_alert(ac, {'name': u'Livestream Al\xfcrts', 'amount': '$17.32', 'comment': u'Test Donation from Liv\xfcstream Alerts', 'id': 'tmp-%s' % ac.id}, True)
     if request.GET.get('ret') == 'alerts':
         return HttpResponseRedirect("/alert_page")
     return HttpResponseRedirect("/fanfunding/")

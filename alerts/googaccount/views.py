@@ -14,7 +14,7 @@
 
 import os
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from datetime import datetime
 from googaccount.models import CredentialsModel, AppCreds
 from fanfunding.models import FanFundingUpdate
@@ -26,6 +26,7 @@ from django.conf import settings
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.contrib.django_orm import Storage
+from googaccount.helpers import get_channel
 
 from django.shortcuts import render
 
@@ -84,6 +85,13 @@ def unlink(request, id):
   updaters = _get_updaters(request.user, ac)
   data = {'account': ac, 'updaters': updaters}
   return render(request, "googaccount/unlink.html", data)
+
+@login_required
+def update_channel(request, id):
+  ac = AppCreds.objects.get(user=request.user, id=id)
+  channel = get_channel(ac, force=True)
+  return HttpResponse(channel)
+    
 
 @login_required
 def unlink_confirm(request, id):

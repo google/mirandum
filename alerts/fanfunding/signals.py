@@ -30,10 +30,10 @@ def config_to_alert(alert, info, test=False):
     for s in blacklist_strings:
         if s and s.lower() in info['name'].lower():
             return
-    text = alert.alert_text
-    text = text.replace("[[name]]", info['name'])
-    text = text.replace("[[amount]]", info['amount'])
-    text = text.replace("[[comment]]", info['comment'])
+    text = alert.alert_text.encode("utf-8")
+    text = text.replace("[[name]]", info['name'].encode("utf-8"))
+    text = text.replace("[[amount]]", info['amount'].encode("utf-8"))
+    text = text.replace("[[comment]]", info['comment'].encode("utf-8"))
     sound_url = alert.sound_url
     if alert.text_to_speech and info['comment']:
         try:
