@@ -51,7 +51,7 @@ def setup(request):
             'response_type': 'code',
             'scope': 'donations.read'
         }
-        return HttpResponseRedirect("https://www.twitchalerts.com/api/v1.0/authorize?%s" % urllib.urlencode(url_data))
+        return HttpResponseRedirect("https://www.streamlabs.com/api/v1.0/authorize?%s" % urllib.urlencode(url_data))
     data = {
         'code': request.GET['code'],
         'grant_type': 'authorization_code',
@@ -59,7 +59,7 @@ def setup(request):
         'client_secret': TWITCH_INFO['client_secret'],
         'redirect_uri': TWITCH_INFO['redirect_uri']
     }
-    twitch_request = urllib2.Request("https://www.twitchalerts.com/api/v1.0/token", headers= {
+    twitch_request = urllib2.Request("https://www.streamlabs.com/api/v1.0/token", headers= {
     'Accept': 'application/json',
     'User-Agent': 'Livestream Alerts (python-urllib2)'
     })
