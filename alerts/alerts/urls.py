@@ -139,7 +139,12 @@ urlpatterns = patterns('',
     url(r'^youtubesubs/test_alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.test_alert'),
     url(r'^youtubesubs/alert$', 'youtubesubs.views.alert_config'),
     url(r'^youtubesubs/alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.alert_config'),
+    
     url(r'^meta/$', 'meta.views.setup'),
+
+    url(r'^actions/go$', 'actions.views.go'),
+    url(r'^actions/$', 'actions.views.setup'),
+    url(r'^actions/(?P<action_type>[a-z_]*)/?$', 'actions.views.setup'),
     
     url(r'^accounts/', include('registration.backends.simple.urls')),
    url(r'^account/password/reset/$', 

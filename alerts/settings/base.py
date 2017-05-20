@@ -66,7 +66,8 @@ INSTALLED_APPS = (
     'twitchaccount',
     'twitchfollows',
     'meta',
-    'accounts'
+    'accounts',
+    'actions'
 )
 
 MIDDLEWARE_CLASSES = (
