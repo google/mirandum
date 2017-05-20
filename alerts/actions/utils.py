@@ -24,12 +24,14 @@ BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 class YouTubeAPIException(Exception):
     pass
+class CredentialsException(Exception):
+    pass
 
 def ytapicall(appcreds, url, post_json=None):
     storage = Storage(CredentialsModel, 'id', appcreds, 'credential')
     credential = storage.get()
     if credential is None or credential.invalid == True:
-        raise Exception("bad creds")
+        raise CredentialsException("bad creds")
     http = httplib2.Http()
     http = credential.authorize(http)
     if post_json:
@@ -48,15 +50,19 @@ def send_yt_chat_message(user, message):
     video_ids = []
     for appcreds in AppCreds.objects.filter(user=user):
         for event_type in ('upcoming', 'active'):
-            url = "%sliveBroadcasts?part=snippet&broadcastStatus=%s&maxResults=50" % (BASE_URL, event_type)
+            url = "%sliveBroadcasts?broadcastType=all&part=snippet&broadcastStatus=%s&maxResults=50" % (BASE_URL, event_type)
             try:
                 data = ytapicall(appcreds, url)
+                print data
                 for i in data['items']:
                     if 'snippet' in i and 'liveChatId' in i['snippet']:
                         live_chat_id = i['snippet']['liveChatId']
                         live_chat_ids.append((live_chat_id, appcreds))
                         video_ids.append(i['id'])
             except YouTubeAPIException, E:
+                print E
+                continue
+            except CredentialsException, E:
                 print E
                 continue
     live_chat_ids = set(live_chat_ids)
@@ -71,5 +77,5 @@ if __name__ == "__main__":
 
     django.setup()
     from django.contrib.auth.models import User
-    u = User.objects.get(pk=1)
+    u = User.objects.get(pk=6)
     send_yt_chat_message(u, "foo 💩 :awesome:")
