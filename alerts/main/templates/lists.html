@@ -21,13 +21,13 @@ limitations under the License.
   <p>You have {{recents|length}} lists of recent actions.</p>
   <ul>
   {% for recent in recents %}
-    <li><b>{{recent.type}} - {{recent.id}}</b>: List {{recent.count}} items, <i>{{recent.format}}</i> (<a href="/recent_config/{{recent.id}}">edit</a>) (<a href="/recent_popup?id={{recent.id}}&key={{key.key}}">open</a>)</li>
+    <li><b>{{recent.type}} - {{recent.id}}</b>: List {{recent.count}} items, <i>{{recent.format}}</i> (<a href="/recent_config/{{recent.id}}">edit</a>) (<a href="/recent_popup?id={{recent.id}}&key={{key.key}}&version=2">open</a>)</li>
   {% endfor %}  
   </ul>
   <p>You have {{tops|length}} lists of top donations.</p>
   <ul>
   {% for top in tops %}
-    <li><b>top - {{top.type}} - {{top.id}}</b>: List {{top.count}} items, <i>{{top.format}}</i>{% if top.type == "limited" %}, {{top.days}} days{% endif %} (<a href="/donations/top/{{top.id}}">edit</a>) (<a href="/recent_popup?id={{top.id}}&key={{key.key}}&type=top">open</a>)</li>
+    <li><b>top - {{top.type}} - {{top.id}}</b>: List {{top.count}} items, <i>{{top.format}}</i>{% if top.type == "limited" %}, {{top.days}} days{% endif %} (<a href="/donations/top/{{top.id}}">edit</a>) (<a href="/recent_popup?id={{top.id}}&key={{key.key}}&type=top&version=2">open</a>)</li>
   {% endfor %}
   </ul>
   <p>

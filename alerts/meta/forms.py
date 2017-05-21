@@ -12,18 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License. 
 import django.forms as forms
-from donations.models import TopList, Goal
-from django.forms.fields import DateField
-from django.contrib.admin.widgets import AdminDateWidget
+from meta.models import Meta
 
-class TopForm(forms.ModelForm):
+class MetaForm(forms.ModelForm):
     class Meta:
-        model = TopList
-        fields = ['format', 'count', 'seperator', 'type', 'days', 'font', 'font_size', 'font_color', 'font_effect', 'font_weight', 'outline_color']
+        model = Meta
+        fields = ['pre_text', 'post_text', 'font', 'font_size', 'font_color', 'font_effect', 'font_weight', 'outline_color']
 
-class GoalForm(forms.ModelForm):
-    class Meta:
-        model = Goal
-        fields = ['start_date', 'end_date', 'amount', 'description', 'source_type']
-    start_date = DateField(widget=AdminDateWidget())
-    end_date   = DateField(widget=AdminDateWidget(), required=False)
+

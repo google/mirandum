@@ -103,6 +103,9 @@ class RecentConfig(models.Model):
     font = models.CharField(blank=True, null=True, max_length=255)
     font_size = models.CharField(blank=True, null=True, max_length=255)
     font_color = models.CharField(blank=True, null=True, max_length=255)
+    font_effect = models.CharField(blank=True, null=True, max_length=255, default=None, choices=font_effects())
+    font_weight = models.CharField(blank=True, null=True, max_length=255, default="normal")
+    outline_color = models.CharField(blank=True, null=True, max_length=255, default=None)
 
 class Session(models.Model):
     user = models.ForeignKey(User)

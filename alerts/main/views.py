@@ -25,6 +25,8 @@ from main.forms import RecentForm
 from main.appconfig import type_data
 from donations.models import Donation, TopList
 from donations.support import output_for_top
+from meta.models import Meta
+from meta.views import output_for_meta
 from django.views.decorators.csrf import csrf_exempt
 
 @login_required
@@ -155,6 +157,8 @@ def all_recents(request):
         output['%s-%s' % (i.type, i.id)] = output_for_recent(i)
     for i in TopList.objects.filter(user=k.user):
         output['top-%s-%s' % (i.type, i.id)] = output_for_top(i)
+    for i in Meta.objects.filter(user=k.user):
+        output['meta-%s-%s' % (i.type, i.id)] = output_for_meta(i)
     output_s = json.dumps(output)
     return HttpResponse(output_s, content_type='text/plain')
 
@@ -170,16 +174,30 @@ def recent_api(request):
         if config.user != k.user:
             return HttpResponseBadRequest()
         data = output_for_top(config)
+    elif request.GET.get("type") == "meta":
+        config = Meta.objects.get(pk=request.GET['id'])
+        if config.user != k.user:
+            return HttpResponseBadRequest()
+        data = output_for_meta(config)    
     else:
         config = RecentConfig.objects.get(pk=request.GET['id'])
         if config.user != k.user:
             return HttpResponseBadRequest()
         data = output_for_recent(config)
+    google_font = False
+    try:
+        google_font = check_google_font(config.font)
+    except Exception, E:
+        print "Failed to check font", E
     output = {
       'latest': data,
       'font': config.font or None,
+      'google_font': google_font,
       'font_size': config.font_size or None,
       'font_color': config.font_color or None,
+      'weight': config.font_weight or None,
+      'font_effect': config.font_effect or None,
+      'outline': config.outline_color or None,
       }
      
     output_s = json.dumps(output)

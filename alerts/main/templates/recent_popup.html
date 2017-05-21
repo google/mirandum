@@ -19,7 +19,10 @@ limitations under the License.
     <meta charset='utf-8' />
     <title>Sub Alerts</title>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
 
+
+    <link rel="stylesheet" type="text/css" href="/static/font-effects.css">
   </head>
   <body class="styled">
     <style>
@@ -88,13 +91,31 @@ limitations under the License.
       function handleEmails(resp) {
         var latest = resp.latest;
         populateAlert(resp.latest);
-        var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color'};
+        var styleProps = {'font': 'font-family', 'font_size': 'fontSize', 'font_color': 'color', 'weight': 'fontWeight'};
         for (var key in styleProps) {
             var val = styleProps[key];
             if (resp[key]) {
                 $("#latestContainer").css(val, resp[key]);
             }
         }
+        if (resp['font_effect']) {
+            $("#latestContainer").addClass('font-effect-'+resp['font_effect']);
+        }
+        if (resp['outline']) {
+            var outline = resp['outline'];
+            $("#latestContainer").css('textShadow', '3px 0 0 '+outline+', 0 -3px 0 '+outline+', 0 3px 0 '+outline+', -3px 0 0 '+outline+''); 
+        }
+        if (resp['google_font']) {
+            WebFont.load({
+               google: {
+                  families: [resp['font']]
+               }
+            });
+        }
+
+
+
+
         setTimeout(loadSubMessages, DEFAULT_ALERT_TIME);
       }
 
@@ -108,6 +129,9 @@ limitations under the License.
         currentType = params.type;
       } else {
         currentType = '';
+      }
+      if (params.version == "2"){
+        $("#latestContainer").css('padding', '60px'); 
       }
       if (params.bgColor != undefined) {
           document.body.style.backgroundColor = params.bgColor;

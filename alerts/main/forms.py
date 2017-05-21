@@ -30,6 +30,7 @@ class RecentForm(forms.ModelForm):
     class Meta:
         model = RecentConfig
         fields = ['format', 'count', 'seperator', 'type', 'font', 'font_size', 'font_color']
+        fields = ['format', 'count', 'seperator', 'type', 'font', 'font_size', 'font_color', 'font_effect', 'font_weight', 'outline_color']
         widgets = {
             'type': forms.widgets.Select(choices=([('', '')] + main.appconfig.type_choices()))
         }

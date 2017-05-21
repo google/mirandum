@@ -141,6 +141,8 @@ urlpatterns = patterns('',
     url(r'^youtubesubs/alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.alert_config'),
     
     url(r'^meta/$', 'meta.views.setup'),
+    url(r'^meta/meta$', 'meta.views.meta_config'),
+    url(r'^meta/meta/(?P<meta_id>[0-9]+)$', 'meta.views.meta_config'),
 
     url(r'^actions/go$', 'actions.views.go'),
     url(r'^actions/$', 'actions.views.setup'),

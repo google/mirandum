@@ -1,6 +1,33 @@
-<form method="POST">{% csrf_token %}
- <input type="hidden" value="subs" name="type" />
- <input type="hidden" value="1" name="id" />
- <input type="submit" />
-</form>
+{% extends "base.html" %}
+{% block content %}
+<p>
+  In addition to alerts, you can track metadata about your accounts -- number of sponsors, patrons, and so on. All trackers are included in output in the <a href="/label_manager">Label Manager</a> Chrome App.</p>
 
+
+<ul>
+{% for meta in metas %}
+  <li>{{meta.get_type_display}} for {{meta.appcreds.label}}: {{meta.display}} <br /><span style="padding-left:50px; font-size: .8em"><a href="/recent_popup?id={{meta.id}}&key={{key}}&version=2&type=meta">embed widget</a> (label: <tt>meta-{{meta.type}}-{{meta.id}}</tt>)</span></li>
+{% endfor %}  
+</ul>
+<p>Add additional counters to track:</p>
+<ul>
+{% for appcred in appcreds_subs %}
+<form method="POST">{% csrf_token %}
+ <li>Track YouTube Subscribers for {{appcred.label}}
+ <input type="hidden" value="youtubesubs" name="type" />
+ <input type="hidden" value="{{appcred.id}}" name="id" />
+ <input type="submit" value="Add" />
+ </li>
+</form>
+{% endfor %}
+{% for appcred in appcreds_viewers %}
+<form method="POST">{% csrf_token %}
+ <li>Track YouTube Viewers for {{appcred.label}}
+ <input type="hidden" value="youtubeviewers" name="type" />
+ <input type="hidden" value="{{appcred.id}}" name="id" />
+ <input type="submit" value="Add" />
+ </li>
+</form>
+{% endfor %}
+</ul>
+{% endblock %}

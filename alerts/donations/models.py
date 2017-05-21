@@ -14,6 +14,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from donations.currencymap import SYMBOLS
+from main.support import animations_list, font_effects
 
 class Donation(models.Model):
     user = models.ForeignKey(User)
@@ -47,6 +48,9 @@ class TopList(models.Model):
     font = models.CharField(blank=True, null=True, max_length=255)
     font_size = models.CharField(blank=True, null=True, max_length=255)
     font_color = models.CharField(blank=True, null=True, max_length=255)
+    font_effect = models.CharField(blank=True, null=True, max_length=255, default=None, choices=font_effects())
+    font_weight = models.CharField(blank=True, null=True, max_length=255, default="normal")
+    outline_color = models.CharField(blank=True, null=True, max_length=255, default=None)
     days = models.IntegerField(blank=True, null=True)
     type = models.CharField(max_length=50, choices=(
         ('session', 'Session'),
