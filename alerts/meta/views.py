@@ -37,7 +37,8 @@ def setup(request):
         i.display = output_for_meta(i)
     appcreds_subs = AppCreds.objects.filter(user=request.user).exclude(id__in=Meta.objects.filter(user=request.user, type="youtubesubs").values_list('appcreds__id', flat=True))
     appcreds_viewers = AppCreds.objects.filter(user=request.user).exclude(id__in=Meta.objects.filter(user=request.user, type="youtubeviewers").values_list('appcreds__id', flat=True))
-    return render(request, "meta/setup.html", {'metas': metas, 'appcreds_subs': appcreds_subs, 'appcreds_viewers': appcreds_viewers, 'key': key.key})  
+    appcreds_likes = AppCreds.objects.filter(user=request.user).exclude(id__in=Meta.objects.filter(user=request.user, type="youtubelikes").values_list('appcreds__id', flat=True))
+    return render(request, "meta/setup.html", {'metas': metas, 'appcreds_subs': appcreds_subs, 'appcreds_viewers': appcreds_viewers, 'appcreds_likes': appcreds_likes, 'key': key.key})  
 
 @login_required
 def meta_config(request, meta_id=None):

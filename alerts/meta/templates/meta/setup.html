@@ -6,7 +6,7 @@
 
 <ul>
 {% for meta in metas %}
-  <li>{{meta.get_type_display}} for {{meta.appcreds.label}}: {{meta.display}} <br /><span style="padding-left:50px; font-size: .8em"><a href="/recent_popup?id={{meta.id}}&key={{key}}&version=2&type=meta">embed widget</a> (label: <tt>meta-{{meta.type}}-{{meta.id}}</tt>)</span></li>
+  <li>{{meta.get_type_display}} for {{meta.appcreds.label}}: {{meta.display}} <br /><span style="padding-left:50px; font-size: .8em"><a href="/recent_popup?id={{meta.id}}&key={{key}}&version=2&type=meta">embed widget</a> <a href="/meta/meta/{{meta.id}}">edit display</a> (label: <tt>meta-{{meta.type}}-{{meta.id}}</tt>)</span></li>
 {% endfor %}  
 </ul>
 <p>Add additional counters to track:</p>
@@ -20,10 +20,23 @@
  </li>
 </form>
 {% endfor %}
+</ul>
+<ul>
 {% for appcred in appcreds_viewers %}
 <form method="POST">{% csrf_token %}
  <li>Track YouTube Viewers for {{appcred.label}}
  <input type="hidden" value="youtubeviewers" name="type" />
+ <input type="hidden" value="{{appcred.id}}" name="id" />
+ <input type="submit" value="Add" />
+ </li>
+</form>
+{% endfor %}
+</ul>
+<ul>
+{% for appcred in appcreds_likes %}
+<form method="POST">{% csrf_token %}
+ <li>Track likes for active livestream for {{appcred.label}}
+ <input type="hidden" value="youtubelikes" name="type" />
  <input type="hidden" value="{{appcred.id}}" name="id" />
  <input type="submit" value="Add" />
  </li>

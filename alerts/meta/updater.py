@@ -46,6 +46,13 @@ def get_viewers_for_vid(appcreds, vid):
     if 'items' in data and len(data['items']):
         viewers = int(data['items'][0]['liveStreamingDetails']['concurrentViewers'])
     return viewers
+def get_likes_for_vid(appcreds, vid):
+    url = "%svideos?part=statistics&id=%s" % (BASE_URL, chan)
+    data = ytapicall(appcreds, url)
+    likes = 0 
+    if 'items' in data and len(data['items']):
+        likes = int(data['items'][0]['statistics']['likeCount'])
+    return likes
     
 
 def get_youtube_viewers(appcreds):
@@ -53,12 +60,24 @@ def get_youtube_viewers(appcreds):
     data = ytapicall(appcreds, url)
     m = 0
     for event in data['items']:
-        m = get_viewers_for_vid(appcreds, event['id'])
+        viewers = get_viewers_for_vid(appcreds, event['id'])
+        if viewers > m:
+            m = viewers
+    return m
+def get_youtube_likes(appcreds):
+    url = "%sliveBroadcasts?broadcastType=all&part=snippet&broadcastStatus=active&maxResults=50&" % (BASE_URL)
+    data = ytapicall(appcreds, url)
+    m = 0
+    for event in data['items']:
+        likes = get_likes_for_vid(appcreds, event['id'])
+        if likes > m:
+            m = likes
     return m
 
 f = {
     'youtubesubs': get_youtube_subs,
     'youtubeviewers': get_youtube_viewers,
+    'youtubelikes': get_youtube_likes,
 }
 
 def update_meta(meta, delay=DEFAULT_UPDATE_INTERVAL):
