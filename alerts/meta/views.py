@@ -32,7 +32,7 @@ def setup(request):
         m.save()
         update_meta(m)
     key = AccessKey.objects.get(user=request.user)
-    metas = Meta.objects.filter(user=request.user)
+    metas = Meta.objects.filter(user=request.user).order_by("id")
     for i in metas:
         i.display = output_for_meta(i)
     appcreds_subs = AppCreds.objects.filter(user=request.user).exclude(id__in=Meta.objects.filter(user=request.user, type="youtubesubs").values_list('appcreds__id', flat=True))
