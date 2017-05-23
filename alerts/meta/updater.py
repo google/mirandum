@@ -40,14 +40,14 @@ def get_youtube_subs(appcreds):
     return sub_count 
 
 def get_viewers_for_vid(appcreds, vid):
-    url = "%svideos?part=liveStreamingDetails&id=%s" % (BASE_URL, chan)
+    url = "%svideos?part=liveStreamingDetails&id=%s" % (BASE_URL, vid)
     data = ytapicall(appcreds, url)
     viewers = 0
     if 'items' in data and len(data['items']):
         viewers = int(data['items'][0]['liveStreamingDetails']['concurrentViewers'])
     return viewers
 def get_likes_for_vid(appcreds, vid):
-    url = "%svideos?part=statistics&id=%s" % (BASE_URL, chan)
+    url = "%svideos?part=statistics&id=%s" % (BASE_URL, vid)
     data = ytapicall(appcreds, url)
     likes = 0 
     if 'items' in data and len(data['items']):
