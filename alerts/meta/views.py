@@ -1,3 +1,4 @@
+import md5
 from django.shortcuts import render
 from meta.models import Meta
 from meta.updater import update_meta
@@ -31,7 +32,11 @@ def setup(request):
         )
         m.save()
         update_meta(m)
-    key = AccessKey.objects.get(user=request.user)
+    key, created = AccessKey.objects.get_or_create(user=request.user)
+    if created:
+        k = md5.md5(str(random.random())).hexdigest()
+        key.key = k
+        key.save()
     metas = Meta.objects.filter(user=request.user).order_by("id")
     for i in metas:
         i.display = output_for_meta(i)
@@ -49,10 +54,10 @@ def meta_config(request, meta_id=None):
         try:
             ac = config.objects.get(pk=int(meta_id), user=request.user)
         except ObjectDoesNotExist:
-            return HttpResponseRedirect('/meta')
+            return HttpResponseRedirect('/counters/')
         if request.POST and 'delete' in request.POST:
             ac.delete()
-            return HttpResponseRedirect('/meta')
+            return HttpResponseRedirect('/counters/')
     if request.POST:
         f = form(request.POST, instance=ac)
     else:
@@ -64,6 +69,6 @@ def meta_config(request, meta_id=None):
         ac = f.save(commit=False)
         ac.user = request.user
         ac.save()
-        return HttpResponseRedirect("/meta/")
+        return HttpResponseRedirect("/counters/")
 
     return render(request, "meta/meta_config.html", {'form': f, 'new': meta_id is None})

@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml">
 <!--
 Copyright 2016 Google Inc. All Rights Reserved.
 
@@ -15,6 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
   -->
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Livestream Alerts - YouTube Subscriber Alerts and More" />
+    <meta property="og:description" content="Want YouTube Alerts during your live stream for subscribers and Super Chat payments? Livestream Alerts is for you!" />
+    <meta property="og:type" content="website" />
+    <meta property="fb:admins" content="1926269" />
+    <meta property="og:image" content="https://www.livestreamalerts.com/static/megaphone.png" />
 <style type="text/css">
 .button {
   background-color: #d38715;
@@ -126,7 +135,7 @@ padding: 10px;
     <li>Twitch Subscribers (coming soon)</li>
    </ul>
   </li> 
-  <li><a href="/meta/">Counters</a></li>
+  <li><a href="/counters/">Counters</a></li>
   <li><a href="/accounts/">Accounts</a></li>
   <li id="last_menu">{% if user.is_authenticated %}{{user}} | <a href="/accounts/logout/">Logout</a>{% else %}<a href="/accounts/login/">Login</a>{% endif %}</li>
 </ul>

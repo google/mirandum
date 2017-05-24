@@ -6,19 +6,20 @@
 <p>Simply click "Add" next to any supported tracker, and it will immediately be added to the label manager app; or you can simply display it in your website via the provided widget.</p>
 <h3>Supported Trackers</h3>
 <ul>
-  <li>YouTube Likes - Will track the current number of likes on the active listream on your channel. Never again forget to update the video ID so you can get the right number of likes. When you switch livestreams, updates in seconds.</li>
-  <li>YouTube Viewers - Will track the current number of viewers on the active listream on your channel. Never again update a video ID in a URL in order to update your viewer tracker!</li>
-  <li>YouTube Subscribers - Will display the current number of YouTube subscribers for your account.</li>
+  <li>YouTube Likes - Will track the current number of likes on the active listream on your channel. Never again forget to update the video ID so you can get the right number of likes. When you switch livestreams, updates in seconds.{% if not appcreds_likes %} (Requires connected Google account: <a href="/googleaccount/setup">Register new Google account</a>){% endif %}</li>
+  <li>YouTube Viewers - Will track the current number of viewers on the active listream on your channel. Never again update a video ID in a URL in order to update your viewer tracker! {% if not appcreds_viewers %} (Requires connected Google account: <a href="/googleaccount/setup">Register new Google account</a>.){% endif %}</li>
+  <li>YouTube Subscribers - Will display the current number of YouTube subscribers for your account. {% if not appcreds_subs %}(Requires connected Google account: <a href="/googleaccount/setup">Register new Google account</a>.){% endif %}</li>
 </ul>  
 
 <h3>Current Configured Trackers</h3>
 <ul>
 {% for meta in metas %}
-  <li>{{meta.get_type_display}} for {{meta.appcreds.label}}: {{meta.display}} <br /><span style="padding-left:50px; font-size: .8em"><a href="/recent_popup?id={{meta.id}}&key={{key}}&version=2&type=meta">embed widget</a> <a href="/meta/meta/{{meta.id}}">edit display</a> (label: <tt>meta-{{meta.type}}-{{meta.id}}</tt>)</span></li>
+  <li>{{meta.get_type_display}} for {{meta.appcreds.label}}: {{meta.display}} <br /><span style="padding-left:50px; font-size: .8em"><a href="/recent_popup?id={{meta.id}}&key={{key}}&version=2&type=meta">embed widget</a> <a href="/counters/counter/{{meta.id}}">edit display</a> (label: <tt>meta-{{meta.type}}-{{meta.id}}</tt>)</span></li>
 {% endfor %}  
 </ul>
 <h3>Add additional trackers</h3>
 <ul>
+{% if appcreds_subs %}
   <li>YouTube Subscribers<ul>
 {% for appcred in appcreds_subs %}
 <form method="POST">{% csrf_token %}
@@ -30,6 +31,8 @@
 </form>
 {% endfor %}
 </ul></li>
+{% endif %}
+{% if appcreds_viewers %}
 <li>YouTube Viewers/Concurrents:
 <ul>
 {% for appcred in appcreds_viewers %}
@@ -42,6 +45,8 @@
 </form>
 {% endfor %}
 </ul></li>
+{% endif %}
+{% if appcreds_likes %}
 <li>YouTube Likes:
 <ul>
 {% for appcred in appcreds_likes %}
@@ -54,5 +59,6 @@
 </form>
 {% endfor %}
 </ul></li>
+{% endif %}
 </ul>
 {% endblock %}
