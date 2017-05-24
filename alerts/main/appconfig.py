@@ -31,6 +31,9 @@ from youtubesubs.models import YoutubeSubEvent
 from patreon.support import run_patreon
 from patreon.models import PatreonEvent
 
+from streamme.support import run_streamme
+from streamme.models import StreammeEvent
+
 type_data = {
     'fanfunding': {
         'runner': run_fan_funding,
@@ -43,6 +46,12 @@ type_data = {
         'prop': 'extralifeupdate',
         'event': ExtralifeEvent,
         'label': 'Extra Life',
+    },
+    'streamme': {
+        'runner': run_streamme,
+        'prop': 'streammeupdate',
+        'event': StreammeEvent,
+        'label': 'Stream.me',
     },
     'ytsubs': {
         'runner': run_subs,

@@ -110,3 +110,17 @@ class RecentConfig(models.Model):
 class Session(models.Model):
     user = models.ForeignKey(User)
     session_start = models.DateTimeField()
+
+class RecentActivity(models.Model):
+    user = models.ForeignKey(User)
+    timestamp = models.DateTimeField()
+    type = models.CharField(max_length=255, choices=(
+            ('follow', 'Followers/Subscribers'),
+            ('support', 'Recurring Support'),
+        )
+    )
+    data = models.TextField()
+
+    def as_dict(self):
+        data = json.loads(self.data)
+        return data
