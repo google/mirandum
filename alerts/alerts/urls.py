@@ -61,6 +61,12 @@ urlpatterns = patterns('',
     url(r'^extralife/alert$', 'extralife.views.alert_config'),
     url(r'^extralife/alert/(?P<alert_id>[0-9]*)$', 'extralife.views.alert_config'),
     
+    url(r'^streamme/$', 'streamme.views.home'),
+    url(r'^streamme/setup$', 'streamme.views.setup'),
+    url(r'^streamme/test_alert/(?P<alert_id>[0-9]*)$', 'streamme.views.test_alert'),
+    url(r'^streamme/alert$', 'streamme.views.alert_config'),
+    url(r'^streamme/alert/(?P<alert_id>[0-9]*)$', 'streamme.views.alert_config'),
+    
     url(r'^fanfunding/$', 'fanfunding.views.home'),
     url(r'^fanfunding/setup$', 'fanfunding.views.setup'),
     url(r'^fanfunding/test_alert/(?P<alert_id>[0-9]*)$', 'fanfunding.views.test_alert'),
@@ -94,7 +100,7 @@ urlpatterns = patterns('',
     url(r'^patreon/test_alert/(?P<alert_id>[0-9]*)$', 'patreon.views.test_alert'),
     url(r'^patreon/alert$', 'patreon.views.alert_config'),
     url(r'^patreon/alert/(?P<alert_id>[0-9]*)$', 'patreon.views.alert_config'),
-
+    
     url(r'^twitchalerts/$', 'twitchalerts.views.home'),
     url(r'^twitchalerts/setup$', 'twitchalerts.views.setup'),
     url(r'^twitchalerts/authorize$', 'twitchalerts.views.setup'),

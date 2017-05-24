@@ -149,3 +149,15 @@ def update_last_activity(user):
         lu = LastActivity(user=user, timestamp=now)
     lu.save()
     return True
+
+def add_recent(user, type, info):
+    from main.models import RecentActivity
+    timestamp = info.get("timestamp", timezone.now())
+    ra = RecentActivity(
+        user = user,
+        timestamp = timestamp,
+        type = type,
+        data = info,
+    )
+    ra.save()
+    
