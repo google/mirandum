@@ -19,6 +19,7 @@ from django.shortcuts import render
 from django.conf import settings
 import django.forms as forms
 from django.utils import timezone
+import json
 
 def ac(module_name, form, config, form_sample=None):
     @login_required
@@ -155,6 +156,7 @@ def add_recent(user, type, info):
     timestamp = info.get("timestamp", timezone.now())
     if 'timestamp' in info:
         del info['timestamp']
+    info = json.dumps(info)
     ra = RecentActivity(
         user = user,
         timestamp = timestamp,
