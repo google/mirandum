@@ -45,3 +45,4 @@ def event(instance, **kwargs):
     if alerts.count():
         chosen_config = random.choice(alerts)
         config_to_alert(chosen_config, info)
+    add_recent(user, "follow", info)    
