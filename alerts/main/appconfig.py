@@ -34,6 +34,9 @@ from patreon.models import PatreonEvent
 from streamme.support import run_streamme
 from streamme.models import StreammeEvent
 
+from beam.support import run_beam
+from beam.models import BeamEvent
+
 type_data = {
     'fanfunding': {
         'runner': run_fan_funding,
@@ -52,6 +55,12 @@ type_data = {
         'prop': 'streammeupdate',
         'event': StreammeEvent,
         'label': 'Stream.me',
+    },
+    'beam': {
+        'runner': run_beam,
+        'prop': 'beamupdate',
+        'event': BeamEvent,
+        'label': 'Beam',
     },
     'ytsubs': {
         'runner': run_subs,

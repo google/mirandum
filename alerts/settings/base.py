@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'accounts',
     'actions',
     'streamme',
+    'beam',
 )
 
 MIDDLEWARE_CLASSES = (
