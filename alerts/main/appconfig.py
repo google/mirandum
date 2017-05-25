@@ -1,9 +1,6 @@
 from fanfunding.support import run_fan_funding
 from fanfunding.models import FanFundingEvent
 
-from ytsubs.support import run_subs
-from ytsubs.models import SubEvent
-
 from sponsors.support import run_sponsors
 from sponsors.models import SponsorEvent
 
@@ -62,17 +59,11 @@ type_data = {
         'event': BeamEvent,
         'label': 'Beam',
     },
-    'ytsubs': {
-        'runner': run_subs,
-        'prop': 'subupdate',
-        'event': SubEvent,
-        'label': 'YouTube Subscribers (email-based)',
-    },
     'youtubesubs': {
         'runner': run_youtubesubs,
         'prop': 'youtubesubupdate',
         'event': YoutubeSubEvent,
-        'label': 'YouTube Subscribers (new)',
+        'label': 'YouTube Subscribers',
     },
     'sponsors': {
         'runner': run_sponsors,

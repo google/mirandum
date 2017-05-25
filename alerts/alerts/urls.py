@@ -144,11 +144,6 @@ urlpatterns = patterns('',
     url(r'^donations/goal$', 'donations.views.goal_config'),
     url(r'^donations/goal/(?P<goal_id>[0-9]+)$', 'donations.views.goal_config'),
 
-    url(r'^ytsubs/$', 'ytsubs.views.home'),
-    url(r'^ytsubs/test_alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.test_alert'),
-    url(r'^ytsubs/alert$', 'ytsubs.views.alert_config'),
-    url(r'^ytsubs/alert/(?P<alert_id>[0-9]*)$', 'ytsubs.views.alert_config'),
-    
     url(r'^youtubesubs/$', 'youtubesubs.views.home'),
     url(r'^youtubesubs/setup$', 'youtubesubs.views.setup'),
     url(r'^youtubesubs/test_alert/(?P<alert_id>[0-9]*)$', 'youtubesubs.views.test_alert'),
