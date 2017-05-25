@@ -19,7 +19,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session
+from main.models import AccessKey, AlertConfig, Alert, Updater, RecentConfig, Session, RecentActivity
 from main.support import formatter, check_google_font, update_last_activity
 from main.forms import RecentForm
 from main.appconfig import type_data
@@ -135,14 +135,18 @@ def alert_api(request):
 
 def output_for_recent(config):
     output = []
-    if config.type != "donations":
+    if config.type == "donations":
+        donation = Donation.objects.filter(user=config.user).order_by("-timestamp")[0:config.count]
+        for i in donation:
+            output.append(formatter(config.format, i.as_dict()))
+    elif config.type == "follows":
+        donation = RecentActivity.objects.filter(user=config.user, type="follow").order_by("-timestamp")[0:config.count]
+        for i in donation:
+            output.append(formatter(config.format, i.as_dict()))
+    else:
         event = type_data[config.type]['event']
         events = event.objects.filter(updater__user=config.user).order_by("-id")[0:config.count]
         for i in events:
-            output.append(formatter(config.format, i.as_dict()))
-    else:
-        donation = Donation.objects.filter(user=config.user).order_by("-timestamp")[0:config.count]
-        for i in donation:
             output.append(formatter(config.format, i.as_dict()))
     return config.seperator.join(output)
 

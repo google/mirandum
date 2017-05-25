@@ -14,6 +14,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+import json
 import md5, random, datetime
 from main.support import animations_list, font_effects
 
