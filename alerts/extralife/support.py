@@ -16,11 +16,11 @@ import json
 import httplib2
 from extralife.models import *
 from django.contrib.auth.models import User
+import urllib
 
 def run_extralife(ffu):
     added = 0
-    http = httplib2.Http()
-    resp, data = http.request("http://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&format=json&participantID=%s" % ffu.profile_id)
+    data = urllib.urlopen("https://www.extra-life.org/index.cfm?fuseaction=donorDrive.participantDonations&format=json&participantID=%s" % ffu.profile_id).read()
     data = json.loads(data)
     events = []
     if len(data):
