@@ -117,5 +117,11 @@ type_data = {
 def type_choices():
     output = []
     for key in type_data:
+        if 'donations' == key: continue
         output.append((key, type_data[key].get('label',key)))
-    return sorted(output)
+    output = sorted(output)
+    output = [
+        ('donations', 'Overall Donations'),
+        ('follows', 'Overall Followers'),
+    ] + output
+    return output
