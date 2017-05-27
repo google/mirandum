@@ -83,11 +83,17 @@ f = {
 def update_meta(meta, delay=DEFAULT_UPDATE_INTERVAL):
     if not meta.type in f:
         raise Exception("Unsupported type")
-    count = f[meta.type](meta.appcreds)
-    meta.counter = count
-    meta.last_update = timezone.now()
-    meta.next_update = timezone.now() + timedelta(seconds=delay)
-    meta.save()
+    try:
+        count = f[meta.type](meta.appcreds)
+        meta.counter = count
+        meta.last_update = timezone.now()
+        meta.next_update = timezone.now() + timedelta(seconds=delay)
+        meta.save()
+    except Exception, E:
+        print "Error on %s" % meta.id
+        meta.running = False
+        meta.next_update = timezone.now() + timedelta(seconds=delay*3)
+        meta.save()
 
 def thread_runner(instance):
     if DEBUG:
