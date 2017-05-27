@@ -16,7 +16,7 @@ limitations under the License.
 {% endcomment %}
 {% block content %}
 <h2>Accounts</h2>
-<p>You have {{configs|length}} registered Beam accounts.</p>
+<p>You have {{configs|length}} registered Mixer accounts.</p>
 
 <ul>
   {% for config in configs %}
@@ -28,10 +28,10 @@ limitations under the License.
   {% endfor %}
 </ul>
 
-<a href="setup" class="button">Register Beam account</a>
+<a href="setup" class="button">Register Mixer account</a>
 
 <h2>Alerts</h2>
-<p>You have {{alerts|length}} configured Beam alerts.</p>
+<p>You have {{alerts|length}} configured Mixer alerts.</p>
 <a href="alert" class="button">Add new alert</a>
 <ul>
   {% for alert in alerts %}
