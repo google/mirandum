@@ -145,9 +145,13 @@ def output_for_recent(config):
             output.append(formatter(config.format, i.as_dict()))
     else:
         event = type_data[config.type]['event']
-        events = event.objects.filter(updater__user=config.user).order_by("-id")[0:config.count]
-        for i in events:
-            output.append(formatter(config.format, i.as_dict()))
+        # fast fail for no-updates case
+        if Updater.objects.filter(user=config.user, type=config.type):
+            events = event.objects.filter(updater__user=config.user).order_by("-id")[0:config.count]
+            for i in events:
+                output.append(formatter(config.format, i.as_dict()))
+        else:
+            output = []
     return config.seperator.join(output)
 
 def all_recents(request):
@@ -276,8 +280,8 @@ def lists(request):
             config.type = "sponsors"
             config.format = "[[name]]"
             config.save()
-        elif request.POST['add'] == "Add Recent Subscriber":
-            config.type = "youtubesubs"
+        elif request.POST['add'] == "Add Recent Followers":
+            config.type = "follow"
             config.format = "[[name]]"
             config.save()
 
