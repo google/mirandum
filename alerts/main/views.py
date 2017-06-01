@@ -90,8 +90,8 @@ def delete_updater(request, id):
 
 def alert_popup(request):
     if 'v' in request.GET:
-        if request.GET['v'] == '2':
-            return render(request, "alert_popupv2.html")
+        if request.GET['v'] in ('2', '2-dev'):
+            return render(request, "alert_popupv%s.html" % request.GET['v'])
     return render(request, "alert_popup.html")
 
 def recent_popup(request):

@@ -19,16 +19,19 @@ import django
 
 django.setup()
 
+import urllib
 import math
 import threading
 import time
 from datetime import datetime, timedelta
 from django.utils import timezone
-from main.models import Updater, LastActivity
+from main.models import Updater, LastActivity, AccessKey
 from main.appconfig import type_data
 
 
 from django.conf import settings
+
+REPORT_PUSH = settings.REPORT_PUSH
 
 DEBUG = settings.RUNNER_DEBUG
 
@@ -43,6 +46,7 @@ def thread_runner(instance):
         updater_props = type_data.get(instance.type, None)
         delay = updater_props.get('delay', DEFAULT_UPDATE_INTERVAL)
         lu = LastActivity.objects.filter(user=instance.user)
+        key = AccessKey.objects.filter(user=instance.user)
         recent = timezone.now() - timedelta(seconds=120)
         if not lu.count() or lu[0].timestamp < recent:
             if DEBUG: print "Not active"
@@ -51,7 +55,12 @@ def thread_runner(instance):
             if DEBUG: print "Active"
         runner = updater_props['runner']
         instance = getattr(instance, updater_props['prop'])
-        runner(instance)
+        changed = runner(instance)
+        if changed > 0 and REPORT_PUSH:
+            if len(key):
+                urllib.urlopen("http://localhost:8765/api?key=%s" % key[0].key).read()
+
+                
         instance.last_update = timezone.now()
         instance.next_update = timezone.now() + timedelta(seconds=delay)
         # We leave messages + timestamps so we can see old failures even if the system recovered.
