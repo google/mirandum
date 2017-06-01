@@ -15,7 +15,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from main.models import AccessKey
+from main.models import AccessKey, Alert, AlertStyle
 from main.support import formatter, check_google_font, update_last_activity
 from actions.models import Action
 from actions.utils import send_yt_chat_message
@@ -29,9 +29,19 @@ def send_youtube_message(action, params=None):
     videos = send_yt_chat_message(user, message)
     return "Message sent to videos: %s" % (",".join(videos))
 
+def repeat_last_alert(action, params=None):
+    alerts = Alert.objects.filter(user=action.user).order_by("-id")
+    if len(alerts) > 0:
+        last_alert = alerts[0]
+        last_alert.pk = None
+        last_alert.save()
+        return "Repeated last alert."    
+    return "No previous alerts."
+
 
 action_mapping = {
-    'send_youtube_message': send_youtube_message
+    'send_youtube_message': send_youtube_message,
+    'repeat_last_alert': repeat_last_alert,
 }
 
 def go(request):
@@ -64,7 +74,7 @@ def setup(request, action_type=None):
         a = Action(
             user=request.user,
             action_type=action_type,
-            data = request.POST['data']
+            data = request.POST.get('data', "")
         )
         a.save()
         return HttpResponseRedirect("/actions/")

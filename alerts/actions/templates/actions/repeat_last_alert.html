@@ -15,13 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 {% block content %}
- <ul>
- <li><a href="/actions/send_youtube_message">Add YouTube Chat Message Action</a>
- <li><a href="/actions/repeat_last_alert">Add Repeat Last Alert Action</a>
- </ul>
- <ul>
- {% for action in actions %}
-   <form method="POST"><li>{{action.get_action_type_display}} - {{action.data}} -- <a href="/actions/go?id={{action.id}}&key={{key}}">URL</a> {%csrf_token%}<input type="hidden" value="delete" name="action" /> <input type="submit" value="Delete" /> <input type="hidden" name="id" value="{{action.id}}" /></li></form>
- {% endfor %}
- </ul>
+
+  <form method="POST">{%csrf_token%}
+  <input type="submit" value="Save" />
+  </form>
 {% endblock %} 
+
