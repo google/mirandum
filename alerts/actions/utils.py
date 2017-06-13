@@ -65,9 +65,10 @@ def send_yt_chat_message(user, message):
             except CredentialsException, E:
                 print E
                 continue
-    live_chat_ids = set(live_chat_ids)
+                
+    live_chat_ids = set(map(lambda x: x[0], live_chat_ids))
     for live_chat_id in live_chat_ids:
-        data = {'snippet': {'type': 'textMessageEvent', 'liveChatId': live_chat_id[0], 'textMessageDetails': {'messageText': message}}} 
+        data = {'snippet': {'type': 'textMessageEvent', 'liveChatId': live_chat_id, 'textMessageDetails': {'messageText': message}}} 
         url = "%sliveChat/messages?part=snippet" % BASE_URL
         print ytapicall(live_chat_id[1], url, post_json=data)
     return video_ids
