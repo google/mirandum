@@ -54,6 +54,7 @@ def event(instance, **kwargs):
     info['id'] = instance.id
     alerts = AlertConfig.objects.filter(user=user).order_by("filter_type", "-filter_amount")
     amount_micros = info['amount_micros']
+    alerts = []
     for alert in alerts:
         if alert.filter_type == "1equal" and alert.filter_amount:
             if alert.filter_amount * 1000000 == amount_micros:
@@ -64,7 +65,11 @@ def event(instance, **kwargs):
                 config_to_alert(alert, info)
                 break
         elif alert.filter_type == "3default":
-            config_to_alert(alert, info)
+            alerts.append(alert)
+    if len(alerts):
+        chosen_config = random.choice(alerts)
+        config_to_alert(chosen_config, info)
+            
     add_donation(instance.as_dict(), user, "fanfunding")
 
 

@@ -40,5 +40,6 @@ def event(instance, **kwargs):
     user = instance.updater.credentials.user
     alerts = SponsorAlertConfig.objects.filter(user=user)
     info = instance.as_dict()
-    for alert in alerts:
-        config_to_alert(alert, info)
+    if alerts.count():
+        chosen_config = random.choice(alerts)
+        config_to_alert(chosen_config, info)
