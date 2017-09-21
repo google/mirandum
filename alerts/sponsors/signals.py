@@ -18,6 +18,7 @@ from main.models import Alert
 from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from sponsors.models import SponsorEvent, SponsorAlertConfig
+import random
 import json
 
 def config_to_alert(alert, info, test=False):

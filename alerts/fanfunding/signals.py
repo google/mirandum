@@ -19,6 +19,7 @@ from django.dispatch import receiver
 from main.models import AlertStyle, Alert
 from fanfunding.models import FanFundingEvent, AlertConfig
 from donations.support import add_donation
+import random
 import json
 from fanfunding.tts import do_it
 
