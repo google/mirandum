@@ -20,11 +20,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'alerts',
         'USER': 'alerts',
-        'PASSWORD': 'password',
+        'PASSWORD': 'CHANGEME',
         'HOST': os.environ.get('POSTGRESQL_HOST', '127.0.0.1'),
         'PORT': '',
     }
 }
 SERVER_BASE="https://www.livestreamalerts.com/"
-SECRET_KEY="Un!%}$eV&kxw=ZN!&eP@BO!=Oso0b2m-|gf/J-.3FbL/a%q2hk"
+SECRET_KEY="CHANGEME"
 RUNNER_DEBUG=False
